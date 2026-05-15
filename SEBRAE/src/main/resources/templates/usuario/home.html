@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Capacitação | SEBRAE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --sebrae-blue: #0054a6;
+            --sebrae-yellow: #ffcb05;
+        }
+        .navbar { background-color: var(--sebrae-blue); }
+        .hero-section {
+            background: linear-gradient(rgba(0,84,166,0.8), rgba(0,84,166,0.8)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80');
+            background-size: cover;
+            color: white;
+            padding: 100px 0;
+        }
+        .btn-sebrae { background-color: var(--sebrae-yellow); color: #000; font-weight: bold; }
+        .btn-sebrae:hover { background-color: #e6b800; }
+        .course-card:hover { transform: translateY(-5px); transition: 0.3s; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">SEBRAE <span class="text-warning">PROJETO</span></a>
+            <div class="d-flex">
+                <a th:href="@{/admin}" class="btn btn-outline-light btn-sm">Acesso Administrativo</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Transforme sua ideia em negócio</h1>
+            <p class="lead">Cursos gratuitos e consultorias especializadas para você empreender com sucesso.</p>
+            <a href="#cursos" class="btn btn-sebrae btn-lg px-5 mt-3">Ver Cursos</a>
+        </div>
+    </header>
+
+    <main class="container my-5" id="cursos">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Cursos em Destaque</h2>
+            <p class="text-muted">Capacitação rápida e prática para o seu dia a dia</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm course-card">
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Gestão</span>
+                        <h5 class="card-title fw-bold">Fluxo de Caixa para Iniciantes</h5>
+                        <p class="card-text text-muted">Aprenda a organizar as finanças da sua empresa sem complicações.</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <button class="btn btn-outline-primary w-100">Saiba Mais</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm course-card">
+                    <div class="card-body">
+                        <span class="badge bg-success mb-2">Marketing</span>
+                        <h5 class="card-title fw-bold">Vendas no Instagram</h5>
+                        <p class="card-text text-muted">Como utilizar as redes sociais para atrair novos clientes todos os dias.</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <button class="btn btn-outline-primary w-100">Saiba Mais</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm course-card">
+                    <div class="card-body">
+                        <span class="badge bg-warning text-dark mb-2">Planejamento</span>
+                        <h5 class="card-title fw-bold">Plano de Negócios</h5>
+                        <p class="card-text text-muted">Estruture seu sonho e saiba exatamente quais passos dar.</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <button class="btn btn-outline-primary w-100">Saiba Mais</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2026 Projeto SEBRAE - Desenvolvido para fins de aprendizado.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
