@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Conceito</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { display: flex; height: 100vh; background: #f8f9fa; }
+        .sidebar { width: 250px; background: #212529; color: white; }
+        .content { flex-grow: 1; padding: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar p-3">
+        <h3>Empresa Admin</h3>
+        <hr>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a href="#" class="nav-link text-white">Dashboard</a></li>
+            <li class="nav-item"><a href="#" class="nav-link text-white">Produtos</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <header class="d-flex justify-content-between border-bottom pb-3 mb-4">
+            <h2>Visão Geral</h2>
+            <span>Olá, Administrador</span>
+        </header>
+
+        <div class="row text-center">
+            <div class="col-md-4"><div class="card p-3 shadow-sm">Vendas: R$ 15.200</div></div>
+            <div class="col-md-4"><div class="card p-3 shadow-sm">Clientes: 42</div></div>
+            <div class="col-md-4"><div class="card p-3 shadow-sm">Pendências: 12</div></div>
+        </div>
+    </div>
+
+</body>
+</html>
