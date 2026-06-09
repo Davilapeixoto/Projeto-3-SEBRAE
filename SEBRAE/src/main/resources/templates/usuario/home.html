@@ -3,97 +3,848 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Capacitação | SEBRAE</title>
+    <title>SEBRAE - Plataforma Educacional</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
+        /* ==========================================================================
+           Escopo de Variáveis Customizadas (Design System)
+           ========================================================================== */
         :root {
-            --sebrae-blue: #0054a6;
-            --sebrae-yellow: #ffcb05;
+            --cor-primaria: #0B0C10;
+            --cor-fundo-hero: #36363E;
+            --cor-texto-hero: #F8F9FA;
+            --cor-texto-mutado-hero: #C0C0C0;
+            --cor-borda-suave: #EAEAEA;
+            --cor-input-bg: #F1F3F5;
         }
-        .navbar { background-color: var(--sebrae-blue); }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #FFFFFF;
+            color: var(--cor-primaria);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ==========================================================================
+           Camada 1: Barra de Navegação Global
+           ========================================================================== */
+        .navbar-global {
+            padding: 1rem 2rem;
+            /* Fundo branco semi-transparente para permitir a passagem de luz */
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--cor-borda-suave);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Grupo Esquerdo: Logo e Links */
+        .nav-grupo-esquerdo {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-box {
+            background-color: var(--cor-primaria);
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .logo-texto {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-right: 16px;
+        }
+
+        .nav-link {
+            color: var(--cor-primaria);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+
+        .nav-link:hover { opacity: 0.7; }
+
+        /* Grupo Central: Motor de Busca */
+        .nav-grupo-central {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            background-color: var(--cor-input-bg);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px 10px 40px;
+            font-size: 0.9rem;
+            color: var(--cor-primaria);
+        }
+
+        .search-input:focus {
+            outline: 2px solid var(--cor-primaria);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6C757D;
+        }
+
+        /* Grupo Direito: Contexto e Autenticação */
+        .nav-grupo-direito {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .localizacao-link {
+            color: var(--cor-primaria);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-entrar {
+            background-color: var(--cor-primaria);
+            color: #FFFFFF;
+            border-radius: 8px;
+            padding: 10px 28px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.1s;
+        }
+
+        .btn-entrar:hover { transform: scale(1.02); color: #FFFFFF;}
+
+        /* ==========================================================================
+           Camada 2: Seção de Impacto (Hero Section)
+           ========================================================================== */
         .hero-section {
-            background: linear-gradient(rgba(0,84,166,0.8), rgba(0,84,166,0.8)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80');
-            background-size: cover;
-            color: white;
-            padding: 100px 0;
+            background-color: var(--cor-fundo-hero);
+            /* Implementação de Grid Pattern com CSS Gradiente */
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+            color: var(--cor-texto-hero);
+            padding: 100px 80px;
+            min-height: calc(100vh - 75px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        .btn-sebrae { background-color: var(--sebrae-yellow); color: #000; font-weight: bold; }
-        .btn-sebrae:hover { background-color: #e6b800; }
-        .course-card:hover { transform: translateY(-5px); transition: 0.3s; }
+
+        .hero-badge {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--cor-texto-hero);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            width: fit-content;
+            margin-bottom: 30px;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--cor-texto-mutado-hero);
+            max-width: 650px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* Estruturação dos Botões de Ação */
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .btn-comecar {
+            background-color: #FFFFFF;
+            color: var(--cor-primaria);
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-comecar:hover { background-color: #F1F3F5; color: var(--cor-primaria); }
+
+        .btn-explorar {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #FFFFFF;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background-color 0.2s;
+        }
+
+        .btn-explorar:hover { background-color: rgba(255, 255, 255, 0.1); color: #FFFFFF; }
+
+        /* Rodapé do Hero (Métricas) */
+        .hero-metrics {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.9rem;
+            color: var(--cor-texto-mutado-hero);
+        }
+
+        .metric-dot {
+            width: 4px;
+            height: 4px;
+            background-color: var(--cor-texto-mutado-hero);
+            border-radius: 50%;
+        }
+
+        /* Responsividade Básica */
+        @media (max-width: 992px) {
+            .navbar-global { flex-wrap: wrap; gap: 20px; padding: 1rem; }
+            .nav-grupo-central { order: 3; width: 100%; padding: 0; }
+            .hero-section { padding: 60px 20px; }
+            .hero-title { font-size: 3rem; }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .hero-metrics { flex-wrap: wrap; }
+        }
+        /* ==========================================================================
+           Camada 3: Seção "Continue Explorando" (Carrossel)
+           ========================================================================== */
+        .secao-carrosel {
+            padding: 80px 2rem;
+            background-color: #FFFFFF;
+            overflow: hidden; /* Evita que a página crie barra de rolagem horizontal */
+        }
+
+        .carrosel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .carrosel-titulo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--cor-primaria);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .carrosel-subtitulo {
+            font-size: 1rem;
+            color: #6C757D;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+
+        /* Controles do Carrossel (Setas) */
+        .carrosel-controles {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-seta {
+            background-color: #FFFFFF;
+            border: 1px solid var(--cor-borda-suave);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cor-primaria);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-seta:hover {
+            background-color: var(--cor-input-bg);
+            border-color: #D1D5DB;
+        }
+
+        /* A Pista onde os cartões correm */
+        .carrosel-track {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-behavior: smooth; /* Animação nativa de deslize */
+            padding-bottom: 20px; /* Espaço para a sombra dos cartões não cortar */
+            max-width: 1400px;
+            margin: 0 auto;
+            /* Oculta a barra de rolagem para um visual mais limpo */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+
+        .carrosel-track::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        /* O Cartão Individual */
+        .card-curso {
+            flex: 0 0 320px; /* Não encolhe, não cresce, tamanho fixo de 320px */
+            border: 1px solid var(--cor-borda-suave);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: #FFFFFF;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-curso:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        }
+
+        /* Topo Colorido do Cartão */
+        .card-capa {
+            height: 160px;
+            padding: 24px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .card-capa i {
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Corpo de Texto do Cartão */
+        .card-corpo {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-categoria {
+            font-size: 0.8rem;
+            color: #6C757D;
+            margin-bottom: 8px;
+        }
+
+        .card-titulo {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--cor-primaria);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .card-meta {
+            margin-top: auto; /* Empurra o tempo para o rodapé do card */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #6C757D;
+        }
+        /* ==========================================================================
+           Camada 4: Seção "Cursos em Destaque" (Carrossel)
+           ========================================================================== */
+        .card-destaque {
+            flex: 0 0 320px;
+            border: 1px solid var(--cor-borda-suave);
+            border-radius: 16px;
+            overflow: hidden;
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-destaque:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        }
+
+        .card-destaque-capa {
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+        }
+
+        .card-destaque-capa i {
+            font-size: 1.8rem;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .card-modalidade {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(255,255,255,0.9);
+            color: var(--cor-primaria);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .card-destaque-corpo {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-destaque-titulo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: var(--cor-primaria);
+        }
+
+        .card-destaque-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #6C757D;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .card-destaque-meta .separador {
+            font-size: 0.8rem;
+        }
+
+        .btn-saiba-mais {
+            margin-top: auto;
+            background-color: var(--cor-primaria);
+            color: #FFFFFF;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .btn-saiba-mais:hover {
+            opacity: 0.9;
+            color: #FFFFFF;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">SEBRAE <span class="text-warning">PROJETO</span></a>
-            <div class="d-flex">
-                <a th:href="@{/admin}" class="btn btn-outline-light btn-sm">Acesso Administrativo</a>
+<nav class="navbar-global">
+
+    <div class="nav-grupo-esquerdo">
+        <div class="logo-box">S</div>
+        <span class="logo-texto">Sebrae</span>
+        <a href="#" class="nav-link">Início</a>
+        <a href="#" class="nav-link">Explorar</a>
+        <a href="#" class="nav-link">Cursos</a>
+        <a href="#" class="nav-link">Mentorias</a>
+        <a href="#" class="nav-link">Atendimento</a>
+    </div>
+
+    <div class="nav-grupo-central">
+        <div class="search-wrapper">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Buscar cursos, mentorias...">
+        </div>
+    </div>
+
+    <div class="nav-grupo-direito">
+        <a href="#" class="localizacao-link">
+            <i class="bi bi-geo-alt"></i> São Paulo
+        </a>
+        <a th:href="@{/login}" class="btn-entrar">Entrar</a>
+    </div>
+
+</nav>
+
+<section class="hero-section">
+
+    <div class="hero-badge">
+        Programa em Destaque
+    </div>
+
+    <h1 class="hero-title">
+        Jornada do Empreendedor<br>Digital
+    </h1>
+
+    <p class="hero-subtitle">
+        Aprenda a transformar sua ideia em um negócio digital de sucesso. Do planejamento ao lançamento.
+    </p>
+
+    <div class="hero-actions">
+        <a href="#" class="btn-comecar">
+            <i class="bi bi-play-fill" style="font-size: 1.2rem; line-height: 0;"></i> Começar agora
+        </a>
+
+        <a href="#" class="btn-explorar">
+            <i class="bi bi-search"></i> Explorar catálogo
+        </a>
+    </div>
+
+    <div class="hero-metrics">
+        <span>120+ Cursos</span>
+        <div class="metric-dot"></div>
+        <span>50+ Mentores</span>
+        <div class="metric-dot"></div>
+        <span>100% Online</span>
+    </div>
+
+</section>
+
+<section class="secao-carrosel">
+
+    <div class="carrosel-header">
+        <div>
+            <h2 class="carrosel-titulo">Continue Explorando</h2>
+            <p class="carrosel-subtitulo">Retome de onde você parou</p>
+        </div>
+
+        <div class="carrosel-controles">
+            <button class="btn-seta" onclick="moverCarroselContinue(-1)">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn-seta" onclick="moverCarroselContinue(1)">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="carrosel-track" id="pistaCursos">
+
+        <div class="card-curso">
+            <div class="card-capa" style="background-color: #F05D23;">
+                <i class="bi bi-book"></i>
             </div>
-        </div>
-    </nav>
-
-    <header class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Transforme sua ideia em negócio</h1>
-            <p class="lead">Cursos gratuitos e consultorias especializadas para você empreender com sucesso.</p>
-            <a href="#cursos" class="btn btn-sebrae btn-lg px-5 mt-3">Ver Cursos</a>
-        </div>
-    </header>
-
-    <main class="container my-5" id="cursos">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">Cursos em Destaque</h2>
-            <p class="text-muted">Capacitação rápida e prática para o seu dia a dia</p>
-        </div>
-
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm course-card">
-                    <div class="card-body">
-                        <span class="badge bg-primary mb-2">Gestão</span>
-                        <h5 class="card-title fw-bold">Fluxo de Caixa para Iniciantes</h5>
-                        <p class="card-text text-muted">Aprenda a organizar as finanças da sua empresa sem complicações.</p>
-                    </div>
-                    <div class="card-footer bg-transparent border-0 pb-3">
-                        <button class="btn btn-outline-primary w-100">Saiba Mais</button>
-                    </div>
+            <div class="card-corpo">
+                <span class="card-categoria">Formalização</span>
+                <h3 class="card-titulo">Como abrir um MEI</h3>
+                <div class="card-meta">
+                    <i class="bi bi-clock"></i> 45 min
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm course-card">
-                    <div class="card-body">
-                        <span class="badge bg-success mb-2">Marketing</span>
-                        <h5 class="card-title fw-bold">Vendas no Instagram</h5>
-                        <p class="card-text text-muted">Como utilizar as redes sociais para atrair novos clientes todos os dias.</p>
-                    </div>
-                    <div class="card-footer bg-transparent border-0 pb-3">
-                        <button class="btn btn-outline-primary w-100">Saiba Mais</button>
-                    </div>
-                </div>
+        <div class="card-curso">
+            <div class="card-capa" style="background-color: #11A893;">
+                <i class="bi bi-book"></i>
             </div>
-
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm course-card">
-                    <div class="card-body">
-                        <span class="badge bg-warning text-dark mb-2">Planejamento</span>
-                        <h5 class="card-title fw-bold">Plano de Negócios</h5>
-                        <p class="card-text text-muted">Estruture seu sonho e saiba exatamente quais passos dar.</p>
-                    </div>
-                    <div class="card-footer bg-transparent border-0 pb-3">
-                        <button class="btn btn-outline-primary w-100">Saiba Mais</button>
-                    </div>
+            <div class="card-corpo">
+                <span class="card-categoria">Marketing</span>
+                <h3 class="card-titulo">Marketing Digital para Pequenos Negócios</h3>
+                <div class="card-meta">
+                    <i class="bi bi-clock"></i> 2h 30min
                 </div>
             </div>
         </div>
-    </main>
 
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container text-center">
-            <p class="mb-0">© 2026 Projeto SEBRAE - Desenvolvido para fins de aprendizado.</p>
+        <div class="card-curso">
+            <div class="card-capa" style="background-color: #215A6D;">
+                <i class="bi bi-book"></i>
+            </div>
+            <div class="card-corpo">
+                <span class="card-categoria">Finanças</span>
+                <h3 class="card-titulo">Gestão Financeira Essencial</h3>
+                <div class="card-meta">
+                    <i class="bi bi-clock"></i> 1h 45min
+                </div>
+            </div>
         </div>
-    </footer>
+
+        <div class="card-curso">
+            <div class="card-capa" style="background-color: #FFB800;">
+                <i class="bi bi-book"></i>
+            </div>
+            <div class="card-corpo">
+                <span class="card-categoria">E-commerce</span>
+                <h3 class="card-titulo">Vendas Online: Primeiros Passos</h3>
+                <div class="card-meta">
+                    <i class="bi bi-clock"></i> 1h 15min
+                </div>
+            </div>
+        </div>
+
+        <div class="card-curso">
+            <div class="card-capa" style="background-color: #FF9900;">
+                <i class="bi bi-book"></i>
+            </div>
+            <div class="card-corpo">
+                <span class="card-categoria">Tecnologia</span>
+                <h3 class="card-titulo">Inteligência Artificial nos Negócios</h3>
+                <div class="card-meta">
+                    <i class="bi bi-clock"></i> 3h
+                </div>
+            </div>
+        </div>
+
+        <div class="card-curso">
+            <div class="card-capa" style="background-color: #F65714;">
+                <i class="bi bi-book"></i>
+            </div>
+            <div class="card-corpo">
+                <span class="card-categoria">Gestão</span>
+                <h3 class="card-titulo">Planejamento Estratégico</h3>
+                <div class="card-meta">
+                    <i class="bi bi-clock"></i> 2h
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="secao-carrosel">
+
+    <div class="carrosel-header">
+        <div>
+            <h2 class="carrosel-titulo">Cursos em Destaque</h2>
+            <p class="carrosel-subtitulo">Aprenda com os melhores</p>
+        </div>
+
+        <div class="carrosel-controles">
+            <button class="btn-seta" onclick="moverCarroselDestaque(-1)">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn-seta" onclick="moverCarroselDestaque(1)">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="carrosel-track" id="pistaDestaques">
+
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background-color:#0F978A;">
+                <span class="card-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">
+                    Marketing Digital Completo
+                </h3>
+
+                <div class="card-destaque-meta">
+                    <span><i class="bi bi-display"></i> Online</span>
+                    <span class="separador">•</span>
+                    <span>Iniciante</span>
+                </div>
+
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background-color:#144F63;">
+                <span class="card-modalidade">Presencial</span>
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">
+                    Gestão de Pessoas para Pequenas Empresas
+                </h3>
+
+                <div class="card-destaque-meta">
+                    <span><i class="bi bi-geo-alt"></i> Presencial</span>
+                    <span class="separador">•</span>
+                    <span>Intermediário</span>
+                </div>
+
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background-color:#E8AC00;">
+                <span class="card-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">
+                    E-commerce: Do Zero ao Lançamento
+                </h3>
+
+                <div class="card-destaque-meta">
+                    <span><i class="bi bi-display"></i> Online</span>
+                    <span class="separador">•</span>
+                    <span>Iniciante</span>
+                </div>
+
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background-color:#ED9800;">
+                <span class="card-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">
+                    Precificação Estratégica
+                </h3>
+
+                <div class="card-destaque-meta">
+                    <span><i class="bi bi-display"></i> Online</span>
+                    <span class="separador">•</span>
+                    <span>Avançado</span>
+                </div>
+
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background-color:#E04400;">
+                <span class="card-modalidade">Presencial</span>
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">
+                    Atendimento ao Cliente de Excelência
+                </h3>
+
+                <div class="card-destaque-meta">
+                    <span><i class="bi bi-geo-alt"></i> Presencial</span>
+                    <span class="separador">•</span>
+                    <span>Iniciante</span>
+                </div>
+
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background-color:#008478;">
+                <span class="card-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">
+                    Redes Sociais para Negócios
+                </h3>
+
+                <div class="card-destaque-meta">
+                    <span><i class="bi bi-display"></i> Online</span>
+                    <span class="separador">•</span>
+                    <span>Intermediário</span>
+                </div>
+
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background-color:#0E4356;">
+                <span class="card-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">
+                    Análise de Dados para Empreendedores
+                </h3>
+
+                <div class="card-destaque-meta">
+                    <span><i class="bi bi-display"></i> Online</span>
+                    <span class="separador">•</span>
+                    <span>Avançado</span>
+                </div>
+
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+    function moverCarroselContinue(direcao) {
+        const pista = document.getElementById('pistaCursos');
+        // O cálculo (320 + 24) representa a largura de um cartão + o gap entre eles
+        const distanciaDeRolagem = (320 + 24) * direcao;
+
+        pista.scrollBy({
+            left: distanciaDeRolagem,
+            behavior: 'smooth'
+        });
+    }
+    function moverCarroselDestaque(direcao) {
+        const pista = document.getElementById('pistaDestaques');
+        const distanciaDeRolagem = (320 + 24) * direcao;
+        
+        pista.scrollBy({
+            left: distanciaDeRolagem,
+            behavior: 'smooth'
+        });
+    }
+</script>
 
 </body>
 </html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SEBRAE - Login</title>
+    <link rel="stylesheet" th:href="@{/css/estilo-sebrae.css}" />
+</head>
+<body>
+<h2>Acessar o Sistema</h2>
+
+<div th:if="${erro}" style="color: red;">
+    <p th:text="${erro}"></p>
+</div>
+
+<form th:action="@{/login}" method="post">
+    <div>
+        <label>E-mail:</label>
+        <input type="email" name="email" required />
+    </div>
+    <div>
+        <label>Senha:</label>
+        <input type="password" name="senha" required />
+    </div>
+    <button type="submit">Entrar</button>
+</form>
+
+<br/>
+<a th:href="@{/cadastro}">Não tem uma conta? Cadastre-se aqui</a>
+</body>
+</html>
