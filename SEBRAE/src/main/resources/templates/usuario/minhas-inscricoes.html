@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas inscrições | SEBRAE</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; color: #172033; }
+        header { background: white; border-bottom: 1px solid #dfe4ea; }
+        nav { max-width: 1180px; margin: auto; min-height: 72px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .marca { color: #0050c8; font-size: 1.35rem; font-weight: 800; text-decoration: none; }
+        .links { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
+        .links a { color: #172033; text-decoration: none; font-weight: 700; }
+        main { max-width: 1180px; margin: auto; padding: 50px 24px 80px; }
+        h1 { margin: 0 0 8px; }
+        .subtitulo { margin: 0 0 30px; color: #667085; }
+        .grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+        .card { position: relative; cursor: pointer; display: grid; grid-template-columns: 180px 1fr; overflow: hidden; background: white; border: 1px solid #dfe4ea; border-radius: 16px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(22, 34, 51, 0.1); }
+        .card-link { position: absolute; inset: 0; z-index: 1; border-radius: 16px; }
+        .card-link:focus-visible { outline: 3px solid #0050c8; outline-offset: 3px; }
+        .acoes { position: relative; z-index: 2; }
+        .imagem { width: 100%; height: 100%; min-height: 210px; object-fit: cover; background: #eaecf0; }
+        .conteudo { padding: 22px; }
+        .area { color: #0050c8; font-weight: 800; }
+        h2 { margin: 10px 0; }
+        .data { color: #667085; font-size: 0.9rem; }
+        .acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+        .detalhes, button { padding: 10px 14px; border-radius: 9px; font-weight: 800; }
+        .detalhes { background: #0050c8; color: white; text-decoration: none; }
+        button { border: 0; background: #fff1f1; color: #b42318; cursor: pointer; }
+        .vazio { padding: 42px; border-radius: 16px; background: white; text-align: center; color: #667085; }
+        @media (max-width: 900px) { .grade { grid-template-columns: 1fr; } }
+        @media (max-width: 560px) { .card { grid-template-columns: 1fr; } .imagem { height: 210px; } nav { align-items: flex-start; flex-direction: column; padding-top: 18px; padding-bottom: 18px; } }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a class="marca" th:href="@{/}">SEBRAE</a>
+        <div class="links">
+            <a th:href="@{/cursos}">Cursos</a>
+            <a th:if="${usuarioLogado.administrador}" th:href="@{/cursos/novo}">Cadastrar curso</a>
+            <a th:href="@{/logout}">Sair</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <h1>Minhas inscrições</h1>
+    <p class="subtitulo">Cursos nos quais você está inscrito.</p>
+
+    <section class="grade" th:if="${!#lists.isEmpty(inscricoes)}">
+        <article class="card" th:each="inscricao : ${inscricoes}">
+            <a class="card-link" th:href="@{/cursos/{id}(id=${inscricao.curso.id})}" th:attr="aria-label=|Abrir curso ${inscricao.curso.nome}|"></a>
+            <img class="imagem" th:src="${inscricao.curso.imagemUrl}" th:alt="${inscricao.curso.nome}">
+            <div class="conteudo">
+                <span class="area" th:text="${inscricao.curso.area.nome}">Área</span>
+                <h2 th:text="${inscricao.curso.nome}">Curso</h2>
+                <div class="data">Inscrição realizada em <span th:text="${inscricao.dataInscricaoFormatada}">Data</span></div>
+                <div class="acoes">
+                    <a class="detalhes" th:href="@{/cursos/{id}(id=${inscricao.curso.id})}">Ver curso</a>
+                    <form th:action="@{/cursos/{id}/cancelar-inscricao(id=${inscricao.curso.id})}" method="post">
+                        <button type="submit">Cancelar inscrição</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <div class="vazio" th:if="${#lists.isEmpty(inscricoes)}">
+        Você ainda não se inscreveu em nenhum curso. <a th:href="@{/cursos}">Conheça os cursos disponíveis.</a>
+    </div>
+</main>
+</body>
+</html>

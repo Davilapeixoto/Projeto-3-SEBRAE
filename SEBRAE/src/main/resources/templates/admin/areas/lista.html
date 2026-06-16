@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Áreas | SEBRAE Admin</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; display: flex; font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; color: #172033; }
+        aside { width: 260px; background: #101828; color: white; padding: 28px 20px; }
+        .marca { display: block; margin-bottom: 34px; color: white; font-size: 1.35rem; font-weight: 800; text-decoration: none; }
+        aside a { display: block; margin-bottom: 8px; padding: 12px 14px; border-radius: 10px; color: #d0d5dd; text-decoration: none; font-weight: 700; }
+        aside a:hover, aside a.ativo { background: #1d2939; color: white; }
+        main { flex: 1; min-width: 0; padding: 34px; }
+        h1 { margin: 0 0 7px; }
+        .subtitulo { margin: 0 0 26px; color: #667085; }
+        .grade { display: grid; grid-template-columns: minmax(260px, 390px) 1fr; gap: 22px; align-items: start; }
+        .painel { background: white; border: 1px solid #dfe4ea; border-radius: 16px; padding: 24px; }
+        label { display: block; margin-bottom: 8px; font-weight: 800; }
+        input { width: 100%; padding: 13px 14px; border: 1px solid #cfd6df; border-radius: 10px; font: inherit; }
+        .acoes { display: flex; gap: 10px; margin-top: 18px; }
+        button, .cancelar, .editar { padding: 10px 14px; border-radius: 9px; font-weight: 800; cursor: pointer; text-decoration: none; }
+        button { border: 0; background: #0050c8; color: white; }
+        .cancelar { border: 1px solid #cfd6df; color: #172033; }
+        .editar { background: #eaf2ff; color: #003b94; }
+        .excluir { background: #fff1f1; color: #b42318; }
+        .mensagem { margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; background: #ecfdf3; color: #067647; }
+        .erro { margin-top: 8px; color: #b42318; }
+        .erro-geral { margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; background: #fff1f1; color: #b42318; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px; border-bottom: 1px solid #eaecf0; text-align: left; }
+        th { background: #f9fafb; color: #475467; }
+        td:last-child { width: 190px; }
+        .acoes-linha { display: flex; gap: 8px; }
+        .vazio { color: #667085; }
+        @media (max-width: 850px) { body { display: block; } aside { width: 100%; } .grade { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<aside>
+    <a class="marca" th:href="@{/admin/home}">SEBRAE Admin</a>
+    <a th:href="@{/admin/home}">Visão geral</a>
+    <a class="ativo" th:href="@{/admin/areas}">Áreas</a>
+    <a th:href="@{/admin/tags}">Tags</a>
+    <a th:href="@{/logout}">Sair</a>
+</aside>
+<main>
+    <h1>Áreas</h1>
+    <p class="subtitulo">Somente áreas cadastradas aqui poderão ser selecionadas nos cursos.</p>
+
+    <div class="mensagem" th:if="${param.salvo}">Área salva com sucesso.</div>
+    <div class="mensagem" th:if="${param.excluido}">Área excluída com sucesso.</div>
+    <div class="erro-geral" th:if="${erro}" th:text="${erro}"></div>
+
+    <div class="grade">
+        <section class="painel">
+            <h2 th:text="${area.id == null ? 'Nova área' : 'Editar área'}">Nova área</h2>
+            <form th:action="@{/admin/areas/salvar}" th:object="${area}" method="post">
+                <input type="hidden" th:field="*{id}">
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" th:field="*{nome}" maxlength="100" required>
+                <div class="erro" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                <div class="acoes">
+                    <button type="submit">Salvar</button>
+                    <a class="cancelar" th:if="${area.id != null}" th:href="@{/admin/areas}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="painel">
+            <table th:if="${!#lists.isEmpty(areas)}">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${areas}">
+                        <td th:text="${item.nome}">Área</td>
+                        <td>
+                            <div class="acoes-linha">
+                                <a class="editar" th:href="@{/admin/areas/editar/{id}(id=${item.id})}">Editar</a>
+                                <form th:action="@{/admin/areas/excluir/{id}(id=${item.id})}" method="post">
+                                    <button class="excluir" type="submit">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="vazio" th:if="${#lists.isEmpty(areas)}">Nenhuma área cadastrada.</div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

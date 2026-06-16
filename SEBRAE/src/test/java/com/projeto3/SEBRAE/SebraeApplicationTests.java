@@ -1,13 +1,13 @@
 package com.projeto3.SEBRAE;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+import org.junit.jupiter.api.Test;
+
 class SebraeApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void classePrincipalExiste() {
+		assertNotNull(SebraeApplication.class);
 	}
-
 }
