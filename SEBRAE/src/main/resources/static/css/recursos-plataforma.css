@@ -71,14 +71,15 @@ a { color: inherit; }
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, .92);
+    background: #ffffff;
     border-bottom: 1px solid var(--cinza-borda);
-    backdrop-filter: blur(12px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 html.tema-escuro .site-navbar,
 html.tema-escuro .navbar-global {
-    background: rgba(15, 23, 42, .94) !important;
+    background: #0b0b32 !important;
 }
 
 .site-nav-left,
@@ -647,17 +648,7 @@ html.tema-escuro .footer-logo-box {
     align-items: center;
     gap: 5px;
 }
-.nav-pill-new::after {
-    content: "novo";
-    padding: 2px 6px;
-    border-radius: 999px;
-    background: rgba(243, 44, 6, .12);
-    color: var(--laranja);
-    font-size: .61rem;
-    font-weight: 850;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-}
+.nav-pill-new::after { content: none; display: none; }
 
 .section-block { margin-top: 44px; }
 .section-heading {
@@ -767,7 +758,7 @@ html.tema-escuro .footer-logo-box {
 .onboarding-number { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; background: var(--cinza-fundo); color: var(--laranja); font-weight: 900; }
 .onboarding-step h2 { margin: 0 0 5px; font-size: 1.08rem; }
 .onboarding-step p { margin: 0; color: var(--cinza-texto); line-height: 1.5; font-size: .9rem; }
-.onboarding-check { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--cinza-borda); border-radius: 50%; background: var(--superficie); color: var(--cinza-texto); cursor: pointer; }
+.onboarding-check { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--cinza-borda); border-radius: 50%; background: var(--superficie); color: var(--cinza-texto); cursor: default; }
 .onboarding-step.completed { border-color: rgba(6, 118, 71, .45); }
 .onboarding-step.completed .onboarding-number,
 .onboarding-step.completed .onboarding-check { background: var(--sucesso-fundo); color: var(--sucesso); }
@@ -858,10 +849,385 @@ html.tema-escuro .footer-logo-box {
 .filter-card input:focus,
 .filter-card select:focus { border-color: var(--vermelho); }
 .page-hero-strip::after { background: rgba(231, 241, 24, .30); }
-.nav-pill-new::after,
 .category-icon { background: rgba(243, 44, 6, .12); color: var(--vermelho); }
 .site-footer { border-top: 4px solid var(--amarelo); }
-html.tema-escuro .site-logo-image { filter: brightness(0) invert(1); }
 @media (max-width: 650px) {
     .logo-box, .site-logo-box, .site-logo-image { width: 92px; }
+}
+
+
+/* Ajustes finais: cabeçalhos sólidos, programas clicáveis e recomendações. */
+.site-navbar,
+.navbar-global {
+    background-color: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+html.tema-escuro .site-navbar,
+html.tema-escuro .navbar-global { background-color: #0b0b32 !important; }
+
+.card-programa {
+    position: relative;
+    color: var(--texto);
+    text-decoration: none;
+}
+.card-programa-corpo { display: flex; min-height: 176px; flex-direction: column; }
+.card-programa-nome { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--texto); }
+.card-programa-desc { flex: 1; }
+.programa-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    color: var(--vermelho);
+    font-size: .84rem;
+    font-weight: 850;
+}
+.card-programa:hover .programa-link i { transform: translateX(4px); }
+.programa-link i { transition: transform .18s ease; }
+
+.card-selec { position: relative; display: flex; flex-direction: column; }
+.card-selec-link-total { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.card-selec-capa { background-color: var(--azul-escuro); }
+.card-selec-corpo { display: flex; flex: 1; flex-direction: column; }
+.card-selec-meta { justify-content: space-between; }
+.card-selec-meta > span { display: inline-flex; align-items: center; gap: 6px; }
+.badge-recomendado {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #E7F118;
+    color: #0F0F77;
+    font-size: .72rem;
+    font-weight: 900;
+}
+.btn-selec-curso {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    margin-top: auto;
+    padding: 11px 15px;
+    border: 2px solid #0F0F77;
+    border-radius: 9px;
+    background: #0F0F77;
+    color: #ffffff !important;
+    font-size: .88rem;
+    font-weight: 850;
+    text-decoration: none;
+    transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
+}
+.btn-selec-curso:hover { transform: translateY(-2px); background: #F32C06; border-color: #F32C06; }
+.btn-selec-curso i { transition: transform .18s ease; }
+.btn-selec-curso:hover i { transform: translateX(4px); }
+.onboarding-check { cursor: default; }
+.onboarding-check:not(.is-complete) i { opacity: .22; }
+.onboarding-step.completed .onboarding-check i { opacity: 1; }
+
+/* Correção de contraste da marca no tema escuro. A logo mantém suas cores oficiais. */
+html.tema-escuro .site-logo-image,
+html.tema-escuro .navbar-global .site-logo-image,
+html.tema-escuro .footer-logo-image,
+html.tema-escuro .admin-brand-logo {
+    filter: none !important;
+}
+
+html.tema-escuro .logo-box,
+html.tema-escuro .site-logo-box {
+    width: 124px;
+    padding: 4px 8px;
+    border-radius: 9px;
+    background: #ffffff;
+}
+
+html.tema-escuro .logo-box .site-logo-image,
+html.tema-escuro .site-logo-box .site-logo-image {
+    width: 106px;
+    max-height: 34px;
+}
+
+html.tema-escuro .footer-logo-image {
+    padding: 7px 10px;
+    border-radius: 9px;
+    background: #ffffff;
+}
+
+/* Mantém o formato original do bloco “Selecionado para você”, com ações padronizadas. */
+.card-selec-antigo .card-selec-corpo {
+    min-height: 205px;
+}
+
+.card-selec-antigo .card-selec-titulo {
+    min-height: 45px;
+}
+
+.card-selec-antigo .card-selec-meta {
+    min-height: 22px;
+}
+
+.card-selec-antigo .card-selec-capa::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(145deg, rgba(255,255,255,.10), transparent 55%);
+}
+
+.card-selec-antigo .card-selec-capa > * {
+    position: relative;
+    z-index: 1;
+}
+
+.card-selec-antigo .card-selec-capa-amarela > i {
+    color: #0F0F77;
+}
+
+.btn-selec-antigo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    margin-top: auto;
+    padding: 11px 15px;
+    border: 2px solid #0F0F77;
+    border-radius: 9px;
+    background: #0F0F77;
+    color: #ffffff !important;
+    font-size: .88rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
+}
+
+.btn-selec-antigo:hover {
+    transform: translateY(-2px);
+    border-color: #F32C06;
+    background: #F32C06;
+}
+
+.btn-selec-antigo i {
+    transition: transform .18s ease;
+}
+
+.btn-selec-antigo:hover i {
+    transform: translateX(4px);
+}
+
+html.tema-escuro .card-selec-antigo {
+    background: var(--superficie);
+}
+
+@media (max-width: 650px) {
+    html.tema-escuro .logo-box,
+    html.tema-escuro .site-logo-box {
+        width: 104px;
+    }
+    html.tema-escuro .logo-box .site-logo-image,
+    html.tema-escuro .site-logo-box .site-logo-image {
+        width: 88px;
+    }
+}
+
+/* ========================================================================
+   CORREÇÕES FINAIS DE CONTRASTE DO TEMA ESCURO
+   Mantém a paleta oficial e evita fundo e texto brancos no mesmo elemento.
+   ======================================================================== */
+html.tema-escuro {
+    --botao-primario-fundo: #E7F118;
+    --botao-primario-texto: #0F0F77;
+    --botao-primario-hover: #0F0F77;
+    --botao-primario-hover-texto: #FFFFFF;
+}
+
+/* Marca: a imagem clara é amarela e continua com fundo transparente. */
+html.tema-escuro .logo-box,
+html.tema-escuro .site-logo-box,
+html.tema-escuro .footer-logo-box {
+    width: 112px;
+    height: 42px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+html.tema-escuro .site-logo-image,
+html.tema-escuro .navbar-global .site-logo-image,
+html.tema-escuro .footer-logo-image,
+html.tema-escuro .admin-brand-logo {
+    content: url("/assets/logo-sebrae-escuro.png");
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    filter: none !important;
+    box-shadow: none !important;
+    object-fit: contain;
+}
+
+html.tema-escuro .logo-box .site-logo-image,
+html.tema-escuro .site-logo-box .site-logo-image,
+html.tema-escuro .navbar-global .site-logo-image {
+    width: 112px;
+    max-height: 42px;
+}
+
+html.tema-escuro .footer-logo-image {
+    width: 150px;
+    max-height: none;
+}
+
+/* Botões de ação principal. */
+html.tema-escuro .btn-nav,
+html.tema-escuro .btn-entrar,
+html.tema-escuro .btn-primary,
+html.tema-escuro .filter-card button,
+html.tema-escuro .action-link,
+html.tema-escuro .btn-saiba-mais,
+html.tema-escuro .btn-trilha,
+html.tema-escuro .btn-selec-antigo,
+html.tema-escuro .btn-selec-curso {
+    border-color: var(--botao-primario-fundo) !important;
+    background: var(--botao-primario-fundo) !important;
+    color: var(--botao-primario-texto) !important;
+    opacity: 1;
+}
+
+html.tema-escuro .btn-nav:hover,
+html.tema-escuro .btn-entrar:hover,
+html.tema-escuro .btn-primary:hover,
+html.tema-escuro .filter-card button:hover,
+html.tema-escuro .action-link:hover,
+html.tema-escuro .btn-saiba-mais:hover,
+html.tema-escuro .btn-trilha:hover,
+html.tema-escuro .btn-selec-antigo:hover,
+html.tema-escuro .btn-selec-curso:hover {
+    border-color: var(--botao-primario-hover) !important;
+    background: var(--botao-primario-hover) !important;
+    color: var(--botao-primario-hover-texto) !important;
+    opacity: 1;
+}
+
+/* Botões claros e secundários. */
+html.tema-escuro .btn-hero-branco,
+html.tema-escuro .btn-hero-branco:hover {
+    border-color: #FFFFFF !important;
+    background: #FFFFFF !important;
+    color: #0F0F77 !important;
+}
+
+html.tema-escuro .btn-hero-outline,
+html.tema-escuro .btn-hero-outline:hover {
+    border-color: rgba(255,255,255,.55) !important;
+    background: rgba(255,255,255,.08) !important;
+    color: #FFFFFF !important;
+}
+
+html.tema-escuro .btn-secondary {
+    border-color: #55558d !important;
+    background: #1b1b55 !important;
+    color: #FFFFFF !important;
+}
+html.tema-escuro .btn-secondary:hover {
+    border-color: #E7F118 !important;
+    background: #242466 !important;
+    color: #E7F118 !important;
+}
+
+html.tema-escuro .btn-danger {
+    border: 1px solid #7f3038 !important;
+    background: #481c22 !important;
+    color: #fecaca !important;
+}
+
+/* Controles circulares, alternadores e ícones sobre fundo claro. */
+html.tema-escuro .btn-seta,
+html.tema-escuro .tema-toggle,
+html.tema-escuro .toast-close,
+html.tema-escuro .onboarding-check {
+    border-color: #4b4b82 !important;
+    background: #20205a !important;
+    color: #FFFFFF !important;
+}
+html.tema-escuro .btn-seta:hover,
+html.tema-escuro .tema-toggle:hover,
+html.tema-escuro .toast-close:hover {
+    border-color: #E7F118 !important;
+    background: #2a2a70 !important;
+    color: #E7F118 !important;
+}
+
+html.tema-escuro .view-switch button {
+    background: transparent !important;
+    color: #C2C2D9 !important;
+}
+html.tema-escuro .view-switch button.active {
+    background: #E7F118 !important;
+    color: #0F0F77 !important;
+}
+
+html.tema-escuro .play-btn {
+    background: #FFFFFF !important;
+}
+html.tema-escuro .play-btn i {
+    color: #0F0F77 !important;
+}
+html.tema-escuro .badge-modalidade,
+html.tema-escuro .badge-categoria-aula {
+    background: #FFFFFF !important;
+    color: #0F0F77 !important;
+}
+
+/* Campos e estados nativos mantêm texto legível. */
+html.tema-escuro input,
+html.tema-escuro select,
+html.tema-escuro textarea {
+    color: #FFFFFF;
+    caret-color: #E7F118;
+}
+html.tema-escuro input::placeholder,
+html.tema-escuro textarea::placeholder {
+    color: #AFAFCC;
+    opacity: 1;
+}
+html.tema-escuro select option {
+    background: #15154A;
+    color: #FFFFFF;
+}
+
+/* Links do cabeçalho permanecem claros sobre o header sólido. */
+html.tema-escuro .site-navbar .site-nav-link,
+html.tema-escuro .navbar-global .nav-link-item,
+html.tema-escuro .navbar-global .nav-localizacao,
+html.tema-escuro .site-navbar .site-brand,
+html.tema-escuro .navbar-global .logo-nome {
+    color: #FFFFFF !important;
+}
+html.tema-escuro .site-navbar .site-nav-link:hover,
+html.tema-escuro .navbar-global .nav-link-item:hover {
+    color: #E7F118 !important;
+    opacity: 1;
+}
+
+@media (max-width: 650px) {
+    html.tema-escuro .logo-box,
+    html.tema-escuro .site-logo-box {
+        width: 92px;
+    }
+    html.tema-escuro .logo-box .site-logo-image,
+    html.tema-escuro .site-logo-box .site-logo-image,
+    html.tema-escuro .navbar-global .site-logo-image {
+        width: 92px;
+    }
 }

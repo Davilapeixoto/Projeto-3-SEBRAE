@@ -23,6 +23,16 @@
         }
     }
 
+    function atualizarLogosTema() {
+        const escuro = temaEscuroAtivo();
+        document.querySelectorAll(".site-logo-image, .footer-logo-image, .admin-brand-logo").forEach(function (logo) {
+            if (!logo.dataset.logoClaro) {
+                logo.dataset.logoClaro = logo.getAttribute("src") || "/assets/logo-sebrae.png";
+            }
+            logo.setAttribute("src", escuro ? "/assets/logo-sebrae-escuro.png" : logo.dataset.logoClaro);
+        });
+    }
+
     function atualizarBotoesTema() {
         const escuro = temaEscuroAtivo();
         document.querySelectorAll("[data-tema-toggle]").forEach(function (botao) {
@@ -30,6 +40,7 @@
             botao.setAttribute("aria-label", escuro ? "Ativar modo claro" : "Ativar modo escuro");
             botao.title = escuro ? "Modo claro" : "Modo escuro";
         });
+        atualizarLogosTema();
     }
 
     function alternarTema() {
@@ -207,50 +218,70 @@
     }
 
     function configurarJornadaNovoUsuario() {
-        const jornada = document.querySelector("[data-onboarding]");
-        if (!jornada) return;
-
-        const chave = "sebrae-jornada-novo-usuario";
-        const passos = Array.from(jornada.querySelectorAll("[data-onboarding-step]"));
-        const progresso = jornada.querySelector("[data-onboarding-progress]");
-        const rotulo = jornada.querySelector("[data-onboarding-label]");
+        const chave = "sebrae-jornada-novo-usuario-v2";
+        const idsValidos = ["conta", "categorias", "curso", "feed"];
         let concluidos = [];
 
         try {
-            const valor = JSON.parse(localStorage.getItem(chave) || "[]");
-            if (Array.isArray(valor)) concluidos = valor;
+            const salvo = JSON.parse(localStorage.getItem(chave) || "[]");
+            if (Array.isArray(salvo)) {
+                concluidos = salvo.filter(function (id) { return idsValidos.includes(id); });
+            } else if (salvo && Array.isArray(salvo.concluidos)) {
+                concluidos = salvo.concluidos.filter(function (id) { return idsValidos.includes(id); });
+            }
         } catch (erro) { concluidos = []; }
 
-        function atualizar() {
-            passos.forEach(function (passo) {
-                const id = passo.getAttribute("data-onboarding-step");
-                const completo = concluidos.includes(id);
-                passo.classList.toggle("completed", completo);
-                const botao = passo.querySelector("[data-onboarding-toggle]");
-                if (botao) {
-                    botao.setAttribute("aria-pressed", String(completo));
-                    botao.title = completo ? "Marcar como pendente" : "Marcar como concluída";
-                }
-            });
-            const total = passos.length || 1;
-            const quantidade = passos.filter(function (passo) {
-                return concluidos.includes(passo.getAttribute("data-onboarding-step"));
-            }).length;
-            if (progresso) progresso.style.width = ((quantidade / total) * 100) + "%";
-            if (rotulo) rotulo.textContent = quantidade + " de " + total + " etapas concluídas";
-            try { localStorage.setItem(chave, JSON.stringify(concluidos)); } catch (erro) { /* opcional */ }
+        function concluir(id) {
+            if (idsValidos.includes(id) && !concluidos.includes(id)) concluidos.push(id);
         }
 
-        jornada.querySelectorAll("[data-onboarding-toggle]").forEach(function (botao) {
-            botao.addEventListener("click", function () {
-                const id = botao.getAttribute("data-onboarding-toggle");
-                concluidos = concluidos.includes(id)
-                    ? concluidos.filter(function (item) { return item !== id; })
-                    : concluidos.concat(id);
-                atualizar();
-            });
+        const caminho = window.location.pathname.replace(/\/$/, "") || "/";
+        const parametros = new URLSearchParams(window.location.search);
+        const usuarioConectado = Boolean(document.querySelector('a[href$="/logout"]'));
+
+        if (usuarioConectado) concluir("conta");
+        if (caminho === "/categorias" || parametros.has("area")) concluir("categorias");
+        if (/^\/cursos\/\d+$/.test(caminho)) concluir("curso");
+        if (caminho === "/feed") concluir("feed");
+
+        try { localStorage.setItem(chave, JSON.stringify(concluidos)); } catch (erro) { /* preferência opcional */ }
+
+        const jornada = document.querySelector("[data-onboarding]");
+        if (!jornada) return;
+
+        const passos = Array.from(jornada.querySelectorAll("[data-onboarding-step]"));
+        const progresso = jornada.querySelector("[data-onboarding-progress]");
+        const rotulo = jornada.querySelector("[data-onboarding-label]");
+        const proximo = jornada.querySelector("[data-onboarding-next]");
+
+        passos.forEach(function (passo) {
+            const id = passo.getAttribute("data-onboarding-step");
+            const completo = concluidos.includes(id);
+            passo.classList.toggle("completed", completo);
+            const status = passo.querySelector("[data-onboarding-status]");
+            if (status) {
+                status.classList.toggle("is-complete", completo);
+                status.setAttribute("title", completo ? "Etapa concluída automaticamente" : "Concluída automaticamente ao realizar esta ação");
+                status.setAttribute("aria-label", completo ? "Etapa concluída" : "Etapa pendente");
+            }
         });
-        atualizar();
+
+        const quantidade = idsValidos.filter(function (id) { return concluidos.includes(id); }).length;
+        if (progresso) progresso.style.width = ((quantidade / idsValidos.length) * 100) + "%";
+        if (rotulo) rotulo.textContent = quantidade + " de " + idsValidos.length + " etapas concluídas automaticamente";
+
+        if (proximo) {
+            const destinos = {
+                conta: { href: "/cadastro", texto: "Criar ou acessar conta" },
+                categorias: { href: "/categorias", texto: "Explorar categorias" },
+                curso: { href: "/loja", texto: "Escolher primeiro curso" },
+                feed: { href: "/feed", texto: "Conhecer meu feed" }
+            };
+            const pendente = idsValidos.find(function (id) { return !concluidos.includes(id); });
+            const destino = pendente ? destinos[pendente] : { href: "/feed", texto: "Jornada concluída — abrir feed" };
+            proximo.setAttribute("href", destino.href);
+            proximo.textContent = destino.texto;
+        }
     }
 
     function configurarPreviewImagemCurso() {

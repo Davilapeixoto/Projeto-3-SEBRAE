@@ -35,8 +35,8 @@
             justify-content: space-between;
             padding: 0 2rem;
             height: 64px;
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(12px);
+            background: #FFFFFF;
+            backdrop-filter: none;
             border-bottom: 1px solid var(--cinza-borda);
             position: sticky;
             top: 0;
@@ -799,8 +799,6 @@
 
     <style>
         .footer-logo-image { width: 150px; height: auto; display: block; }
-        html.tema-escuro .footer-logo-image,
-        html.tema-escuro .navbar-global .site-logo-image { filter: brightness(0) invert(1); }
     </style>
 </head>
 <body>
@@ -1140,50 +1138,46 @@
     <div class="secao-header">
         <div>
             <h2 class="secao-titulo">Programas Estratégicos</h2>
-            <p class="secao-sub">Iniciativas especiais para impulsionar seu negócio</p>
+            <p class="secao-sub">Iniciativas oficiais do Sebrae para impulsionar seu negócio</p>
         </div>
         <div class="seta-grupo">
-            <button class="btn-seta" onclick="rolar('programas', -1)"><i class="bi bi-chevron-left"></i></button>
-            <button class="btn-seta" onclick="rolar('programas', 1)"><i class="bi bi-chevron-right"></i></button>
+            <button class="btn-seta" onclick="rolar('programas', -1)" aria-label="Programas anteriores"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('programas', 1)" aria-label="Próximos programas"><i class="bi bi-chevron-right"></i></button>
         </div>
     </div>
     <div class="carrossel" id="programas">
-        <div class="card-programa">
-            <div class="card-programa-capa" style="background:#F32C06;">
-                <i class="bi bi-stars"></i>
-            </div>
+        <a class="card-programa" href="https://sebrae.com.br/sites/PortalSebrae/sebraetec" target="_blank" rel="noopener noreferrer" aria-label="Conhecer o programa Sebraetec no portal do Sebrae">
+            <div class="card-programa-capa" style="background:#F32C06;"><i class="bi bi-stars"></i></div>
             <div class="card-programa-corpo">
-                <p class="card-programa-nome">Sebraetec</p>
+                <p class="card-programa-nome">Sebraetec <i class="bi bi-box-arrow-up-right"></i></p>
                 <p class="card-programa-desc">Programa de inovação e tecnologia para aumentar a competitividade da sua empresa.</p>
+                <span class="programa-link">Conhecer programa <i class="bi bi-arrow-right"></i></span>
             </div>
-        </div>
-        <div class="card-programa">
-            <div class="card-programa-capa" style="background:#0F0F77;">
-                <i class="bi bi-stars"></i>
-            </div>
+        </a>
+        <a class="card-programa" href="https://sebrae.com.br/sites/PortalSebrae/ufs/pe/sebraeaz/ali-agente-local-de-inovacao%2Cf137767836fc7710VgnVCM100000d701210aRCRD" target="_blank" rel="noopener noreferrer" aria-label="Conhecer o programa ALI do Sebrae Pernambuco">
+            <div class="card-programa-capa" style="background:#0F0F77;"><i class="bi bi-lightbulb"></i></div>
             <div class="card-programa-corpo">
-                <p class="card-programa-nome">ALI</p>
-                <p class="card-programa-desc">Agente Local de Inovação: apoio gratuito para inovar em seu pequeno negócio.</p>
+                <p class="card-programa-nome">ALI <i class="bi bi-box-arrow-up-right"></i></p>
+                <p class="card-programa-desc">Agentes Locais de Inovação oferecem acompanhamento para melhorar produtividade e resultados.</p>
+                <span class="programa-link">Conhecer programa <i class="bi bi-arrow-right"></i></span>
             </div>
-        </div>
-        <div class="card-programa">
-            <div class="card-programa-capa" style="background:#0F0F77;">
-                <i class="bi bi-stars"></i>
-            </div>
+        </a>
+        <a class="card-programa" href="https://sebrae.com.br/subsites/sebrae-delas/" target="_blank" rel="noopener noreferrer" aria-label="Conhecer o programa Sebrae Delas">
+            <div class="card-programa-capa" style="background:#0F0F77;"><i class="bi bi-people"></i></div>
             <div class="card-programa-corpo">
-                <p class="card-programa-nome">Sebrae Delas</p>
-                <p class="card-programa-desc">Programa dedicado ao empreendedorismo feminino com mentorias e capacitação.</p>
+                <p class="card-programa-nome">Sebrae Delas <i class="bi bi-box-arrow-up-right"></i></p>
+                <p class="card-programa-desc">Programa dedicado ao empreendedorismo feminino, com capacitação, apoio e conexões.</p>
+                <span class="programa-link">Conhecer programa <i class="bi bi-arrow-right"></i></span>
             </div>
-        </div>
-        <div class="card-programa">
-            <div class="card-programa-capa" style="background:#E7F118;">
-                <i class="bi bi-stars"></i>
-            </div>
+        </a>
+        <a class="card-programa" href="https://sebrae.com.br/subsites/sebrae-startups" target="_blank" rel="noopener noreferrer" aria-label="Conhecer o Sebrae Startups">
+            <div class="card-programa-capa" style="background:#E7F118; color:#0F0F77;"><i class="bi bi-rocket-takeoff"></i></div>
             <div class="card-programa-corpo">
-                <p class="card-programa-nome">Sebrae Startups</p>
-                <p class="card-programa-desc">Ecossistema para startups e negócios com base tecnológica inovadora.</p>
+                <p class="card-programa-nome">Sebrae Startups <i class="bi bi-box-arrow-up-right"></i></p>
+                <p class="card-programa-desc">Conteúdos, conexões e oportunidades para startups e negócios inovadores.</p>
+                <span class="programa-link">Conhecer programa <i class="bi bi-arrow-right"></i></span>
             </div>
-        </div>
+        </a>
     </div>
 </section>
 
@@ -1250,61 +1244,79 @@
 </section>
 
 <!-- ======================== SELECIONADO PARA VOCÊ ======================== -->
-<section class="secao secao-cinza">
+<section class="secao">
     <div class="secao-header">
         <div>
             <h2 class="secao-titulo">Selecionado para você</h2>
-            <p class="secao-sub">Baseado nos seus interesses</p>
+            <p class="secao-sub">Conteúdos escolhidos para apoiar os próximos passos do seu negócio</p>
         </div>
         <div class="seta-grupo">
-            <button class="btn-seta" onclick="rolar('selec', -1)"><i class="bi bi-chevron-left"></i></button>
-            <button class="btn-seta" onclick="rolar('selec', 1)"><i class="bi bi-chevron-right"></i></button>
+            <button class="btn-seta" onclick="rolar('selec', -1)" aria-label="Itens anteriores"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('selec', 1)" aria-label="Próximos itens"><i class="bi bi-chevron-right"></i></button>
         </div>
     </div>
+
     <div class="carrossel" id="selec">
-        <div class="card-selec">
+        <article class="card-selec card-selec-antigo">
             <div class="card-selec-capa" style="background:#0F0F77;">
                 <span class="badge-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
+                <i class="bi bi-instagram"></i>
             </div>
             <div class="card-selec-corpo">
+                <p class="card-selec-cat">Marketing digital</p>
                 <h3 class="card-selec-titulo">Instagram para Negócios</h3>
                 <div class="card-selec-meta"><i class="bi bi-display"></i> Online <span>•</span> Iniciante</div>
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+                <a th:href="@{/cursos(q='Marketing Digital')}" class="btn-selec-antigo">
+                    Ver conteúdos <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
-        </div>
-        <div class="card-selec">
+        </article>
+
+        <article class="card-selec card-selec-antigo">
             <div class="card-selec-capa" style="background:#0F0F77;">
-                <i class="bi bi-book"></i>
+                <span class="badge-modalidade">Guia</span>
+                <i class="bi bi-journal-check"></i>
             </div>
             <div class="card-selec-corpo">
                 <p class="card-selec-cat">Planejamento</p>
                 <h3 class="card-selec-titulo">Como criar um plano de negócios</h3>
-                <div class="card-selec-meta"><i class="bi bi-clock"></i> 1h 30min</div>
+                <div class="card-selec-meta"><i class="bi bi-clock"></i> Leitura rápida</div>
+                <a th:href="@{/cursos(q='Plano de Negócios')}" class="btn-selec-antigo">
+                    Explorar tema <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
-        </div>
-        <div class="card-selec">
+        </article>
+
+        <article class="card-selec card-selec-antigo">
             <div class="card-selec-capa" style="background:#F32C06;">
                 <div class="play-btn"><i class="bi bi-play-fill"></i></div>
                 <span class="badge-duracao" style="top:14px;right:14px;"><i class="bi bi-clock"></i> 25min</span>
                 <span class="badge-categoria-aula" style="bottom:14px;left:14px;">Marketing Digital</span>
             </div>
             <div class="card-selec-corpo">
+                <p class="card-selec-cat">Conteúdo em destaque</p>
                 <h3 class="card-selec-titulo">Stories que vendem: dicas práticas</h3>
-                <div class="card-selec-meta"><i class="bi bi-person"></i> Beatriz Oliveira</div>
+                <div class="card-selec-meta"><i class="bi bi-person"></i> Especialistas Sebrae</div>
+                <a th:href="@{/cursos(q='Marketing')}" class="btn-selec-antigo">
+                    Acessar seleção <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
-        </div>
-        <div class="card-selec">
-            <div class="card-selec-capa" style="background:#E7F118;">
+        </article>
+
+        <article class="card-selec card-selec-antigo">
+            <div class="card-selec-capa card-selec-capa-amarela" style="background:#E7F118;">
                 <span class="badge-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
+                <i class="bi bi-graph-up-arrow"></i>
             </div>
             <div class="card-selec-corpo">
+                <p class="card-selec-cat">Finanças</p>
                 <h3 class="card-selec-titulo">Finanças para Empreendedores</h3>
                 <div class="card-selec-meta"><i class="bi bi-display"></i> Online <span>•</span> Iniciante</div>
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+                <a th:href="@{/cursos(q='Finanças')}" class="btn-selec-antigo">
+                    Ver conteúdos <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
-        </div>
+        </article>
     </div>
 </section>
 

@@ -46,7 +46,7 @@
                         <span class="text-link" th:if="${usuarioLogado != null}">Conta conectada ✓</span>
                     </div>
                 </div>
-                <button class="onboarding-check" type="button" data-onboarding-toggle="conta" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+                <span class="onboarding-check" data-onboarding-status="conta" aria-label="Status automático da etapa"><i class="bi bi-check-lg"></i></span>
             </article>
 
             <article class="onboarding-step" data-onboarding-step="categorias">
@@ -56,7 +56,7 @@
                     <p>Navegue pelas categorias e descubra assuntos relacionados aos seus objetivos de negócio.</p>
                     <div class="actions-row" style="margin-top:12px"><a class="text-link" th:href="@{/categorias}">Explorar categorias</a></div>
                 </div>
-                <button class="onboarding-check" type="button" data-onboarding-toggle="categorias" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+                <span class="onboarding-check" data-onboarding-status="categorias" aria-label="Status automático da etapa"><i class="bi bi-check-lg"></i></span>
             </article>
 
             <article class="onboarding-step" data-onboarding-step="curso">
@@ -66,7 +66,7 @@
                     <p>Use a loja em formato de vitrine, aplique filtros e abra os detalhes do conteúdo que mais combina com você.</p>
                     <div class="actions-row" style="margin-top:12px"><a class="text-link" th:href="@{/loja}">Abrir loja de cursos</a></div>
                 </div>
-                <button class="onboarding-check" type="button" data-onboarding-toggle="curso" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+                <span class="onboarding-check" data-onboarding-status="curso" aria-label="Status automático da etapa"><i class="bi bi-check-lg"></i></span>
             </article>
 
             <article class="onboarding-step" data-onboarding-step="feed">
@@ -76,17 +76,17 @@
                     <p>Veja novidades, cursos populares e recomendações ajustadas ao seu histórico de inscrições.</p>
                     <div class="actions-row" style="margin-top:12px"><a class="text-link" th:href="@{/feed}">Acessar feed</a></div>
                 </div>
-                <button class="onboarding-check" type="button" data-onboarding-toggle="feed" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+                <span class="onboarding-check" data-onboarding-status="feed" aria-label="Status automático da etapa"><i class="bi bi-check-lg"></i></span>
             </article>
         </section>
 
         <aside class="onboarding-side">
             <p class="page-eyebrow">Seu progresso</p>
             <h2>Primeiros passos</h2>
-            <p>Marque cada etapa conforme avançar. O progresso fica salvo neste navegador.</p>
+            <p>As etapas são concluídas automaticamente conforme você utiliza a plataforma. O progresso fica salvo neste navegador.</p>
             <div class="progress-track"><div class="progress-value" data-onboarding-progress></div></div>
             <div class="progress-label" data-onboarding-label>0 de 4 etapas concluídas</div>
-            <a class="btn-primary btn-block" style="margin-top:20px" th:href="${usuarioLogado == null} ? @{/cadastro} : @{/feed}" th:text="${usuarioLogado == null ? 'Começar agora' : 'Continuar no feed'}">Começar agora</a>
+            <a class="btn-primary btn-block" style="margin-top:20px" href="/cadastro" data-onboarding-next>Começar jornada</a>
         </aside>
     </div>
 

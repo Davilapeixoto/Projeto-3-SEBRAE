@@ -85,8 +85,9 @@ body.admin-body {
     margin: 0 -34px 30px;
     padding: 22px 34px;
     border-bottom: 1px solid var(--admin-border);
-    background: color-mix(in srgb, var(--admin-bg) 92%, transparent);
-    backdrop-filter: blur(12px);
+    background: var(--admin-bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 .admin-title { margin: 0 0 6px; font-size: clamp(1.7rem, 3vw, 2.35rem); line-height: 1.12; letter-spacing: -.03em; }
 .admin-subtitle { margin: 0; color: var(--admin-muted); line-height: 1.5; }
@@ -271,3 +272,51 @@ html.tema-escuro .admin-level { color: #bae6fd; }
 .admin-select:focus,
 .admin-textarea:focus { border-color: #F32C06; box-shadow: 0 0 0 3px rgba(243,44,6,.13); }
 .admin-image-preview-hidden { display: none; }
+
+/* Contraste consistente do painel administrativo no tema escuro. */
+html.tema-escuro .admin-brand-logo {
+    content: url("/assets/logo-sebrae-escuro.png");
+    width: 118px;
+    max-height: 46px;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    filter: none;
+}
+html.tema-escuro .admin-button,
+html.tema-escuro .admin-logout {
+    border: 1px solid #E7F118;
+    background: #E7F118;
+    color: #0F0F77;
+    opacity: 1;
+}
+html.tema-escuro .admin-button:hover,
+html.tema-escuro .admin-logout:hover {
+    border-color: #0F0F77;
+    background: #0F0F77;
+    color: #FFFFFF;
+    opacity: 1;
+}
+html.tema-escuro .admin-button-secondary {
+    border-color: #55558d;
+    background: #1b1b55;
+    color: #FFFFFF;
+}
+html.tema-escuro .admin-button-secondary:hover {
+    border-color: #E7F118;
+    color: #E7F118;
+}
+html.tema-escuro .admin-button-small {
+    background: rgba(243, 44, 6, .18);
+    color: #FF9A86;
+}
+html.tema-escuro .admin-button-danger {
+    border: 1px solid #7f3038;
+    background: #481c22;
+    color: #fecaca;
+}
+html.tema-escuro .admin-button-success {
+    border: 1px solid #21765e;
+    background: #123c32;
+    color: #86efca;
+}

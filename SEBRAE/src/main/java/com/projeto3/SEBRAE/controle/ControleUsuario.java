@@ -34,11 +34,14 @@ public class ControleUsuario {
 
 	@GetMapping("/")
 	public String paginaInicial(Model model, HttpSession session) {
+		Usuario usuario = usuarioLogado(session);
 		model.addAttribute("cursos", servicoCurso.listar().stream().limit(6).toList());
 		model.addAttribute("maisVisitados", servicoCurso.listarMaisVisitados());
+		model.addAttribute("selecionados", servicoCurso.recomendarParaUsuario(usuario == null ? null : usuario.getId())
+				.stream().limit(6).toList());
 		model.addAttribute("categorias", servicoArea.listarComEstatisticas().stream().limit(8).toList());
 		model.addAttribute("categoriasMaisAcessadas", servicoArea.listarMaisAcessadas().stream().limit(5).toList());
-		model.addAttribute("usuarioLogado", session.getAttribute("usuarioLogado"));
+		model.addAttribute("usuarioLogado", usuario);
 		return "usuario/home";
 	}
 
