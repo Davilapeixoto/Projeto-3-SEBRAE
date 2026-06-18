@@ -4,845 +4,1397 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEBRAE - Plataforma Educacional</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <style>
-        /* ==========================================================================
-           Escopo de Variáveis Customizadas (Design System)
-           ========================================================================== */
         :root {
-            --cor-primaria: #0B0C10;
-            --cor-fundo-hero: #36363E;
-            --cor-texto-hero: #F8F9FA;
-            --cor-texto-mutado-hero: #C0C0C0;
-            --cor-borda-suave: #EAEAEA;
-            --cor-input-bg: #F1F3F5;
+            --preto: #0B0C10;
+            --cinza-hero: #36363E;
+            --branco: #FFFFFF;
+            --cinza-borda: #E5E7EB;
+            --cinza-fundo: #F3F4F6;
+            --cinza-texto: #6B7280;
+            --laranja: #F05D23;
+            --verde: #0F978A;
+            --azul-escuro: #144F63;
+            --amarelo: #E8AC00;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #FFFFFF;
-            color: var(--cor-primaria);
-            margin: 0;
-            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: var(--branco);
+            color: var(--preto);
         }
 
-        /* ==========================================================================
-           Camada 1: Barra de Navegação Global
-           ========================================================================== */
+        /* ===================== NAVBAR ===================== */
         .navbar-global {
-            padding: 1rem 2rem;
-            /* Fundo branco semi-transparente para permitir a passagem de luz */
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--cor-borda-suave);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 2rem;
+            height: 64px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--cinza-borda);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
-        /* Grupo Esquerdo: Logo e Links */
-        .nav-grupo-esquerdo {
+        .nav-esquerdo {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 28px;
         }
 
         .logo-box {
-            background-color: var(--cor-primaria);
-            color: #FFFFFF;
-            font-weight: bold;
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-        }
-
-        .logo-texto {
+            background: var(--preto);
+            color: #fff;
             font-weight: 700;
-            font-size: 1.1rem;
-            margin-right: 16px;
+            font-size: 1rem;
+            width: 38px; height: 38px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .nav-link {
-            color: var(--cor-primaria);
+        .logo-nome {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-right: 8px;
+        }
+
+        .nav-link-item {
+            color: var(--preto);
             text-decoration: none;
-            font-weight: 500;
             font-size: 0.95rem;
+            font-weight: 500;
             transition: opacity 0.2s;
         }
+        .nav-link-item:hover { opacity: 0.6; }
 
-        .nav-link:hover { opacity: 0.7; }
-
-        /* Grupo Central: Motor de Busca */
-        .nav-grupo-central {
-            flex-grow: 1;
+        .nav-centro {
+            flex: 1;
             display: flex;
             justify-content: center;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
-        .search-wrapper {
+        .search-box {
             position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 480px;
         }
 
-        .search-input {
+        .search-box input {
             width: 100%;
-            background-color: var(--cor-input-bg);
+            background: var(--cinza-fundo);
             border: none;
             border-radius: 8px;
             padding: 10px 16px 10px 40px;
             font-size: 0.9rem;
-            color: var(--cor-primaria);
+            color: var(--preto);
         }
+        .search-box input:focus { outline: 2px solid var(--preto); }
 
-        .search-input:focus {
-            outline: 2px solid var(--cor-primaria);
-        }
-
-        .search-icon {
+        .search-box .ico-busca {
             position: absolute;
-            left: 14px;
-            top: 50%;
+            left: 14px; top: 50%;
             transform: translateY(-50%);
-            color: #6C757D;
-        }
-
-        /* Grupo Direito: Contexto e Autenticação */
-        .nav-grupo-direito {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .localizacao-link {
-            color: var(--cor-primaria);
-            text-decoration: none;
+            color: var(--cinza-texto);
             font-size: 0.9rem;
+        }
+
+        .nav-direito {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 18px;
+        }
+
+        .nav-localizacao {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.9rem; color: var(--preto); text-decoration: none;
         }
 
         .btn-entrar {
-            background-color: var(--cor-primaria);
-            color: #FFFFFF;
+            background: var(--preto);
+            color: #fff;
+            padding: 10px 26px;
             border-radius: 8px;
-            padding: 10px 28px;
-            text-decoration: none;
             font-weight: 600;
-            transition: transform 0.1s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: opacity 0.2s;
         }
+        .btn-entrar:hover { opacity: 0.85; color: #fff; }
 
-        .btn-entrar:hover { transform: scale(1.02); color: #FFFFFF;}
-
-        /* ==========================================================================
-           Camada 2: Seção de Impacto (Hero Section)
-           ========================================================================== */
-        .hero-section {
-            background-color: var(--cor-fundo-hero);
-            /* Implementação de Grid Pattern com CSS Gradiente */
+        /* ===================== HERO ===================== */
+        .hero {
+            background: var(--cinza-hero);
             background-image:
                 linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 40px 40px;
-            background-position: center center;
-            color: var(--cor-texto-hero);
-            padding: 100px 80px;
-            min-height: calc(100vh - 75px);
+            color: #fff;
+            padding: 90px 80px;
+            min-height: calc(100vh - 64px);
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
         .hero-badge {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--cor-texto-hero);
-            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
             border-radius: 20px;
+            padding: 7px 16px;
             font-size: 0.85rem;
             font-weight: 500;
+            margin-bottom: 28px;
             width: fit-content;
-            margin-bottom: 30px;
-            backdrop-filter: blur(4px);
         }
 
-        .hero-title {
-            font-size: 4.5rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            max-width: 800px;
+        .hero h1 {
+            font-size: 4.2rem;
+            font-weight: 800;
+            line-height: 1.08;
+            max-width: 760px;
+            margin-bottom: 22px;
         }
 
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--cor-texto-mutado-hero);
-            max-width: 650px;
-            margin-bottom: 40px;
+        .hero p {
+            font-size: 1.15rem;
+            color: #C0C0C0;
+            max-width: 580px;
             line-height: 1.6;
+            margin-bottom: 38px;
         }
 
-        /* Estruturação dos Botões de Ação */
-        .hero-actions {
+        .hero-botoes {
             display: flex;
-            gap: 16px;
-            align-items: center;
-            margin-bottom: 60px;
+            gap: 14px;
+            margin-bottom: 52px;
         }
 
-        .btn-comecar {
-            background-color: #FFFFFF;
-            color: var(--cor-primaria);
-            padding: 14px 32px;
+        .btn-hero-branco {
+            background: #fff;
+            color: var(--preto);
+            padding: 14px 30px;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 0.95rem;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            transition: background-color 0.2s;
+            display: flex; align-items: center; gap: 8px;
+            transition: background 0.2s;
         }
+        .btn-hero-branco:hover { background: #f1f1f1; color: var(--preto); }
 
-        .btn-comecar:hover { background-color: #F1F3F5; color: var(--cor-primaria); }
-
-        .btn-explorar {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #FFFFFF;
-            padding: 14px 32px;
+        .btn-hero-outline {
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+            padding: 14px 30px;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 0.95rem;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: background-color 0.2s;
+            display: flex; align-items: center; gap: 8px;
+            border: 1px solid rgba(255,255,255,0.18);
+            transition: background 0.2s;
         }
+        .btn-hero-outline:hover { background: rgba(255,255,255,0.12); color: #fff; }
 
-        .btn-explorar:hover { background-color: rgba(255, 255, 255, 0.1); color: #FFFFFF; }
-
-        /* Rodapé do Hero (Métricas) */
-        .hero-metrics {
+        .hero-metricas {
             display: flex;
             align-items: center;
-            gap: 16px;
-            font-size: 0.9rem;
-            color: var(--cor-texto-mutado-hero);
+            gap: 14px;
+            font-size: 0.88rem;
+            color: #9CA3AF;
+        }
+        .hero-metricas .ponto {
+            width: 4px; height: 4px;
+            background: #9CA3AF; border-radius: 50%;
         }
 
-        .metric-dot {
-            width: 4px;
-            height: 4px;
-            background-color: var(--cor-texto-mutado-hero);
-            border-radius: 50%;
+        /* ===================== SEÇÕES GENÉRICAS ===================== */
+        .secao {
+            padding: 64px 2rem;
+            background: var(--branco);
+            overflow: hidden;
         }
+        .secao-cinza { background: var(--cinza-fundo); }
 
-        /* Responsividade Básica */
-        @media (max-width: 992px) {
-            .navbar-global { flex-wrap: wrap; gap: 20px; padding: 1rem; }
-            .nav-grupo-central { order: 3; width: 100%; padding: 0; }
-            .hero-section { padding: 60px 20px; }
-            .hero-title { font-size: 3rem; }
-            .hero-actions { flex-direction: column; align-items: stretch; }
-            .hero-metrics { flex-wrap: wrap; }
-        }
-        /* ==========================================================================
-           Camada 3: Seção "Continue Explorando" (Carrossel)
-           ========================================================================== */
-        .secao-carrosel {
-            padding: 80px 2rem;
-            background-color: #FFFFFF;
-            overflow: hidden; /* Evita que a página crie barra de rolagem horizontal */
-        }
-
-        .carrosel-header {
+        .secao-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 30px;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 1380px;
+            margin: 0 auto 28px;
         }
 
-        .carrosel-titulo {
-            font-size: 2rem;
+        .secao-titulo {
+            font-size: 1.7rem;
             font-weight: 700;
-            color: var(--cor-primaria);
-            margin: 0;
-            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+        .secao-sub {
+            font-size: 0.95rem;
+            color: var(--cinza-texto);
         }
 
-        .carrosel-subtitulo {
-            font-size: 1rem;
-            color: #6C757D;
-            margin-top: 8px;
-            margin-bottom: 0;
-        }
-
-        /* Controles do Carrossel (Setas) */
-        .carrosel-controles {
-            display: flex;
-            gap: 12px;
+        .seta-grupo {
+            display: flex; gap: 10px;
         }
 
         .btn-seta {
-            background-color: #FFFFFF;
-            border: 1px solid var(--cor-borda-suave);
+            width: 42px; height: 42px;
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--cor-primaria);
+            border: 1px solid var(--cinza-borda);
+            background: #fff;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            color: var(--preto);
+            transition: background 0.2s;
         }
+        .btn-seta:hover { background: var(--cinza-fundo); }
 
-        .btn-seta:hover {
-            background-color: var(--cor-input-bg);
-            border-color: #D1D5DB;
-        }
-
-        /* A Pista onde os cartões correm */
-        .carrosel-track {
+        /* ===================== CARROSSEL BASE ===================== */
+        .carrossel {
             display: flex;
-            gap: 24px;
+            gap: 20px;
             overflow-x: auto;
-            scroll-behavior: smooth; /* Animação nativa de deslize */
-            padding-bottom: 20px; /* Espaço para a sombra dos cartões não cortar */
-            max-width: 1400px;
+            scroll-behavior: smooth;
+            padding-bottom: 8px;
+            max-width: 1380px;
             margin: 0 auto;
-            /* Oculta a barra de rolagem para um visual mais limpo */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;
         }
+        .carrossel::-webkit-scrollbar { display: none; }
 
-        .carrosel-track::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
-        }
-
-        /* O Cartão Individual */
-        .card-curso {
-            flex: 0 0 320px; /* Não encolhe, não cresce, tamanho fixo de 320px */
-            border: 1px solid var(--cor-borda-suave);
+        /* ===================== CARDS: CONTINUE EXPLORANDO ===================== */
+        .card-explorar {
+            flex: 0 0 310px;
+            border: 1px solid var(--cinza-borda);
             border-radius: 12px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            background: #FFFFFF;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #fff;
+            transition: transform 0.25s, box-shadow 0.25s;
         }
+        .card-explorar:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
 
-        .card-curso:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-        }
-
-        /* Topo Colorido do Cartão */
-        .card-capa {
-            height: 160px;
-            padding: 24px;
+        .card-explorar-capa {
+            height: 150px;
             display: flex;
             align-items: flex-end;
+            padding: 20px;
         }
+        .card-explorar-capa i { font-size: 1.6rem; color: rgba(255,255,255,0.85); }
 
-        .card-capa i {
-            font-size: 1.8rem;
-            color: rgba(255, 255, 255, 0.9);
+        .card-explorar-corpo {
+            padding: 20px;
         }
-
-        /* Corpo de Texto do Cartão */
-        .card-corpo {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
+        .card-cat {
+            font-size: 0.78rem;
+            color: var(--cinza-texto);
+            margin-bottom: 6px;
         }
-
-        .card-categoria {
-            font-size: 0.8rem;
-            color: #6C757D;
-            margin-bottom: 8px;
-        }
-
         .card-titulo {
-            font-size: 1.15rem;
+            font-size: 1rem;
             font-weight: 600;
-            color: var(--cor-primaria);
-            margin-bottom: 24px;
             line-height: 1.4;
+            margin-bottom: 16px;
+            color: var(--preto);
+        }
+        .card-tempo {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.83rem; color: var(--cinza-texto);
         }
 
-        .card-meta {
-            margin-top: auto; /* Empurra o tempo para o rodapé do card */
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: #6C757D;
-        }
-        /* ==========================================================================
-           Camada 4: Seção "Cursos em Destaque" (Carrossel)
-           ========================================================================== */
+        /* ===================== CARDS: CURSOS EM DESTAQUE ===================== */
         .card-destaque {
-            flex: 0 0 320px;
-            border: 1px solid var(--cor-borda-suave);
-            border-radius: 16px;
+            flex: 0 0 380px;
+            border: 1px solid var(--cinza-borda);
+            border-radius: 12px;
             overflow: hidden;
-            background: #FFFFFF;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #fff;
+            transition: transform 0.25s, box-shadow 0.25s;
         }
-
-        .card-destaque:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-        }
+        .card-destaque:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
 
         .card-destaque-capa {
-            height: 160px;
+            height: 180px;
             position: relative;
             display: flex;
             align-items: flex-end;
-            padding: 24px;
+            padding: 22px;
         }
+        .card-destaque-capa i { font-size: 1.8rem; color: rgba(255,255,255,0.7); }
 
-        .card-destaque-capa i {
-            font-size: 1.8rem;
-            color: rgba(255,255,255,0.75);
-        }
-
-        .card-modalidade {
+        .badge-modalidade {
             position: absolute;
-            top: 18px;
-            right: 18px;
-            background: rgba(255,255,255,0.9);
-            color: var(--cor-primaria);
-            padding: 6px 16px;
+            top: 16px; right: 16px;
+            background: rgba(255,255,255,0.92);
+            color: var(--preto);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 5px 14px;
             border-radius: 999px;
-            font-size: 0.9rem;
-            font-weight: 500;
         }
 
-        .card-destaque-corpo {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
+        .card-destaque-corpo { padding: 22px; }
 
         .card-destaque-titulo {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            color: var(--cor-primaria);
+            line-height: 1.45;
+            margin-bottom: 14px;
+            color: var(--preto);
         }
 
         .card-destaque-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #6C757D;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-        }
-
-        .card-destaque-meta .separador {
-            font-size: 0.8rem;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.88rem; color: var(--cinza-texto);
+            margin-bottom: 18px;
         }
 
         .btn-saiba-mais {
-            margin-top: auto;
-            background-color: var(--cor-primaria);
-            color: #FFFFFF;
-            text-decoration: none;
+            display: block;
+            background: var(--preto);
+            color: #fff;
             text-align: center;
             padding: 12px;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
             transition: opacity 0.2s;
         }
+        .btn-saiba-mais:hover { opacity: 0.85; color: #fff; }
 
-        .btn-saiba-mais:hover {
-            opacity: 0.9;
-            color: #FFFFFF;
+        /* ===================== CARDS: MENTORIAS ===================== */
+        .card-mentor {
+            flex: 0 0 290px;
+            border: 1px solid var(--cinza-borda);
+            border-radius: 12px;
+            background: #fff;
+            padding: 28px 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .card-mentor:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
+
+        .avatar-mentor {
+            width: 88px; height: 88px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 18px;
+        }
+
+        .mentor-nome {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .mentor-area {
+            font-size: 0.88rem;
+            color: var(--cinza-texto);
+            margin-bottom: 14px;
+        }
+
+        .mentor-count {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.85rem;
+            color: var(--cinza-texto);
+        }
+
+        /* ===================== CARDS: TRILHAS ===================== */
+        .card-trilha {
+            flex: 0 0 500px;
+            border: 1px solid var(--cinza-borda);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .card-trilha:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
+
+        .card-trilha-banner {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-trilha-banner span {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .card-trilha-corpo { padding: 22px; }
+
+        .card-trilha-desc {
+            font-size: 0.9rem;
+            color: var(--cinza-texto);
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+
+        .trilha-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .stat-item i { font-size: 1.1rem; color: var(--cinza-texto); }
+        .stat-num { font-size: 1.2rem; font-weight: 700; color: var(--preto); }
+        .stat-label { font-size: 0.78rem; color: var(--cinza-texto); }
+
+        .btn-trilha {
+            display: block;
+            background: var(--preto);
+            color: #fff;
+            text-align: center;
+            padding: 13px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-trilha:hover { opacity: 0.85; color: #fff; }
+
+        /* ===================== CARDS: AULAS GRATUITAS ===================== */
+        .card-aula {
+            flex: 0 0 370px;
+            border: 1px solid var(--cinza-borda);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .card-aula:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
+
+        .card-aula-thumb {
+            height: 180px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn {
+            width: 52px; height: 52px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .play-btn i { font-size: 1.1rem; color: var(--preto); margin-left: 3px; }
+
+        .badge-duracao {
+            position: absolute;
+            top: 14px; right: 14px;
+            background: rgba(0,0,0,0.65);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .badge-categoria-aula {
+            position: absolute;
+            bottom: 14px; left: 14px;
+            background: rgba(255,255,255,0.92);
+            color: var(--preto);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        .card-aula-corpo { padding: 18px 20px 20px; }
+
+        .card-aula-titulo {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .card-aula-autor {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.85rem; color: var(--cinza-texto);
+        }
+
+        /* ===================== CARDS: PROGRAMAS ESTRATÉGICOS ===================== */
+        .card-programa {
+            flex: 0 0 300px;
+            border: 1px solid var(--cinza-borda);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .card-programa:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
+
+        .card-programa-capa {
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .card-programa-corpo { padding: 20px; }
+
+        .card-programa-nome {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-programa-desc {
+            font-size: 0.87rem;
+            color: var(--cinza-texto);
+            line-height: 1.55;
+        }
+
+        /* ===================== FERRAMENTAS DIGITAIS ===================== */
+        .ferramentas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+
+        .card-ferramenta {
+            border: 1px solid var(--cinza-borda);
+            border-radius: 12px;
+            background: #fff;
+            padding: 22px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: box-shadow 0.2s;
+            text-decoration: none;
+            color: var(--preto);
+        }
+        .card-ferramenta:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); color: var(--preto); }
+
+        .ferramenta-icone {
+            width: 44px; height: 44px;
+            background: var(--cinza-fundo);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .ferramenta-info { flex: 1; }
+
+        .ferramenta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .ferramenta-nome {
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .ferramenta-desc {
+            font-size: 0.83rem;
+            color: var(--cinza-texto);
+            line-height: 1.5;
+        }
+
+        /* ===================== CARDS: SELECIONADO PARA VOCÊ ===================== */
+        .card-selec {
+            flex: 0 0 350px;
+            border: 1px solid var(--cinza-borda);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .card-selec:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
+
+        .card-selec-capa {
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-selec-capa i { font-size: 1.8rem; color: rgba(255,255,255,0.7); }
+
+        .card-selec-corpo { padding: 18px 20px 20px; }
+
+        .card-selec-cat {
+            font-size: 0.78rem;
+            color: var(--cinza-texto);
+            margin-bottom: 6px;
+        }
+
+        .card-selec-titulo {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .card-selec-meta {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.85rem; color: var(--cinza-texto);
+            margin-bottom: 16px;
+        }
+
+        /* ===================== FOOTER ===================== */
+        .footer {
+            background: #F9FAFB;
+            border-top: 1px solid var(--cinza-borda);
+            padding: 56px 2rem 28px;
+        }
+
+        .footer-inner {
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+
+        .footer-marca-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .footer-logo-box {
+            background: var(--preto);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .footer-marca-nome {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .footer-desc {
+            font-size: 0.88rem;
+            color: var(--cinza-texto);
+            line-height: 1.6;
+            margin-bottom: 22px;
+            max-width: 300px;
+        }
+
+        .footer-redes {
+            display: flex; gap: 10px;
+        }
+
+        .rede-icone {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--cinza-borda);
+            background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--preto);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+        .rede-icone:hover { background: var(--cinza-fundo); color: var(--preto); }
+
+        .footer-col-titulo {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--preto);
+        }
+
+        .footer-lista {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-lista a {
+            color: var(--cinza-texto);
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: color 0.2s;
+        }
+        .footer-lista a:hover { color: var(--preto); }
+
+        .footer-divider {
+            border: none;
+            border-top: 1px solid var(--cinza-borda);
+            margin-bottom: 22px;
+        }
+
+        .footer-rodape {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.83rem;
+            color: var(--cinza-texto);
+        }
+
+        .footer-rodape a { color: var(--cinza-texto); text-decoration: none; }
+        .footer-rodape a:hover { color: var(--preto); }
+        .footer-links-rodape { display: flex; gap: 20px; }
+
+        /* ===================== RESPONSIVO ===================== */
+        @media (max-width: 992px) {
+            .hero { padding: 60px 24px; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero-botoes { flex-direction: column; }
+            .navbar-global { flex-wrap: wrap; height: auto; padding: 12px 1rem; gap: 10px; }
+            .nav-centro { order: 3; width: 100%; padding: 0; }
+            .ferramentas-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 576px) {
+            .ferramentas-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-rodape { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
+<!-- ======================== NAVBAR ======================== -->
 <nav class="navbar-global">
-
-    <div class="nav-grupo-esquerdo">
+    <div class="nav-esquerdo">
         <div class="logo-box">S</div>
-        <span class="logo-texto">Sebrae</span>
-        <a href="#" class="nav-link">Início</a>
-        <a href="#" class="nav-link">Explorar</a>
-        <a href="#" class="nav-link">Cursos</a>
-        <a href="#" class="nav-link">Mentorias</a>
-        <a href="#" class="nav-link">Atendimento</a>
+        <span class="logo-nome">Sebrae</span>
+        <a href="#" class="nav-link-item">Início</a>
+        <a href="#" class="nav-link-item">Explorar</a>
+        <a href="#" class="nav-link-item">Cursos</a>
+        <a href="#" class="nav-link-item">Mentorias</a>
+        <a href="#" class="nav-link-item">Atendimento</a>
     </div>
-
-    <div class="nav-grupo-central">
-        <div class="search-wrapper">
-            <i class="bi bi-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="Buscar cursos, mentorias...">
+    <div class="nav-centro">
+        <div class="search-box">
+            <i class="bi bi-search ico-busca"></i>
+            <input type="text" placeholder="Buscar cursos, mentorias...">
         </div>
     </div>
-
-    <div class="nav-grupo-direito">
-        <a href="#" class="localizacao-link">
+    <div class="nav-direito">
+        <a href="#" class="nav-localizacao">
             <i class="bi bi-geo-alt"></i> São Paulo
         </a>
         <a th:href="@{/login}" class="btn-entrar">Entrar</a>
     </div>
-
 </nav>
 
-<section class="hero-section">
-
-    <div class="hero-badge">
-        Programa em Destaque
-    </div>
-
-    <h1 class="hero-title">
-        Jornada do Empreendedor<br>Digital
-    </h1>
-
-    <p class="hero-subtitle">
-        Aprenda a transformar sua ideia em um negócio digital de sucesso. Do planejamento ao lançamento.
-    </p>
-
-    <div class="hero-actions">
-        <a href="#" class="btn-comecar">
-            <i class="bi bi-play-fill" style="font-size: 1.2rem; line-height: 0;"></i> Começar agora
+<!-- ======================== HERO ======================== -->
+<section class="hero">
+    <div class="hero-badge">Programa em Destaque</div>
+    <h1>Jornada do Empreendedor<br>Digital</h1>
+    <p>Aprenda a transformar sua ideia em um negócio digital de sucesso. Do planejamento ao lançamento.</p>
+    <div class="hero-botoes">
+        <a href="#" class="btn-hero-branco">
+            <i class="bi bi-play-fill"></i> Começar agora
         </a>
-
-        <a href="#" class="btn-explorar">
+        <a href="#" class="btn-hero-outline">
             <i class="bi bi-search"></i> Explorar catálogo
         </a>
     </div>
-
-    <div class="hero-metrics">
+    <div class="hero-metricas">
         <span>120+ Cursos</span>
-        <div class="metric-dot"></div>
+        <div class="ponto"></div>
         <span>50+ Mentores</span>
-        <div class="metric-dot"></div>
+        <div class="ponto"></div>
         <span>100% Online</span>
     </div>
-
 </section>
 
-<section class="secao-carrosel">
-
-    <div class="carrosel-header">
+<!-- ======================== CONTINUE EXPLORANDO ======================== -->
+<section class="secao">
+    <div class="secao-header">
         <div>
-            <h2 class="carrosel-titulo">Continue Explorando</h2>
-            <p class="carrosel-subtitulo">Retome de onde você parou</p>
+            <h2 class="secao-titulo">Continue Explorando</h2>
+            <p class="secao-sub">Retome de onde você parou</p>
         </div>
-
-        <div class="carrosel-controles">
-            <button class="btn-seta" onclick="moverCarroselContinue(-1)">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-            <button class="btn-seta" onclick="moverCarroselContinue(1)">
-                <i class="bi bi-chevron-right"></i>
-            </button>
+        <div class="seta-grupo">
+            <button class="btn-seta" onclick="rolar('explorar', -1)"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('explorar', 1)"><i class="bi bi-chevron-right"></i></button>
         </div>
     </div>
-
-    <div class="carrosel-track" id="pistaCursos">
-
-        <div class="card-curso">
-            <div class="card-capa" style="background-color: #F05D23;">
-                <i class="bi bi-book"></i>
-            </div>
-            <div class="card-corpo">
-                <span class="card-categoria">Formalização</span>
+    <div class="carrossel" id="explorar">
+        <div class="card-explorar">
+            <div class="card-explorar-capa" style="background:#F05D23;"><i class="bi bi-book"></i></div>
+            <div class="card-explorar-corpo">
+                <p class="card-cat">Formalização</p>
                 <h3 class="card-titulo">Como abrir um MEI</h3>
-                <div class="card-meta">
-                    <i class="bi bi-clock"></i> 45 min
-                </div>
+                <div class="card-tempo"><i class="bi bi-clock"></i> 45 min</div>
             </div>
         </div>
-
-        <div class="card-curso">
-            <div class="card-capa" style="background-color: #11A893;">
-                <i class="bi bi-book"></i>
-            </div>
-            <div class="card-corpo">
-                <span class="card-categoria">Marketing</span>
+        <div class="card-explorar">
+            <div class="card-explorar-capa" style="background:#0F978A;"><i class="bi bi-book"></i></div>
+            <div class="card-explorar-corpo">
+                <p class="card-cat">Marketing</p>
                 <h3 class="card-titulo">Marketing Digital para Pequenos Negócios</h3>
-                <div class="card-meta">
-                    <i class="bi bi-clock"></i> 2h 30min
-                </div>
+                <div class="card-tempo"><i class="bi bi-clock"></i> 2h 30min</div>
             </div>
         </div>
-
-        <div class="card-curso">
-            <div class="card-capa" style="background-color: #215A6D;">
-                <i class="bi bi-book"></i>
-            </div>
-            <div class="card-corpo">
-                <span class="card-categoria">Finanças</span>
+        <div class="card-explorar">
+            <div class="card-explorar-capa" style="background:#144F63;"><i class="bi bi-book"></i></div>
+            <div class="card-explorar-corpo">
+                <p class="card-cat">Finanças</p>
                 <h3 class="card-titulo">Gestão Financeira Essencial</h3>
-                <div class="card-meta">
-                    <i class="bi bi-clock"></i> 1h 45min
-                </div>
+                <div class="card-tempo"><i class="bi bi-clock"></i> 1h 45min</div>
             </div>
         </div>
-
-        <div class="card-curso">
-            <div class="card-capa" style="background-color: #FFB800;">
-                <i class="bi bi-book"></i>
-            </div>
-            <div class="card-corpo">
-                <span class="card-categoria">E-commerce</span>
+        <div class="card-explorar">
+            <div class="card-explorar-capa" style="background:#E8AC00;"><i class="bi bi-book"></i></div>
+            <div class="card-explorar-corpo">
+                <p class="card-cat">E-commerce</p>
                 <h3 class="card-titulo">Vendas Online: Primeiros Passos</h3>
-                <div class="card-meta">
-                    <i class="bi bi-clock"></i> 1h 15min
-                </div>
+                <div class="card-tempo"><i class="bi bi-clock"></i> 1h 15min</div>
             </div>
         </div>
-
-        <div class="card-curso">
-            <div class="card-capa" style="background-color: #FF9900;">
-                <i class="bi bi-book"></i>
-            </div>
-            <div class="card-corpo">
-                <span class="card-categoria">Tecnologia</span>
+        <div class="card-explorar">
+            <div class="card-explorar-capa" style="background:#C05800;"><i class="bi bi-book"></i></div>
+            <div class="card-explorar-corpo">
+                <p class="card-cat">Tecnologia</p>
                 <h3 class="card-titulo">Inteligência Artificial nos Negócios</h3>
-                <div class="card-meta">
-                    <i class="bi bi-clock"></i> 3h
-                </div>
+                <div class="card-tempo"><i class="bi bi-clock"></i> 3h</div>
             </div>
         </div>
+        <div class="card-explorar">
+            <div class="card-explorar-capa" style="background:#215A6D;"><i class="bi bi-book"></i></div>
+            <div class="card-explorar-corpo">
+                <p class="card-cat">Gestão</p>
+                <h3 class="card-titulo">Planejamento Estratégico</h3>
+                <div class="card-tempo"><i class="bi bi-clock"></i> 2h</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <div class="card-curso">
-            <div class="card-capa" style="background-color: #F65714;">
+<!-- ======================== CURSOS EM DESTAQUE ======================== -->
+<section class="secao secao-cinza">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Cursos em Destaque</h2>
+            <p class="secao-sub">Aprenda com os melhores</p>
+        </div>
+        <div class="seta-grupo">
+            <button class="btn-seta" onclick="rolar('destaques', -1)"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('destaques', 1)"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="carrossel" id="destaques">
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background:#0F978A;">
+                <span class="badge-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">Marketing Digital Completo</h3>
+                <div class="card-destaque-meta">
+                    <i class="bi bi-display"></i> Online <span>•</span> Iniciante
+                </div>
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background:#144F63;">
+                <span class="badge-modalidade">Presencial</span>
+                <i class="bi bi-award"></i>
+            </div>
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">Gestão de Pessoas para Pequenas Empresas</h3>
+                <div class="card-destaque-meta">
+                    <i class="bi bi-geo-alt"></i> Presencial <span>•</span> Intermediário
+                </div>
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background:#E8AC00;">
+                <span class="badge-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">E-commerce: Do Zero ao Lançamento</h3>
+                <div class="card-destaque-meta">
+                    <i class="bi bi-display"></i> Online <span>•</span> Iniciante
+                </div>
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background:#F05D23;">
+                <span class="badge-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">Precificação Estratégica</h3>
+                <div class="card-destaque-meta">
+                    <i class="bi bi-display"></i> Online <span>•</span> Avançado
+                </div>
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+        <div class="card-destaque">
+            <div class="card-destaque-capa" style="background:#215A6D;">
+                <span class="badge-modalidade">Presencial</span>
+                <i class="bi bi-award"></i>
+            </div>
+            <div class="card-destaque-corpo">
+                <h3 class="card-destaque-titulo">Atendimento ao Cliente de Excelência</h3>
+                <div class="card-destaque-meta">
+                    <i class="bi bi-geo-alt"></i> Presencial <span>•</span> Iniciante
+                </div>
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================== MENTORIAS ======================== -->
+<section class="secao">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Mentorias</h2>
+            <p class="secao-sub">Aprenda com quem já trilhou o caminho</p>
+        </div>
+        <div class="seta-grupo">
+            <button class="btn-seta" onclick="rolar('mentores', -1)"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('mentores', 1)"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="carrossel" id="mentores">
+        <div class="card-mentor">
+            <div class="avatar-mentor" style="background:#F05D23;">AP</div>
+            <p class="mentor-nome">Ana Paula Silva</p>
+            <p class="mentor-area">Marketing Digital</p>
+            <div class="mentor-count"><i class="bi bi-award"></i> 156 mentorias</div>
+        </div>
+        <div class="card-mentor">
+            <div class="avatar-mentor" style="background:#E8AC00;">CE</div>
+            <p class="mentor-nome">Carlos Eduardo Santos</p>
+            <p class="mentor-area">Gestão Financeira</p>
+            <div class="mentor-count"><i class="bi bi-award"></i> 243 mentorias</div>
+        </div>
+        <div class="card-mentor">
+            <div class="avatar-mentor" style="background:#F07820;">MC</div>
+            <p class="mentor-nome">Mariana Costa</p>
+            <p class="mentor-area">E-commerce</p>
+            <div class="mentor-count"><i class="bi bi-award"></i> 189 mentorias</div>
+        </div>
+        <div class="card-mentor">
+            <div class="avatar-mentor" style="background:#F05D23;">RA</div>
+            <p class="mentor-nome">Roberto Almeida</p>
+            <p class="mentor-area">Vendas e Negociação</p>
+            <div class="mentor-count"><i class="bi bi-award"></i> 301 mentorias</div>
+        </div>
+        <div class="card-mentor">
+            <div class="avatar-mentor" style="background:#0F978A;">JS</div>
+            <p class="mentor-nome">Juliana Santos</p>
+            <p class="mentor-area">Tecnologia</p>
+            <div class="mentor-count"><i class="bi bi-award"></i> 128 mentorias</div>
+        </div>
+        <div class="card-mentor">
+            <div class="avatar-mentor" style="background:#144F63;">MO</div>
+            <p class="mentor-nome">Marcos Oliveira</p>
+            <p class="mentor-area">Vendas</p>
+            <div class="mentor-count"><i class="bi bi-award"></i> 97 mentorias</div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================== TRILHAS DE APRENDIZAGEM ======================== -->
+<section class="secao secao-cinza">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Trilhas de Aprendizagem</h2>
+            <p class="secao-sub">Jornadas completas de capacitação</p>
+        </div>
+        <div class="seta-grupo">
+            <button class="btn-seta" onclick="rolar('trilhas', -1)"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('trilhas', 1)"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="carrossel" id="trilhas">
+        <div class="card-trilha">
+            <div class="card-trilha-banner" style="background:#F05D23;">
+                <span>Jornada do MEI</span>
+            </div>
+            <div class="card-trilha-corpo">
+                <p class="card-trilha-desc">Aprenda tudo sobre ser MEI: da formalização à gestão do seu negócio.</p>
+                <div class="trilha-stats">
+                    <div class="stat-item"><i class="bi bi-book"></i><span class="stat-num">8</span><span class="stat-label">Cursos</span></div>
+                    <div class="stat-item"><i class="bi bi-camera-video"></i><span class="stat-num">45</span><span class="stat-label">Aulas</span></div>
+                    <div class="stat-item"><i class="bi bi-people"></i><span class="stat-num">3</span><span class="stat-label">Mentorias</span></div>
+                </div>
+                <a href="#" class="btn-trilha">Iniciar trilha →</a>
+            </div>
+        </div>
+        <div class="card-trilha">
+            <div class="card-trilha-banner" style="background:#0F978A;">
+                <span>Futuro Empreendedor</span>
+            </div>
+            <div class="card-trilha-corpo">
+                <p class="card-trilha-desc">Para quem está começando. Valide sua ideia e estruture seu modelo de negócio.</p>
+                <div class="trilha-stats">
+                    <div class="stat-item"><i class="bi bi-book"></i><span class="stat-num">12</span><span class="stat-label">Cursos</span></div>
+                    <div class="stat-item"><i class="bi bi-camera-video"></i><span class="stat-num">67</span><span class="stat-label">Aulas</span></div>
+                    <div class="stat-item"><i class="bi bi-people"></i><span class="stat-num">5</span><span class="stat-label">Mentorias</span></div>
+                </div>
+                <a href="#" class="btn-trilha">Iniciar trilha →</a>
+            </div>
+        </div>
+        <div class="card-trilha">
+            <div class="card-trilha-banner" style="background:#144F63;">
+                <span>Pequena Empresa, Grande Gestão</span>
+            </div>
+            <div class="card-trilha-corpo">
+                <p class="card-trilha-desc">Gestão completa para fazer seu negócio crescer de forma sustentável.</p>
+                <div class="trilha-stats">
+                    <div class="stat-item"><i class="bi bi-book"></i><span class="stat-num">15</span><span class="stat-label">Cursos</span></div>
+                    <div class="stat-item"><i class="bi bi-camera-video"></i><span class="stat-num">82</span><span class="stat-label">Aulas</span></div>
+                    <div class="stat-item"><i class="bi bi-people"></i><span class="stat-num">6</span><span class="stat-label">Mentorias</span></div>
+                </div>
+                <a href="#" class="btn-trilha">Iniciar trilha →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================== AULAS GRATUITAS ======================== -->
+<section class="secao">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Aulas Gratuitas</h2>
+            <p class="secao-sub">Conteúdo de qualidade sem custo</p>
+        </div>
+        <div class="seta-grupo">
+            <button class="btn-seta" onclick="rolar('aulas', -1)"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('aulas', 1)"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="carrossel" id="aulas">
+        <div class="card-aula">
+            <div class="card-aula-thumb" style="background:#B07800;">
+                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                <span class="badge-duracao"><i class="bi bi-clock"></i> 28min</span>
+                <span class="badge-categoria-aula">Marketing</span>
+            </div>
+            <div class="card-aula-corpo">
+                <h3 class="card-aula-titulo">Como definir o público-alvo do seu negócio</h3>
+                <div class="card-aula-autor"><i class="bi bi-person"></i> Ana Paula Silva</div>
+            </div>
+        </div>
+        <div class="card-aula">
+            <div class="card-aula-thumb" style="background:#B03A00;">
+                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                <span class="badge-duracao"><i class="bi bi-clock"></i> 35min</span>
+                <span class="badge-categoria-aula">Finanças</span>
+            </div>
+            <div class="card-aula-corpo">
+                <h3 class="card-aula-titulo">Fluxo de caixa: o que é e como fazer</h3>
+                <div class="card-aula-autor"><i class="bi bi-person"></i> Carlos Eduardo Santos</div>
+            </div>
+        </div>
+        <div class="card-aula">
+            <div class="card-aula-thumb" style="background:#0F978A;">
+                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                <span class="badge-duracao"><i class="bi bi-clock"></i> 22min</span>
+                <span class="badge-categoria-aula">Marketing Digital</span>
+            </div>
+            <div class="card-aula-corpo">
+                <h3 class="card-aula-titulo">Redes sociais: por onde começar</h3>
+                <div class="card-aula-autor"><i class="bi bi-person"></i> Mariana Costa</div>
+            </div>
+        </div>
+        <div class="card-aula">
+            <div class="card-aula-thumb" style="background:#144F63;">
+                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                <span class="badge-duracao"><i class="bi bi-clock"></i> 18min</span>
+                <span class="badge-categoria-aula">Vendas</span>
+            </div>
+            <div class="card-aula-corpo">
+                <h3 class="card-aula-titulo">Técnicas de vendas para pequenos negócios</h3>
+                <div class="card-aula-autor"><i class="bi bi-person"></i> Roberto Almeida</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================== PROGRAMAS ESTRATÉGICOS ======================== -->
+<section class="secao secao-cinza">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Programas Estratégicos</h2>
+            <p class="secao-sub">Iniciativas especiais para impulsionar seu negócio</p>
+        </div>
+        <div class="seta-grupo">
+            <button class="btn-seta" onclick="rolar('programas', -1)"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('programas', 1)"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="carrossel" id="programas">
+        <div class="card-programa">
+            <div class="card-programa-capa" style="background:#F05D23;">
+                <i class="bi bi-stars"></i>
+            </div>
+            <div class="card-programa-corpo">
+                <p class="card-programa-nome">Sebraetec</p>
+                <p class="card-programa-desc">Programa de inovação e tecnologia para aumentar a competitividade da sua empresa.</p>
+            </div>
+        </div>
+        <div class="card-programa">
+            <div class="card-programa-capa" style="background:#0F978A;">
+                <i class="bi bi-stars"></i>
+            </div>
+            <div class="card-programa-corpo">
+                <p class="card-programa-nome">ALI</p>
+                <p class="card-programa-desc">Agente Local de Inovação: apoio gratuito para inovar em seu pequeno negócio.</p>
+            </div>
+        </div>
+        <div class="card-programa">
+            <div class="card-programa-capa" style="background:#144F63;">
+                <i class="bi bi-stars"></i>
+            </div>
+            <div class="card-programa-corpo">
+                <p class="card-programa-nome">Sebrae Delas</p>
+                <p class="card-programa-desc">Programa dedicado ao empreendedorismo feminino com mentorias e capacitação.</p>
+            </div>
+        </div>
+        <div class="card-programa">
+            <div class="card-programa-capa" style="background:#E8AC00;">
+                <i class="bi bi-stars"></i>
+            </div>
+            <div class="card-programa-corpo">
+                <p class="card-programa-nome">Sebrae Startups</p>
+                <p class="card-programa-desc">Ecossistema para startups e negócios com base tecnológica inovadora.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================== FERRAMENTAS DIGITAIS ======================== -->
+<section class="secao">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Ferramentas Digitais</h2>
+            <p class="secao-sub">Soluções práticas para o dia a dia do seu negócio</p>
+        </div>
+    </div>
+    <div class="ferramentas-grid">
+        <a href="#" class="card-ferramenta">
+            <div class="ferramenta-icone"><i class="bi bi-file-text"></i></div>
+            <div class="ferramenta-info">
+                <div class="ferramenta-header">
+                    <span class="ferramenta-nome">Emissor de Nota Fiscal</span>
+                    <i class="bi bi-box-arrow-up-right" style="color:#9CA3AF; font-size:0.8rem;"></i>
+                </div>
+                <p class="ferramenta-desc">Emita notas fiscais de forma rápida e prática para o seu negócio.</p>
+            </div>
+        </a>
+        <a href="#" class="card-ferramenta">
+            <div class="ferramenta-icone"><i class="bi bi-hammer"></i></div>
+            <div class="ferramenta-info">
+                <div class="ferramenta-header">
+                    <span class="ferramenta-nome">Portal de Licitações</span>
+                    <i class="bi bi-box-arrow-up-right" style="color:#9CA3AF; font-size:0.8rem;"></i>
+                </div>
+                <p class="ferramenta-desc">Encontre oportunidades de vendas para o governo em um só lugar.</p>
+            </div>
+        </a>
+        <a href="#" class="card-ferramenta">
+            <div class="ferramenta-icone"><i class="bi bi-bullseye"></i></div>
+            <div class="ferramenta-info">
+                <div class="ferramenta-header">
+                    <span class="ferramenta-nome">Radar Sebrae</span>
+                    <i class="bi bi-box-arrow-up-right" style="color:#9CA3AF; font-size:0.8rem;"></i>
+                </div>
+                <p class="ferramenta-desc">Análise de mercado e dados sobre seu segmento de atuação.</p>
+            </div>
+        </a>
+        <a href="#" class="card-ferramenta">
+            <div class="ferramenta-icone"><i class="bi bi-bar-chart-line"></i></div>
+            <div class="ferramenta-info">
+                <div class="ferramenta-header">
+                    <span class="ferramenta-nome">Painel de Indicadores</span>
+                    <i class="bi bi-box-arrow-up-right" style="color:#9CA3AF; font-size:0.8rem;"></i>
+                </div>
+                <p class="ferramenta-desc">Acompanhe os principais números do seu negócio em tempo real.</p>
+            </div>
+        </a>
+        <a href="#" class="card-ferramenta">
+            <div class="ferramenta-icone"><i class="bi bi-phone"></i></div>
+            <div class="ferramenta-info">
+                <div class="ferramenta-header">
+                    <span class="ferramenta-nome">Aplicativo Mobile</span>
+                    <i class="bi bi-box-arrow-up-right" style="color:#9CA3AF; font-size:0.8rem;"></i>
+                </div>
+                <p class="ferramenta-desc">Tenha o Sebrae no seu bolso. Acesse conteúdos, cursos e ferramentas.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- ======================== SELECIONADO PARA VOCÊ ======================== -->
+<section class="secao secao-cinza">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Selecionado para você</h2>
+            <p class="secao-sub">Baseado nos seus interesses</p>
+        </div>
+        <div class="seta-grupo">
+            <button class="btn-seta" onclick="rolar('selec', -1)"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('selec', 1)"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="carrossel" id="selec">
+        <div class="card-selec">
+            <div class="card-selec-capa" style="background:#0F978A;">
+                <span class="badge-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+            <div class="card-selec-corpo">
+                <h3 class="card-selec-titulo">Instagram para Negócios</h3>
+                <div class="card-selec-meta"><i class="bi bi-display"></i> Online <span>•</span> Iniciante</div>
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
+        <div class="card-selec">
+            <div class="card-selec-capa" style="background:#144F63;">
                 <i class="bi bi-book"></i>
             </div>
-            <div class="card-corpo">
-                <span class="card-categoria">Gestão</span>
-                <h3 class="card-titulo">Planejamento Estratégico</h3>
-                <div class="card-meta">
-                    <i class="bi bi-clock"></i> 2h
-                </div>
+            <div class="card-selec-corpo">
+                <p class="card-selec-cat">Planejamento</p>
+                <h3 class="card-selec-titulo">Como criar um plano de negócios</h3>
+                <div class="card-selec-meta"><i class="bi bi-clock"></i> 1h 30min</div>
             </div>
         </div>
-
+        <div class="card-selec">
+            <div class="card-selec-capa" style="background:#B03A00;">
+                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                <span class="badge-duracao" style="top:14px;right:14px;"><i class="bi bi-clock"></i> 25min</span>
+                <span class="badge-categoria-aula" style="bottom:14px;left:14px;">Marketing Digital</span>
+            </div>
+            <div class="card-selec-corpo">
+                <h3 class="card-selec-titulo">Stories que vendem: dicas práticas</h3>
+                <div class="card-selec-meta"><i class="bi bi-person"></i> Beatriz Oliveira</div>
+            </div>
+        </div>
+        <div class="card-selec">
+            <div class="card-selec-capa" style="background:#E8AC00;">
+                <span class="badge-modalidade">EAD</span>
+                <i class="bi bi-award"></i>
+            </div>
+            <div class="card-selec-corpo">
+                <h3 class="card-selec-titulo">Finanças para Empreendedores</h3>
+                <div class="card-selec-meta"><i class="bi bi-display"></i> Online <span>•</span> Iniciante</div>
+                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+            </div>
+        </div>
     </div>
-
 </section>
 
-<section class="secao-carrosel">
-
-    <div class="carrosel-header">
-        <div>
-            <h2 class="carrosel-titulo">Cursos em Destaque</h2>
-            <p class="carrosel-subtitulo">Aprenda com os melhores</p>
+<!-- ======================== FOOTER ======================== -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-marca-logo">
+                    <div class="footer-logo-box">S</div>
+                    <span class="footer-marca-nome">Sebrae</span>
+                </div>
+                <p class="footer-desc">Capacitando empreendedores e impulsionando pequenos negócios em todo o Brasil.</p>
+                <div class="footer-redes">
+                    <a href="#" class="rede-icone"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="rede-icone"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="rede-icone"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="rede-icone"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="rede-icone"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <p class="footer-col-titulo">Institucional</p>
+                <ul class="footer-lista">
+                    <li><a href="#">Sobre o Sebrae</a></li>
+                    <li><a href="#">Transparência</a></li>
+                    <li><a href="#">Trabalhe Conosco</a></li>
+                    <li><a href="#">Imprensa</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="footer-col-titulo">Soluções</p>
+                <ul class="footer-lista">
+                    <li><a href="#">Cursos</a></li>
+                    <li><a href="#">Consultorias</a></li>
+                    <li><a href="#">Eventos</a></li>
+                    <li><a href="#">Ferramentas</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="footer-col-titulo">Contato</p>
+                <ul class="footer-lista">
+                    <li><a href="#">Central de Atendimento</a></li>
+                    <li><a href="#">Fale Conosco</a></li>
+                    <li><a href="#">Ouvidoria</a></li>
+                    <li><a href="#">Unidades</a></li>
+                </ul>
+            </div>
         </div>
-
-        <div class="carrosel-controles">
-            <button class="btn-seta" onclick="moverCarroselDestaque(-1)">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-            <button class="btn-seta" onclick="moverCarroselDestaque(1)">
-                <i class="bi bi-chevron-right"></i>
-            </button>
+        <hr class="footer-divider">
+        <div class="footer-rodape">
+            <span>© 2026 Sebrae. Todos os direitos reservados.</span>
+            <div class="footer-links-rodape">
+                <a href="#">Termos de Uso</a>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Cookies</a>
+            </div>
         </div>
     </div>
-
-    <div class="carrosel-track" id="pistaDestaques">
-
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background-color:#0F978A;">
-                <span class="card-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">
-                    Marketing Digital Completo
-                </h3>
-
-                <div class="card-destaque-meta">
-                    <span><i class="bi bi-display"></i> Online</span>
-                    <span class="separador">•</span>
-                    <span>Iniciante</span>
-                </div>
-
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background-color:#144F63;">
-                <span class="card-modalidade">Presencial</span>
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">
-                    Gestão de Pessoas para Pequenas Empresas
-                </h3>
-
-                <div class="card-destaque-meta">
-                    <span><i class="bi bi-geo-alt"></i> Presencial</span>
-                    <span class="separador">•</span>
-                    <span>Intermediário</span>
-                </div>
-
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background-color:#E8AC00;">
-                <span class="card-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">
-                    E-commerce: Do Zero ao Lançamento
-                </h3>
-
-                <div class="card-destaque-meta">
-                    <span><i class="bi bi-display"></i> Online</span>
-                    <span class="separador">•</span>
-                    <span>Iniciante</span>
-                </div>
-
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background-color:#ED9800;">
-                <span class="card-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">
-                    Precificação Estratégica
-                </h3>
-
-                <div class="card-destaque-meta">
-                    <span><i class="bi bi-display"></i> Online</span>
-                    <span class="separador">•</span>
-                    <span>Avançado</span>
-                </div>
-
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background-color:#E04400;">
-                <span class="card-modalidade">Presencial</span>
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">
-                    Atendimento ao Cliente de Excelência
-                </h3>
-
-                <div class="card-destaque-meta">
-                    <span><i class="bi bi-geo-alt"></i> Presencial</span>
-                    <span class="separador">•</span>
-                    <span>Iniciante</span>
-                </div>
-
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background-color:#008478;">
-                <span class="card-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">
-                    Redes Sociais para Negócios
-                </h3>
-
-                <div class="card-destaque-meta">
-                    <span><i class="bi bi-display"></i> Online</span>
-                    <span class="separador">•</span>
-                    <span>Intermediário</span>
-                </div>
-
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background-color:#0E4356;">
-                <span class="card-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">
-                    Análise de Dados para Empreendedores
-                </h3>
-
-                <div class="card-destaque-meta">
-                    <span><i class="bi bi-display"></i> Online</span>
-                    <span class="separador">•</span>
-                    <span>Avançado</span>
-                </div>
-
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-
-    </div>
-
-</section>
+</footer>
 
 <script>
-    function moverCarroselContinue(direcao) {
-        const pista = document.getElementById('pistaCursos');
-        // O cálculo (320 + 24) representa a largura de um cartão + o gap entre eles
-        const distanciaDeRolagem = (320 + 24) * direcao;
-
-        pista.scrollBy({
-            left: distanciaDeRolagem,
-            behavior: 'smooth'
-        });
-    }
-    function moverCarroselDestaque(direcao) {
-        const pista = document.getElementById('pistaDestaques');
-        const distanciaDeRolagem = (320 + 24) * direcao;
-        
-        pista.scrollBy({
-            left: distanciaDeRolagem,
-            behavior: 'smooth'
-        });
+    function rolar(id, dir) {
+        const el = document.getElementById(id);
+        const larguras = { explorar: 330, destaques: 400, mentores: 310, trilhas: 520, aulas: 390, programas: 320, selec: 370 };
+        const dist = (larguras[id] || 350) * dir;
+        el.scrollBy({ left: dist, behavior: 'smooth' });
     }
 </script>
 
