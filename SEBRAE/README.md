@@ -1,6 +1,6 @@
 # SEBRAE
 
-Projeto Spring Boot com cadastro e login de usuários, catálogo de cursos, página individual de cada curso, inscrições e manutenção administrativa de áreas e tags.
+Projeto Spring Boot com cadastro e login de usuários, feed dinâmico, categorias, loja de cursos, avaliações, inscrições e manutenção administrativa de áreas e tags.
 
 ## Requisitos
 
@@ -51,10 +51,11 @@ Acesse `http://localhost:8080`.
 3. Com a conta administradora, crie áreas em `/admin/areas`.
 4. Crie tags em `/admin/tags`.
 5. Cadastre um curso em `/cursos/novo`.
-6. Abra o catálogo em `/cursos`.
-7. Abra a página individual em `/cursos/{id}`.
-8. Inscreva-se no curso.
-9. Consulte as inscrições em `/minhas-inscricoes`.
+6. Abra a Home em `/`, o feed em `/feed` ou a loja em `/loja`.
+7. Explore os tópicos em `/categorias` ou a jornada guiada em `/novo-usuario`.
+8. Abra a página individual em `/cursos/{id}`.
+9. Inscreva-se e avalie o curso.
+10. Consulte as inscrições em `/minhas-inscricoes`.
 
 ## Curso
 
@@ -79,7 +80,7 @@ A tabela `inscricoes` relaciona um usuário a um curso e registra a data e a hor
 - Usuários cadastrados pela tela pública recebem sempre o perfil de aluno.
 - O cadastro e o gerenciamento dos cursos continuam restritos ao perfil de administrador.
 - A exclusão de áreas e tags utilizadas por cursos é bloqueada.
-- A exclusão de um curso remove suas inscrições e sua imagem.
+- A exclusão de um curso remove suas inscrições, avaliações e sua imagem.
 
 ## Navegação pelos cursos
 
@@ -102,3 +103,15 @@ Em produção, defina `ADMIN_EMAIL` e `ADMIN_PASSWORD` no ambiente. Se o e-mail 
 ## Integração front + backend
 
 Este pacote foi montado usando o projeto de front como base. A página inicial, o login, o cadastro e todo o diretório `frontend/` foram preservados. O backend completo foi incorporado e as rotas principais do front agora apontam para o catálogo, busca, inscrições e painel administrativo.
+
+
+## Recursos de descoberta
+
+- `/feed`: recomendações baseadas nas áreas dos cursos em que o usuário está inscrito, novidades e conteúdos populares.
+- `/categorias`: categorias por tópicos e ranking por total de visualizações.
+- `/loja`: catálogo em formato de vitrine, com alternância entre grade e lista.
+- `/novo-usuario`: jornada guiada com progresso salvo no navegador.
+
+## Avaliações
+
+Usuários autenticados podem atribuir notas de 1 a 5 estrelas e publicar um comentário opcional. Cada usuário possui uma única avaliação por curso e pode atualizá-la. A página do curso exibe média, quantidade e comentários. A tabela é criada automaticamente pelo Hibernate.

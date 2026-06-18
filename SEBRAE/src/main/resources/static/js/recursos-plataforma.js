@@ -171,6 +171,88 @@
         window.addEventListener("beforeunload", encerrar, { once: true });
     }
 
+
+
+    function configurarModoCatalogo() {
+        const grade = document.querySelector("[data-course-grid]");
+        const botoes = document.querySelectorAll("[data-course-view-button]");
+        if (!grade || botoes.length === 0) return;
+
+        const chave = "sebrae-modo-catalogo";
+        let modo = grade.getAttribute("data-default-view") || "vitrine";
+        try {
+            const salvo = localStorage.getItem(chave);
+            if (salvo === "lista" || salvo === "vitrine") modo = salvo;
+        } catch (erro) { /* preferência opcional */ }
+
+        if (window.location.pathname === "/loja") modo = "vitrine";
+
+        function aplicar(novoModo) {
+            modo = novoModo === "lista" ? "lista" : "vitrine";
+            grade.classList.toggle("course-grid-list", modo === "lista");
+            botoes.forEach(function (botao) {
+                const ativo = botao.getAttribute("data-course-view-button") === modo;
+                botao.classList.toggle("active", ativo);
+                botao.setAttribute("aria-pressed", String(ativo));
+            });
+            try { localStorage.setItem(chave, modo); } catch (erro) { /* preferência opcional */ }
+        }
+
+        botoes.forEach(function (botao) {
+            botao.addEventListener("click", function () {
+                aplicar(botao.getAttribute("data-course-view-button"));
+            });
+        });
+        aplicar(modo);
+    }
+
+    function configurarJornadaNovoUsuario() {
+        const jornada = document.querySelector("[data-onboarding]");
+        if (!jornada) return;
+
+        const chave = "sebrae-jornada-novo-usuario";
+        const passos = Array.from(jornada.querySelectorAll("[data-onboarding-step]"));
+        const progresso = jornada.querySelector("[data-onboarding-progress]");
+        const rotulo = jornada.querySelector("[data-onboarding-label]");
+        let concluidos = [];
+
+        try {
+            const valor = JSON.parse(localStorage.getItem(chave) || "[]");
+            if (Array.isArray(valor)) concluidos = valor;
+        } catch (erro) { concluidos = []; }
+
+        function atualizar() {
+            passos.forEach(function (passo) {
+                const id = passo.getAttribute("data-onboarding-step");
+                const completo = concluidos.includes(id);
+                passo.classList.toggle("completed", completo);
+                const botao = passo.querySelector("[data-onboarding-toggle]");
+                if (botao) {
+                    botao.setAttribute("aria-pressed", String(completo));
+                    botao.title = completo ? "Marcar como pendente" : "Marcar como concluída";
+                }
+            });
+            const total = passos.length || 1;
+            const quantidade = passos.filter(function (passo) {
+                return concluidos.includes(passo.getAttribute("data-onboarding-step"));
+            }).length;
+            if (progresso) progresso.style.width = ((quantidade / total) * 100) + "%";
+            if (rotulo) rotulo.textContent = quantidade + " de " + total + " etapas concluídas";
+            try { localStorage.setItem(chave, JSON.stringify(concluidos)); } catch (erro) { /* opcional */ }
+        }
+
+        jornada.querySelectorAll("[data-onboarding-toggle]").forEach(function (botao) {
+            botao.addEventListener("click", function () {
+                const id = botao.getAttribute("data-onboarding-toggle");
+                concluidos = concluidos.includes(id)
+                    ? concluidos.filter(function (item) { return item !== id; })
+                    : concluidos.concat(id);
+                atualizar();
+            });
+        });
+        atualizar();
+    }
+
     aplicarTemaInicial();
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -178,6 +260,8 @@
         configurarToasts();
         configurarConfirmacaoSenha();
         configurarExibicaoSenha();
+        configurarModoCatalogo();
+        configurarJornadaNovoUsuario();
         configurarTempoPagina();
     });
 })();

@@ -15,10 +15,12 @@ import com.projeto3.SEBRAE.modelo.CursoFormulario;
 import com.projeto3.SEBRAE.modelo.Nivel;
 import com.projeto3.SEBRAE.modelo.Usuario;
 import com.projeto3.SEBRAE.servicos.ServicoArea;
+import com.projeto3.SEBRAE.servicos.ServicoAvaliacaoCurso;
 import com.projeto3.SEBRAE.servicos.ServicoCurso;
 import com.projeto3.SEBRAE.servicos.ServicoInscricao;
 import com.projeto3.SEBRAE.servicos.ServicoTag;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -29,26 +31,30 @@ public class ControleCurso {
 	private final ServicoArea servicoArea;
 	private final ServicoTag servicoTag;
 	private final ServicoInscricao servicoInscricao;
+	private final ServicoAvaliacaoCurso servicoAvaliacao;
 
 	public ControleCurso(
 			ServicoCurso servicoCurso,
 			ServicoArea servicoArea,
 			ServicoTag servicoTag,
-			ServicoInscricao servicoInscricao) {
+			ServicoInscricao servicoInscricao,
+			ServicoAvaliacaoCurso servicoAvaliacao) {
 		this.servicoCurso = servicoCurso;
 		this.servicoArea = servicoArea;
 		this.servicoTag = servicoTag;
 		this.servicoInscricao = servicoInscricao;
+		this.servicoAvaliacao = servicoAvaliacao;
 	}
 
-	@GetMapping({"/cursos", "/explorar"})
+	@GetMapping({"/cursos", "/explorar", "/loja"})
 	public String explorarCursos(
 			@RequestParam(required = false) String q,
 			@RequestParam(required = false) Long area,
 			@RequestParam(required = false) Nivel nivel,
 			@RequestParam(defaultValue = "recentes") String ordem,
 			Model model,
-			HttpSession session) {
+			HttpSession session,
+			HttpServletRequest request) {
 		model.addAttribute("cursos", servicoCurso.explorar(q, area, nivel, ordem));
 		model.addAttribute("maisVisitados", servicoCurso.listarMaisVisitados());
 		model.addAttribute("areas", servicoArea.listar());
@@ -57,6 +63,7 @@ public class ControleCurso {
 		model.addAttribute("areaSelecionada", area);
 		model.addAttribute("nivelSelecionado", nivel);
 		model.addAttribute("ordem", ordem);
+		model.addAttribute("modoLoja", request.getRequestURI().startsWith("/loja"));
 		model.addAttribute("usuarioLogado", usuarioLogado(session));
 		return "usuario/cursos";
 	}
@@ -79,6 +86,10 @@ public class ControleCurso {
 		model.addAttribute("usuarioLogado", usuario);
 		model.addAttribute("inscrito", inscrito);
 		model.addAttribute("totalInscritos", servicoInscricao.contarPorCurso(id));
+		model.addAttribute("avaliacoes", servicoAvaliacao.listarPorCurso(id));
+		model.addAttribute("mediaAvaliacoes", servicoAvaliacao.mediaDoCurso(id));
+		model.addAttribute("totalAvaliacoes", servicoAvaliacao.totalDoCurso(id));
+		model.addAttribute("avaliacaoUsuario", usuario == null ? null : servicoAvaliacao.buscarDoUsuario(id, usuario.getId()).orElse(null));
 		return "usuario/detalhes-curso";
 	}
 

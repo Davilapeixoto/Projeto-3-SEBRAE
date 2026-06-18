@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias | SEBRAE</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <script th:src="@{/js/recursos-plataforma.js}"></script>
+</head>
+<body>
+<nav class="site-navbar">
+    <div class="site-nav-left">
+        <a th:href="@{/}" class="site-logo-box" aria-label="Home">S</a>
+        <span class="site-brand">Sebrae</span>
+        <a th:href="@{/}" class="site-nav-link">Home</a>
+        <a th:href="@{/feed}" class="site-nav-link">Feed</a>
+        <a th:href="@{/categorias}" class="site-nav-link">Categorias</a>
+        <a th:href="@{/loja}" class="site-nav-link">Loja</a>
+        <a th:href="@{/novo-usuario}" class="site-nav-link nav-pill-new">New User</a>
+        <a th:if="${usuarioLogado != null}" th:href="@{/minhas-inscricoes}" class="site-nav-link">Meus cursos</a>
+        <a th:if="${usuarioLogado != null and usuarioLogado.administrador}" th:href="@{/admin/home}" class="site-nav-link">Admin</a>
+    </div>
+    <form class="site-search" th:action="@{/cursos}" method="get">
+        <div class="site-search-box"><i class="bi bi-search site-search-icon"></i><input type="search" name="q" placeholder="Buscar cursos..."></div>
+    </form>
+    <div class="site-nav-actions">
+        <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro">☾</button>
+        <a th:if="${usuarioLogado == null}" class="btn-nav" th:href="@{/login}">Entrar</a>
+        <a th:if="${usuarioLogado != null}" class="btn-nav" th:href="@{/logout}">Sair</a>
+    </div>
+</nav>
+
+<main class="page-shell">
+    <section class="page-hero-strip">
+        <p class="page-eyebrow" style="color:#f7a37d">Categorias por tópicos</p>
+        <h1>Encontre conhecimento por assunto.</h1>
+        <p>Explore as áreas disponíveis, veja quantos cursos cada tema possui e descubra quais categorias são mais procuradas.</p>
+    </section>
+
+    <section class="section-block" th:if="${maisAcessadas != null and !#lists.isEmpty(maisAcessadas)}">
+        <div class="section-heading">
+            <div>
+                <h2>Categorias mais acessadas</h2>
+                <p>Ranking calculado a partir das visualizações dos cursos.</p>
+            </div>
+        </div>
+        <div class="ranking-list">
+            <a class="ranking-item" th:each="categoria, status : ${maisAcessadas}" th:href="@{/cursos(area=${categoria.id},ordem='visitados')}">
+                <span class="ranking-position" th:text="${status.count}">1</span>
+                <div>
+                    <h3 th:text="${categoria.nome}">Categoria</h3>
+                    <p th:text="|${categoria.totalCursos} curso(s) disponível(is)|">0 cursos</p>
+                </div>
+                <span class="ranking-access" th:text="|${categoria.totalAcessos} acessos|">0 acessos</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="section-block">
+        <div class="section-heading">
+            <div>
+                <h2>Todos os tópicos</h2>
+                <p>Selecione uma categoria para abrir os cursos correspondentes.</p>
+            </div>
+        </div>
+        <div class="category-grid" th:if="${categorias != null and !#lists.isEmpty(categorias)}">
+            <a class="category-card" th:each="categoria : ${categorias}" th:href="@{/cursos(area=${categoria.id})}">
+                <div class="category-icon"><i class="bi bi-bookmarks"></i></div>
+                <div>
+                    <h3 th:text="${categoria.nome}">Categoria</h3>
+                    <p><strong th:text="${categoria.totalCursos}">0</strong> curso(s) · <span th:text="|${categoria.totalAcessos} acessos|">0 acessos</span></p>
+                </div>
+            </a>
+        </div>
+        <div class="empty-state" th:if="${categorias == null or #lists.isEmpty(categorias)}">
+            <h2>Nenhuma categoria cadastrada</h2>
+            <p>As categorias criadas pelo administrador aparecerão nesta página.</p>
+        </div>
+    </section>
+</main>
+<footer class="site-footer">© 2026 Sebrae. Conhecimento para transformar negócios.</footer>
+</body>
+</html>

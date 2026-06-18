@@ -806,9 +806,11 @@
     <div class="nav-esquerdo">
         <a th:href="@{/}" class="logo-box" aria-label="Página inicial">S</a>
         <span class="logo-nome">Sebrae</span>
-        <a th:href="@{/}" class="nav-link-item">Início</a>
-        <a th:href="@{/explorar}" class="nav-link-item">Explorar</a>
-        <a th:href="@{/cursos}" class="nav-link-item">Cursos</a>
+        <a th:href="@{/}" class="nav-link-item">Home</a>
+        <a th:href="@{/feed}" class="nav-link-item">Feed</a>
+        <a th:href="@{/categorias}" class="nav-link-item">Categorias</a>
+        <a th:href="@{/loja}" class="nav-link-item">Loja</a>
+        <a th:href="@{/novo-usuario}" class="nav-link-item nav-pill-new">New User</a>
         <a th:if="${usuarioLogado != null}" th:href="@{/minhas-inscricoes}" class="nav-link-item">Meus cursos</a>
         <a th:if="${usuarioLogado != null and usuarioLogado.administrador}" th:href="@{/admin/home}" class="nav-link-item">Admin</a>
     </div>
@@ -924,6 +926,40 @@
     <p class="estado-vazio" th:if="${maisVisitados == null or #lists.isEmpty(maisVisitados)}">
         Os cursos mais visitados aparecerão aqui após os primeiros acessos.
     </p>
+</section>
+
+<!-- ======================== CATEGORIAS ======================== -->
+<section class="secao">
+    <div class="secao-header">
+        <div>
+            <h2 class="secao-titulo">Categorias por tópicos</h2>
+            <p class="secao-sub">Encontre cursos por área de interesse</p>
+        </div>
+        <a th:href="@{/categorias}" class="btn-saiba-mais">Ver todas</a>
+    </div>
+    <div class="category-grid home-category-grid" th:if="${categorias != null and !#lists.isEmpty(categorias)}">
+        <a class="category-card" th:each="categoria : ${categorias}" th:href="@{/cursos(area=${categoria.id})}">
+            <div class="category-icon"><i class="bi bi-bookmarks"></i></div>
+            <div>
+                <h3 th:text="${categoria.nome}">Categoria</h3>
+                <p><strong th:text="${categoria.totalCursos}">0</strong> curso(s)</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="secao-header" style="margin-top:42px">
+        <div>
+            <h2 class="secao-titulo">Categorias mais acessadas</h2>
+            <p class="secao-sub">Os temas populares entre os usuários</p>
+        </div>
+    </div>
+    <div class="home-ranking-grid" th:if="${categoriasMaisAcessadas != null and !#lists.isEmpty(categoriasMaisAcessadas)}">
+        <a class="home-ranking-card" th:each="categoria, status : ${categoriasMaisAcessadas}" th:href="@{/cursos(area=${categoria.id},ordem='visitados')}">
+            <span th:text="|#${status.count} mais acessada|">#1 mais acessada</span>
+            <strong th:text="${categoria.nome}">Categoria</strong>
+            <small th:text="|${categoria.totalAcessos} acessos|">0 acessos</small>
+        </a>
+    </div>
 </section>
 
 <!-- ======================== MENTORIAS ======================== -->

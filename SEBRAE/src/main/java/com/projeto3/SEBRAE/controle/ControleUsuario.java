@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.projeto3.SEBRAE.modelo.PerfilUsuario;
 import com.projeto3.SEBRAE.modelo.Usuario;
 import com.projeto3.SEBRAE.repositorios.RepositorioUsuario;
+import com.projeto3.SEBRAE.servicos.ServicoArea;
 import com.projeto3.SEBRAE.servicos.ServicoCurso;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,18 +24,48 @@ public class ControleUsuario {
 
 	private final RepositorioUsuario repositorioUsuario;
 	private final ServicoCurso servicoCurso;
+	private final ServicoArea servicoArea;
 
-	public ControleUsuario(RepositorioUsuario repositorioUsuario, ServicoCurso servicoCurso) {
+	public ControleUsuario(RepositorioUsuario repositorioUsuario, ServicoCurso servicoCurso, ServicoArea servicoArea) {
 		this.repositorioUsuario = repositorioUsuario;
 		this.servicoCurso = servicoCurso;
+		this.servicoArea = servicoArea;
 	}
 
 	@GetMapping("/")
 	public String paginaInicial(Model model, HttpSession session) {
 		model.addAttribute("cursos", servicoCurso.listar().stream().limit(6).toList());
 		model.addAttribute("maisVisitados", servicoCurso.listarMaisVisitados());
+		model.addAttribute("categorias", servicoArea.listarComEstatisticas().stream().limit(8).toList());
+		model.addAttribute("categoriasMaisAcessadas", servicoArea.listarMaisAcessadas().stream().limit(5).toList());
 		model.addAttribute("usuarioLogado", session.getAttribute("usuarioLogado"));
 		return "usuario/home";
+	}
+
+	@GetMapping("/feed")
+	public String feed(Model model, HttpSession session) {
+		Usuario usuario = usuarioLogado(session);
+		model.addAttribute("usuarioLogado", usuario);
+		model.addAttribute("recomendados", servicoCurso.recomendarParaUsuario(usuario == null ? null : usuario.getId()));
+		model.addAttribute("recentes", servicoCurso.listar().stream().limit(8).toList());
+		model.addAttribute("maisVisitados", servicoCurso.listarMaisVisitados());
+		model.addAttribute("categorias", servicoArea.listarMaisAcessadas().stream().limit(6).toList());
+		return "usuario/feed";
+	}
+
+	@GetMapping("/categorias")
+	public String categorias(Model model, HttpSession session) {
+		model.addAttribute("usuarioLogado", usuarioLogado(session));
+		model.addAttribute("categorias", servicoArea.listarComEstatisticas());
+		model.addAttribute("maisAcessadas", servicoArea.listarMaisAcessadas().stream().limit(5).toList());
+		return "usuario/categorias";
+	}
+
+	@GetMapping({"/novo-usuario", "/new-user"})
+	public String novoUsuario(Model model, HttpSession session) {
+		model.addAttribute("usuarioLogado", usuarioLogado(session));
+		model.addAttribute("categorias", servicoArea.listarMaisAcessadas().stream().limit(4).toList());
+		return "usuario/novo-usuario";
 	}
 
 	@GetMapping("/cadastro")
@@ -96,6 +127,11 @@ public class ControleUsuario {
 
 		model.addAttribute("erro", "Credenciais inválidas. Por favor, tente novamente.");
 		return "usuario/login";
+	}
+
+	private Usuario usuarioLogado(HttpSession session) {
+		Object usuario = session.getAttribute("usuarioLogado");
+		return usuario instanceof Usuario ? (Usuario) usuario : null;
 	}
 
 	@GetMapping("/logout")

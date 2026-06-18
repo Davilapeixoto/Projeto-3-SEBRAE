@@ -13,8 +13,11 @@
     <div class="site-nav-left">
         <a th:href="@{/}" class="site-logo-box">S</a>
         <span class="site-brand">Sebrae</span>
-        <a th:href="@{/}" class="site-nav-link">Início</a>
-        <a th:href="@{/cursos}" class="site-nav-link">Cursos</a>
+        <a th:href="@{/}" class="site-nav-link">Home</a>
+        <a th:href="@{/feed}" class="site-nav-link">Feed</a>
+        <a th:href="@{/categorias}" class="site-nav-link">Categorias</a>
+        <a th:href="@{/loja}" class="site-nav-link">Loja</a>
+        <a th:href="@{/novo-usuario}" class="site-nav-link nav-pill-new">New User</a>
         <a th:if="${usuarioLogado.administrador}" th:href="@{/admin/home}" class="site-nav-link">Admin</a>
     </div>
     <form class="site-search" th:action="@{/cursos}" method="get">

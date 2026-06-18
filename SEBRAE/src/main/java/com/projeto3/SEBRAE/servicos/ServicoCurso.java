@@ -13,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.projeto3.SEBRAE.modelo.Area;
 import com.projeto3.SEBRAE.modelo.Curso;
 import com.projeto3.SEBRAE.modelo.CursoFormulario;
+import com.projeto3.SEBRAE.modelo.Inscricao;
 import com.projeto3.SEBRAE.modelo.Nivel;
 import com.projeto3.SEBRAE.modelo.Tag;
 import com.projeto3.SEBRAE.repositorios.RepositorioArea;
+import com.projeto3.SEBRAE.repositorios.RepositorioAvaliacaoCurso;
 import com.projeto3.SEBRAE.repositorios.RepositorioCurso;
 import com.projeto3.SEBRAE.repositorios.RepositorioInscricao;
 import com.projeto3.SEBRAE.repositorios.RepositorioTag;
@@ -27,6 +29,7 @@ public class ServicoCurso {
 	private final RepositorioArea repositorioArea;
 	private final RepositorioTag repositorioTag;
 	private final RepositorioInscricao repositorioInscricao;
+	private final RepositorioAvaliacaoCurso repositorioAvaliacaoCurso;
 	private final ServicoImagem servicoImagem;
 
 	public ServicoCurso(
@@ -34,11 +37,13 @@ public class ServicoCurso {
 			RepositorioArea repositorioArea,
 			RepositorioTag repositorioTag,
 			RepositorioInscricao repositorioInscricao,
+			RepositorioAvaliacaoCurso repositorioAvaliacaoCurso,
 			ServicoImagem servicoImagem) {
 		this.repositorioCurso = repositorioCurso;
 		this.repositorioArea = repositorioArea;
 		this.repositorioTag = repositorioTag;
 		this.repositorioInscricao = repositorioInscricao;
+		this.repositorioAvaliacaoCurso = repositorioAvaliacaoCurso;
 		this.servicoImagem = servicoImagem;
 	}
 
@@ -68,6 +73,35 @@ public class ServicoCurso {
 				.filter(curso -> nivel == null || curso.getNivel() == nivel)
 				.filter(curso -> termoNormalizado.isBlank() || correspondeAoTermo(curso, termoNormalizado))
 				.sorted(comparador)
+				.toList();
+	}
+
+	@Transactional(readOnly = true)
+	public List<Curso> recomendarParaUsuario(Long usuarioId) {
+		List<Curso> cursos = repositorioCurso.findAll();
+		Comparator<Curso> porPopularidade = Comparator.comparingLong(Curso::getVisualizacoes).reversed()
+				.thenComparing(Curso::getId, Comparator.reverseOrder());
+
+		if (usuarioId == null) {
+			return cursos.stream().sorted(porPopularidade).limit(8).toList();
+		}
+
+		List<Inscricao> inscricoes = repositorioInscricao.findAllByUsuario_IdOrderByDataInscricaoDesc(usuarioId);
+		Set<Long> cursosInscritos = inscricoes.stream()
+				.map(inscricao -> inscricao.getCurso().getId())
+				.collect(java.util.stream.Collectors.toSet());
+		Set<Long> areasPreferidas = inscricoes.stream()
+				.map(inscricao -> inscricao.getCurso().getArea().getId())
+				.collect(java.util.stream.Collectors.toSet());
+
+		Comparator<Curso> recomendacao = Comparator
+				.comparing((Curso curso) -> !areasPreferidas.contains(curso.getArea().getId()))
+				.thenComparing(porPopularidade);
+
+		return cursos.stream()
+				.filter(curso -> !cursosInscritos.contains(curso.getId()))
+				.sorted(recomendacao)
+				.limit(8)
 				.toList();
 	}
 
@@ -143,6 +177,8 @@ public class ServicoCurso {
 		String imagem = curso.getImagem();
 		repositorioInscricao.deleteAllByCurso_Id(id);
 		repositorioInscricao.flush();
+		repositorioAvaliacaoCurso.deleteAllByCurso_Id(id);
+		repositorioAvaliacaoCurso.flush();
 		repositorioCurso.delete(curso);
 		repositorioCurso.flush();
 		servicoImagem.excluir(imagem);

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User | SEBRAE</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <script th:src="@{/js/recursos-plataforma.js}"></script>
+</head>
+<body>
+<nav class="site-navbar">
+    <div class="site-nav-left">
+        <a th:href="@{/}" class="site-logo-box" aria-label="Home">S</a>
+        <span class="site-brand">Sebrae</span>
+        <a th:href="@{/}" class="site-nav-link">Home</a>
+        <a th:href="@{/feed}" class="site-nav-link">Feed</a>
+        <a th:href="@{/categorias}" class="site-nav-link">Categorias</a>
+        <a th:href="@{/loja}" class="site-nav-link">Loja</a>
+        <a th:href="@{/novo-usuario}" class="site-nav-link nav-pill-new">New User</a>
+        <a th:if="${usuarioLogado != null}" th:href="@{/minhas-inscricoes}" class="site-nav-link">Meus cursos</a>
+    </div>
+    <div class="site-nav-actions">
+        <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro">☾</button>
+        <a th:if="${usuarioLogado == null}" class="btn-nav" th:href="@{/cadastro}">Criar conta</a>
+        <a th:if="${usuarioLogado != null}" class="btn-nav" th:href="@{/feed}">Abrir meu feed</a>
+    </div>
+</nav>
+
+<main class="page-shell">
+    <section class="page-hero-strip">
+        <p class="page-eyebrow" style="color:#f7a37d">Jornada New User</p>
+        <h1>Comece pela rota certa.</h1>
+        <p>Uma jornada guiada para conhecer a plataforma, encontrar temas relevantes, escolher um curso e acompanhar sua evolução.</p>
+    </section>
+
+    <div class="onboarding-shell" data-onboarding>
+        <section class="onboarding-steps">
+            <article class="onboarding-step" data-onboarding-step="conta">
+                <div class="onboarding-number">1</div>
+                <div>
+                    <h2>Crie ou acesse sua conta</h2>
+                    <p>Com uma conta, você pode se inscrever em cursos, montar sua área pessoal e avaliar conteúdos.</p>
+                    <div class="actions-row" style="margin-top:12px">
+                        <a class="text-link" th:if="${usuarioLogado == null}" th:href="@{/cadastro}">Criar conta</a>
+                        <a class="text-link" th:if="${usuarioLogado == null}" th:href="@{/login}">Já tenho conta</a>
+                        <span class="text-link" th:if="${usuarioLogado != null}">Conta conectada ✓</span>
+                    </div>
+                </div>
+                <button class="onboarding-check" type="button" data-onboarding-toggle="conta" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+            </article>
+
+            <article class="onboarding-step" data-onboarding-step="categorias">
+                <div class="onboarding-number">2</div>
+                <div>
+                    <h2>Escolha seus tópicos</h2>
+                    <p>Navegue pelas categorias e descubra assuntos relacionados aos seus objetivos de negócio.</p>
+                    <div class="actions-row" style="margin-top:12px"><a class="text-link" th:href="@{/categorias}">Explorar categorias</a></div>
+                </div>
+                <button class="onboarding-check" type="button" data-onboarding-toggle="categorias" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+            </article>
+
+            <article class="onboarding-step" data-onboarding-step="curso">
+                <div class="onboarding-number">3</div>
+                <div>
+                    <h2>Encontre seu primeiro curso</h2>
+                    <p>Use a loja em formato de vitrine, aplique filtros e abra os detalhes do conteúdo que mais combina com você.</p>
+                    <div class="actions-row" style="margin-top:12px"><a class="text-link" th:href="@{/loja}">Abrir loja de cursos</a></div>
+                </div>
+                <button class="onboarding-check" type="button" data-onboarding-toggle="curso" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+            </article>
+
+            <article class="onboarding-step" data-onboarding-step="feed">
+                <div class="onboarding-number">4</div>
+                <div>
+                    <h2>Acompanhe seu feed</h2>
+                    <p>Veja novidades, cursos populares e recomendações ajustadas ao seu histórico de inscrições.</p>
+                    <div class="actions-row" style="margin-top:12px"><a class="text-link" th:href="@{/feed}">Acessar feed</a></div>
+                </div>
+                <button class="onboarding-check" type="button" data-onboarding-toggle="feed" aria-label="Marcar etapa como concluída"><i class="bi bi-check-lg"></i></button>
+            </article>
+        </section>
+
+        <aside class="onboarding-side">
+            <p class="page-eyebrow">Seu progresso</p>
+            <h2>Primeiros passos</h2>
+            <p>Marque cada etapa conforme avançar. O progresso fica salvo neste navegador.</p>
+            <div class="progress-track"><div class="progress-value" data-onboarding-progress></div></div>
+            <div class="progress-label" data-onboarding-label>0 de 4 etapas concluídas</div>
+            <a class="btn-primary btn-block" style="margin-top:20px" th:href="${usuarioLogado == null} ? @{/cadastro} : @{/feed}" th:text="${usuarioLogado == null ? 'Começar agora' : 'Continuar no feed'}">Começar agora</a>
+        </aside>
+    </div>
+
+    <section class="section-block" th:if="${categorias != null and !#lists.isEmpty(categorias)}">
+        <div class="section-heading">
+            <div>
+                <h2>Tópicos para começar</h2>
+                <p>Algumas das categorias mais acessadas pelos usuários.</p>
+            </div>
+        </div>
+        <div class="category-grid">
+            <a class="category-card" th:each="categoria : ${categorias}" th:href="@{/cursos(area=${categoria.id})}">
+                <div class="category-icon"><i class="bi bi-compass"></i></div>
+                <div><h3 th:text="${categoria.nome}">Categoria</h3><p th:text="|${categoria.totalCursos} curso(s) disponível(is)|">0 cursos</p></div>
+            </a>
+        </div>
+    </section>
+</main>
+<footer class="site-footer">© 2026 Sebrae. Conhecimento para transformar negócios.</footer>
+</body>
+</html>

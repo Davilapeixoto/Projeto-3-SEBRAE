@@ -11,10 +11,13 @@
 <body>
 <nav class="site-navbar">
     <div class="site-nav-left">
-        <a th:href="@{/}" class="site-logo-box">S</a>
+        <a th:href="@{/}" class="site-logo-box" aria-label="Home">S</a>
         <span class="site-brand">Sebrae</span>
-        <a th:href="@{/}" class="site-nav-link">Início</a>
-        <a th:href="@{/cursos}" class="site-nav-link">Cursos</a>
+        <a th:href="@{/}" class="site-nav-link">Home</a>
+        <a th:href="@{/feed}" class="site-nav-link">Feed</a>
+        <a th:href="@{/categorias}" class="site-nav-link">Categorias</a>
+        <a th:href="@{/loja}" class="site-nav-link">Loja</a>
+        <a th:href="@{/novo-usuario}" class="site-nav-link nav-pill-new">New User</a>
         <a th:if="${usuarioLogado != null}" th:href="@{/minhas-inscricoes}" class="site-nav-link">Meus cursos</a>
         <a th:if="${usuarioLogado != null and usuarioLogado.administrador}" th:href="@{/admin/home}" class="site-nav-link">Admin</a>
     </div>
@@ -34,6 +37,7 @@
     <div class="alert alert-success" th:if="${param.salvo}">Curso salvo com sucesso.</div>
     <div class="alert alert-success" th:if="${param.inscricao}">Inscrição realizada com sucesso.</div>
     <div class="alert alert-success" th:if="${param.cancelada}">Inscrição cancelada com sucesso.</div>
+    <div class="alert alert-success" th:if="${param.avaliacao}">Sua avaliação foi salva com sucesso.</div>
     <div class="alert alert-error" th:if="${erro}" th:text="${erro}"></div>
 
     <article class="detail-panel">
@@ -47,6 +51,15 @@
                 </div>
                 <p class="page-eyebrow">Curso Sebrae</p>
                 <h1 class="detail-title" th:text="${curso.nome}">Nome do curso</h1>
+                <div class="rating-summary">
+                    <span class="rating-score" th:text="${mediaAvaliacoes}">0.0</span>
+                    <div>
+                        <div class="rating-stars" aria-label="Média das avaliações">
+                            <i th:each="estrela : ${#numbers.sequence(1,5)}" th:class="${estrela <= mediaAvaliacoes ? 'bi bi-star-fill' : 'bi bi-star'}"></i>
+                        </div>
+                        <div class="rating-meta" th:text="${totalAvaliacoes == 1 ? '1 avaliação' : totalAvaliacoes + ' avaliações'}">0 avaliações</div>
+                    </div>
+                </div>
                 <div class="detail-description" th:text="${curso.descricao}">Descrição do curso</div>
                 <div class="chip-list"><span class="chip" th:each="tag : ${curso.tags}" th:text="${tag.nome}">Tag</span></div>
             </section>
@@ -75,6 +88,59 @@
             </aside>
         </div>
     </article>
+
+    <section id="avaliacoes" class="reviews-layout">
+        <div class="review-form-card">
+            <p class="page-eyebrow">Sua opinião importa</p>
+            <h2 th:text="${avaliacaoUsuario == null ? 'Avalie este curso' : 'Atualize sua avaliação'}">Avalie este curso</h2>
+            <p>Escolha de 1 a 5 estrelas e, se desejar, deixe um comentário para ajudar outros usuários.</p>
+
+            <div class="alert alert-error" th:if="${erroAvaliacao}" th:text="${erroAvaliacao}"></div>
+
+            <form th:if="${usuarioLogado != null}" th:action="@{/cursos/{id}/avaliar(id=${curso.id})}" method="post">
+                <div class="star-input" aria-label="Nota do curso">
+                    <input id="nota5" type="radio" name="nota" value="5" required th:checked="${avaliacaoUsuario != null and avaliacaoUsuario.nota == 5}"><label for="nota5" title="5 estrelas">★</label>
+                    <input id="nota4" type="radio" name="nota" value="4" required th:checked="${avaliacaoUsuario != null and avaliacaoUsuario.nota == 4}"><label for="nota4" title="4 estrelas">★</label>
+                    <input id="nota3" type="radio" name="nota" value="3" required th:checked="${avaliacaoUsuario != null and avaliacaoUsuario.nota == 3}"><label for="nota3" title="3 estrelas">★</label>
+                    <input id="nota2" type="radio" name="nota" value="2" required th:checked="${avaliacaoUsuario != null and avaliacaoUsuario.nota == 2}"><label for="nota2" title="2 estrelas">★</label>
+                    <input id="nota1" type="radio" name="nota" value="1" required th:checked="${avaliacaoUsuario != null and avaliacaoUsuario.nota == 1}"><label for="nota1" title="1 estrela">★</label>
+                </div>
+                <div class="field">
+                    <label for="comentario">Comentário (opcional)</label>
+                    <textarea id="comentario" class="textarea" name="comentario" maxlength="1000" placeholder="Conte como foi sua experiência..." th:text="${avaliacaoUsuario != null ? avaliacaoUsuario.comentario : ''}"></textarea>
+                </div>
+                <button class="btn-primary btn-block" type="submit" th:text="${avaliacaoUsuario == null ? 'Publicar avaliação' : 'Salvar alterações'}">Publicar avaliação</button>
+            </form>
+
+            <div th:if="${usuarioLogado == null}">
+                <a class="btn-primary btn-block" th:href="@{/login}">Entrar para avaliar</a>
+            </div>
+        </div>
+
+        <div class="reviews-card">
+            <p class="page-eyebrow">Feedback da comunidade</p>
+            <h2>Avaliações dos usuários</h2>
+            <p th:text="${totalAvaliacoes == 0 ? 'Este curso ainda não recebeu avaliações.' : 'Veja o que outros usuários acharam deste conteúdo.'}">Veja as avaliações.</p>
+
+            <div class="review-list" th:if="${avaliacoes != null and !#lists.isEmpty(avaliacoes)}">
+                <article class="review-item" th:each="avaliacao : ${avaliacoes}">
+                    <div class="review-header">
+                        <div>
+                            <div class="review-author" th:text="${avaliacao.usuario.nome}">Usuário</div>
+                            <div class="review-stars">
+                                <i th:each="estrela : ${#numbers.sequence(1,5)}" th:class="${estrela <= avaliacao.nota ? 'bi bi-star-fill' : 'bi bi-star'}"></i>
+                            </div>
+                        </div>
+                        <span class="review-date" th:text="${avaliacao.dataFormatada}">Data</span>
+                    </div>
+                    <p class="review-comment" th:if="${avaliacao.comentario != null}" th:text="${avaliacao.comentario}">Comentário</p>
+                </article>
+            </div>
+            <div class="review-empty" th:if="${avaliacoes == null or #lists.isEmpty(avaliacoes)}">
+                Seja a primeira pessoa a avaliar este curso.
+            </div>
+        </div>
+    </section>
 </main>
 <footer class="site-footer">© 2026 Sebrae. Conhecimento para transformar negócios.</footer>
 </body>
