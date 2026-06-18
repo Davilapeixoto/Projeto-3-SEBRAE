@@ -253,6 +253,29 @@
         atualizar();
     }
 
+    function configurarPreviewImagemCurso() {
+        const entrada = document.querySelector("[data-course-image-input]");
+        const previa = document.querySelector("[data-course-image-preview]");
+        if (!entrada || !previa || !window.FileReader) return;
+
+        entrada.addEventListener("change", function () {
+            const arquivo = entrada.files && entrada.files[0];
+            if (!arquivo) {
+                previa.removeAttribute("src");
+                previa.classList.add("admin-image-preview-hidden");
+                return;
+            }
+            if (!arquivo.type.startsWith("image/")) return;
+
+            const leitor = new FileReader();
+            leitor.addEventListener("load", function () {
+                previa.src = String(leitor.result || "");
+                previa.classList.remove("admin-image-preview-hidden");
+            });
+            leitor.readAsDataURL(arquivo);
+        });
+    }
+
     aplicarTemaInicial();
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -262,6 +285,7 @@
         configurarExibicaoSenha();
         configurarModoCatalogo();
         configurarJornadaNovoUsuario();
+        configurarPreviewImagemCurso();
         configurarTempoPagina();
     });
 })();

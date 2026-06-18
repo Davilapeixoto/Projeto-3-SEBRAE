@@ -8,16 +8,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root {
-            --preto: #0B0C10;
-            --cinza-hero: #36363E;
+            --preto: #0F0F77;
+            --cinza-hero: #0F0F77;
             --branco: #FFFFFF;
             --cinza-borda: #E5E7EB;
-            --cinza-fundo: #F3F4F6;
+            --cinza-fundo: #EAE8E1;
             --cinza-texto: #6B7280;
-            --laranja: #F05D23;
-            --verde: #0F978A;
-            --azul-escuro: #144F63;
-            --amarelo: #E8AC00;
+            --laranja: #F32C06;
+            --verde: #0F0F77;
+            --azul-escuro: #0F0F77;
+            --amarelo: #E7F118;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,16 +48,14 @@
             align-items: center;
             gap: 28px;
         }
-
         .logo-box {
-            background: var(--preto);
+            width: 118px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
             text-decoration: none;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
-            width: 38px; height: 38px;
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
         }
 
         .logo-nome {
@@ -798,14 +796,19 @@
     </style>
     <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
     <script th:src="@{/js/recursos-plataforma.js}"></script>
+
+    <style>
+        .footer-logo-image { width: 150px; height: auto; display: block; }
+        html.tema-escuro .footer-logo-image,
+        html.tema-escuro .navbar-global .site-logo-image { filter: brightness(0) invert(1); }
+    </style>
 </head>
 <body>
 
 <!-- ======================== NAVBAR ======================== -->
 <nav class="navbar-global">
     <div class="nav-esquerdo">
-        <a th:href="@{/}" class="logo-box" aria-label="Página inicial">S</a>
-        <span class="logo-nome">Sebrae</span>
+        <a th:href="@{/}" class="logo-box" aria-label="Página inicial"><img th:src="@{/assets/logo-sebrae.png}" class="site-logo-image" alt="Sebrae"></a>
         <a th:href="@{/}" class="nav-link-item">Home</a>
         <a th:href="@{/feed}" class="nav-link-item">Feed</a>
         <a th:href="@{/categorias}" class="nav-link-item">Categorias</a>
@@ -976,37 +979,37 @@
     </div>
     <div class="carrossel" id="mentores">
         <div class="card-mentor">
-            <div class="avatar-mentor" style="background:#F05D23;">AP</div>
+            <div class="avatar-mentor" style="background:#F32C06;">AP</div>
             <p class="mentor-nome">Ana Paula Silva</p>
             <p class="mentor-area">Marketing Digital</p>
             <div class="mentor-count"><i class="bi bi-award"></i> 156 mentorias</div>
         </div>
         <div class="card-mentor">
-            <div class="avatar-mentor" style="background:#E8AC00;">CE</div>
+            <div class="avatar-mentor" style="background:#E7F118;">CE</div>
             <p class="mentor-nome">Carlos Eduardo Santos</p>
             <p class="mentor-area">Gestão Financeira</p>
             <div class="mentor-count"><i class="bi bi-award"></i> 243 mentorias</div>
         </div>
         <div class="card-mentor">
-            <div class="avatar-mentor" style="background:#F07820;">MC</div>
+            <div class="avatar-mentor" style="background:#F32C06;">MC</div>
             <p class="mentor-nome">Mariana Costa</p>
             <p class="mentor-area">E-commerce</p>
             <div class="mentor-count"><i class="bi bi-award"></i> 189 mentorias</div>
         </div>
         <div class="card-mentor">
-            <div class="avatar-mentor" style="background:#F05D23;">RA</div>
+            <div class="avatar-mentor" style="background:#F32C06;">RA</div>
             <p class="mentor-nome">Roberto Almeida</p>
             <p class="mentor-area">Vendas e Negociação</p>
             <div class="mentor-count"><i class="bi bi-award"></i> 301 mentorias</div>
         </div>
         <div class="card-mentor">
-            <div class="avatar-mentor" style="background:#0F978A;">JS</div>
+            <div class="avatar-mentor" style="background:#0F0F77;">JS</div>
             <p class="mentor-nome">Juliana Santos</p>
             <p class="mentor-area">Tecnologia</p>
             <div class="mentor-count"><i class="bi bi-award"></i> 128 mentorias</div>
         </div>
         <div class="card-mentor">
-            <div class="avatar-mentor" style="background:#144F63;">MO</div>
+            <div class="avatar-mentor" style="background:#0F0F77;">MO</div>
             <p class="mentor-nome">Marcos Oliveira</p>
             <p class="mentor-area">Vendas</p>
             <div class="mentor-count"><i class="bi bi-award"></i> 97 mentorias</div>
@@ -1028,7 +1031,7 @@
     </div>
     <div class="carrossel" id="trilhas">
         <div class="card-trilha">
-            <div class="card-trilha-banner" style="background:#F05D23;">
+            <div class="card-trilha-banner" style="background:#F32C06;">
                 <span>Jornada do MEI</span>
             </div>
             <div class="card-trilha-corpo">
@@ -1042,7 +1045,7 @@
             </div>
         </div>
         <div class="card-trilha">
-            <div class="card-trilha-banner" style="background:#0F978A;">
+            <div class="card-trilha-banner" style="background:#0F0F77;">
                 <span>Futuro Empreendedor</span>
             </div>
             <div class="card-trilha-corpo">
@@ -1056,7 +1059,7 @@
             </div>
         </div>
         <div class="card-trilha">
-            <div class="card-trilha-banner" style="background:#144F63;">
+            <div class="card-trilha-banner" style="background:#0F0F77;">
                 <span>Pequena Empresa, Grande Gestão</span>
             </div>
             <div class="card-trilha-corpo">
@@ -1086,7 +1089,7 @@
     </div>
     <div class="carrossel" id="aulas">
         <div class="card-aula">
-            <div class="card-aula-thumb" style="background:#B07800;">
+            <div class="card-aula-thumb" style="background:#0F0F77;">
                 <div class="play-btn"><i class="bi bi-play-fill"></i></div>
                 <span class="badge-duracao"><i class="bi bi-clock"></i> 28min</span>
                 <span class="badge-categoria-aula">Marketing</span>
@@ -1097,7 +1100,7 @@
             </div>
         </div>
         <div class="card-aula">
-            <div class="card-aula-thumb" style="background:#B03A00;">
+            <div class="card-aula-thumb" style="background:#F32C06;">
                 <div class="play-btn"><i class="bi bi-play-fill"></i></div>
                 <span class="badge-duracao"><i class="bi bi-clock"></i> 35min</span>
                 <span class="badge-categoria-aula">Finanças</span>
@@ -1108,7 +1111,7 @@
             </div>
         </div>
         <div class="card-aula">
-            <div class="card-aula-thumb" style="background:#0F978A;">
+            <div class="card-aula-thumb" style="background:#0F0F77;">
                 <div class="play-btn"><i class="bi bi-play-fill"></i></div>
                 <span class="badge-duracao"><i class="bi bi-clock"></i> 22min</span>
                 <span class="badge-categoria-aula">Marketing Digital</span>
@@ -1119,7 +1122,7 @@
             </div>
         </div>
         <div class="card-aula">
-            <div class="card-aula-thumb" style="background:#144F63;">
+            <div class="card-aula-thumb" style="background:#0F0F77;">
                 <div class="play-btn"><i class="bi bi-play-fill"></i></div>
                 <span class="badge-duracao"><i class="bi bi-clock"></i> 18min</span>
                 <span class="badge-categoria-aula">Vendas</span>
@@ -1146,7 +1149,7 @@
     </div>
     <div class="carrossel" id="programas">
         <div class="card-programa">
-            <div class="card-programa-capa" style="background:#F05D23;">
+            <div class="card-programa-capa" style="background:#F32C06;">
                 <i class="bi bi-stars"></i>
             </div>
             <div class="card-programa-corpo">
@@ -1155,7 +1158,7 @@
             </div>
         </div>
         <div class="card-programa">
-            <div class="card-programa-capa" style="background:#0F978A;">
+            <div class="card-programa-capa" style="background:#0F0F77;">
                 <i class="bi bi-stars"></i>
             </div>
             <div class="card-programa-corpo">
@@ -1164,7 +1167,7 @@
             </div>
         </div>
         <div class="card-programa">
-            <div class="card-programa-capa" style="background:#144F63;">
+            <div class="card-programa-capa" style="background:#0F0F77;">
                 <i class="bi bi-stars"></i>
             </div>
             <div class="card-programa-corpo">
@@ -1173,7 +1176,7 @@
             </div>
         </div>
         <div class="card-programa">
-            <div class="card-programa-capa" style="background:#E8AC00;">
+            <div class="card-programa-capa" style="background:#E7F118;">
                 <i class="bi bi-stars"></i>
             </div>
             <div class="card-programa-corpo">
@@ -1260,7 +1263,7 @@
     </div>
     <div class="carrossel" id="selec">
         <div class="card-selec">
-            <div class="card-selec-capa" style="background:#0F978A;">
+            <div class="card-selec-capa" style="background:#0F0F77;">
                 <span class="badge-modalidade">EAD</span>
                 <i class="bi bi-award"></i>
             </div>
@@ -1271,7 +1274,7 @@
             </div>
         </div>
         <div class="card-selec">
-            <div class="card-selec-capa" style="background:#144F63;">
+            <div class="card-selec-capa" style="background:#0F0F77;">
                 <i class="bi bi-book"></i>
             </div>
             <div class="card-selec-corpo">
@@ -1281,7 +1284,7 @@
             </div>
         </div>
         <div class="card-selec">
-            <div class="card-selec-capa" style="background:#B03A00;">
+            <div class="card-selec-capa" style="background:#F32C06;">
                 <div class="play-btn"><i class="bi bi-play-fill"></i></div>
                 <span class="badge-duracao" style="top:14px;right:14px;"><i class="bi bi-clock"></i> 25min</span>
                 <span class="badge-categoria-aula" style="bottom:14px;left:14px;">Marketing Digital</span>
@@ -1292,7 +1295,7 @@
             </div>
         </div>
         <div class="card-selec">
-            <div class="card-selec-capa" style="background:#E8AC00;">
+            <div class="card-selec-capa" style="background:#E7F118;">
                 <span class="badge-modalidade">EAD</span>
                 <i class="bi bi-award"></i>
             </div>
@@ -1311,8 +1314,7 @@
         <div class="footer-grid">
             <div>
                 <div class="footer-marca-logo">
-                    <div class="footer-logo-box">S</div>
-                    <span class="footer-marca-nome">Sebrae</span>
+                    <img th:src="@{/assets/logo-sebrae.png}" class="footer-logo-image" alt="Sebrae">
                 </div>
                 <p class="footer-desc">Capacitando empreendedores e impulsionando pequenos negócios em todo o Brasil.</p>
                 <div class="footer-redes">
@@ -1374,3 +1376,4 @@
 
 </body>
 </html>
+

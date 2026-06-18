@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
         .auth-wrapper {
-            background: linear-gradient(135deg, #002f6c 0%, #0056b3 50%, #00b4d8 100%);
+            background: linear-gradient(135deg, #0F0F77 0%, #0F0F77 58%, #F32C06 100%);
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; padding: 20px;
         }
@@ -26,12 +26,12 @@
 
         .logo-sebrae { display: block; max-width: 120px; height: auto; margin: 0 auto 15px auto; }
 
-        .auth-container h2 { color: #0056b3; font-size: 24px; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.5px; }
+        .auth-container h2 { color: #0F0F77; font-size: 24px; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.5px; }
 
         /* --- Estilização dos Blocos de Erro --- */
         .alerta-erro {
             background-color: #FFF5F5; border-left: 4px solid #E53E3E;
-            color: #C53030; padding: 12px; margin-bottom: 25px; font-size: 14px; text-align: left; border-radius: 4px;
+            color: #C53030; padding: 12px; margin-bottom: 25px; font-size: 14px; text-align: left; border-radius: 4px; border-top: 7px solid #E7F118;
         }
 
         .erro-campo {
@@ -43,28 +43,28 @@
         /* --- Inputs em Linha --- */
         .input-group { text-align: left; margin-bottom: 25px; position: relative; }
         .input-group label { display: block; font-size: 13px; color: #718096; margin-bottom: 4px; }
-        .input-group label::before { content: "• "; color: #00b4d8; font-weight: bold; }
+        .input-group label::before { content: "• "; color: #F32C06; font-weight: bold; }
 
         .input-group input {
             width: 100%; padding: 10px 0px; border: none; border-bottom: 2px solid #e2e8f0;
             font-size: 16px; color: #2d3748; outline: none; background: transparent; transition: border-color 0.3s ease;
         }
-        .input-group input:focus { border-bottom-color: #00b4d8; }
+        .input-group input:focus { border-bottom-color: #F32C06; }
         .input-group input:invalid:not(:placeholder-shown) { border-bottom-color: #E53E3E; }
 
         /* --- Botões e Links --- */
         .btn-primario {
-            width: 100%; padding: 16px; background: linear-gradient(90deg, #0056b3 0%, #00b4d8 100%);
+            width: 100%; padding: 16px; background: linear-gradient(90deg, #0F0F77 0%, #F32C06 100%);
             color: #ffffff; border: none; font-size: 15px; font-weight: 700; letter-spacing: 1px;
             text-transform: uppercase; cursor: pointer; margin-top: 10px; margin-bottom: 25px;
-            transition: opacity 0.2s ease, transform 0.1s ease; box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+            transition: opacity 0.2s ease, transform 0.1s ease; box-shadow: 0 4px 12px rgba(243, 44, 6, 0.28);
             border-radius: 4px;
         }
         .btn-primario:hover { opacity: 0.95; }
         .btn-primario:active { transform: scale(0.99); }
 
         .link-rodape { display: inline-block; font-size: 14px; color: #718096; text-decoration: none; }
-        .link-rodape span { color: #0056b3; font-weight: 600; }
+        .link-rodape span { color: #0F0F77; font-weight: 600; }
         .link-rodape:hover span { text-decoration: underline; }
 
 
@@ -74,9 +74,9 @@
             border: 1px solid rgba(255,255,255,.45); background: rgba(0,0,0,.18);
             color: #ffffff; font-size: 20px; cursor: pointer; backdrop-filter: blur(8px);
         }
-        html.tema-escuro .auth-wrapper { background: linear-gradient(135deg, #07111f 0%, #0f2747 50%, #083a4a 100%); }
+        html.tema-escuro .auth-wrapper { background: linear-gradient(135deg, #070720 0%, #0F0F77 60%, #15154a 100%); }
         html.tema-escuro .auth-container { background-color: #111c31; color: #e5e7eb; }
-        html.tema-escuro .auth-container h2 { color: #7dd3fc; }
+        html.tema-escuro .auth-container h2 { color: #E7F118; }
         html.tema-escuro .input-group label, html.tema-escuro .link-rodape, html.tema-escuro .signup-link { color: #aebbd0; }
         html.tema-escuro .input-group input { color: #f8fafc; border-bottom-color: #475569; }
         html.tema-escuro .input-group input::placeholder { color: #8090a7; }

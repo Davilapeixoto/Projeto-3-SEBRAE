@@ -24,6 +24,8 @@ public class ConfiguracaoArquivos implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/css/");
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("classpath:/static/js/");
+        registry.addResourceHandler("/assets/**")
+                .addResourceLocations("classpath:/static/assets/");
 
         String local = Paths.get(diretorioCursos).toAbsolutePath().normalize().toUri().toString();
         if (!local.endsWith("/")) {

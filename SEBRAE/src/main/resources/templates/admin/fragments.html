@@ -2,7 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <body>
 <aside class="admin-sidebar" th:fragment="sidebar(ativo)">
-    <a class="admin-brand" th:href="@{/admin/home}">SEBRAE Admin</a>
+    <a class="admin-brand" th:href="@{/admin/home}"><img class="admin-brand-logo" th:src="@{/assets/logo-sebrae.png}" alt="Sebrae"><span class="admin-brand-text">Admin</span></a>
     <nav class="admin-nav" aria-label="Navegação administrativa">
         <a class="admin-nav-link" th:classappend="${ativo == 'home' ? 'ativo' : ''}" th:href="@{/admin/home}">Visão geral</a>
         <a class="admin-nav-link" th:classappend="${ativo == 'cursos' ? 'ativo' : ''}" th:href="@{/cursos/gerenciar}">Cursos</a>

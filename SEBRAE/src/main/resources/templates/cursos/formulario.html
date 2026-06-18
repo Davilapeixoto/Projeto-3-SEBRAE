@@ -76,9 +76,12 @@
                      th:if="${cursoFormulario.imagemAtual != null and !cursoFormulario.imagemAtual.isBlank()}"
                      th:src="@{/uploads/cursos/{imagem}(imagem=${cursoFormulario.imagemAtual})}"
                      alt="Imagem atual do curso">
+                <img id="nova-imagem-preview" class="admin-current-image admin-image-preview-hidden"
+                     data-course-image-preview alt="Prévia da nova imagem do curso">
                 <input class="admin-input" id="imagem" type="file" th:field="*{imagem}"
-                       accept="image/jpeg,image/png,image/webp" th:required="${cursoFormulario.id == null}">
-                <p class="admin-help">Formatos permitidos: JPG, PNG e WEBP. Tamanho máximo: 5 MB.</p>
+                       data-course-image-input accept="image/jpeg,image/png,image/webp"
+                       th:required="${cursoFormulario.id == null}">
+                <p class="admin-help">Formatos permitidos: JPG, PNG e WEBP. Tamanho máximo: 5 MB. A prévia aparece antes de salvar.</p>
                 <p class="admin-field-error" th:if="${#fields.hasErrors('imagem')}" th:errors="*{imagem}"></p>
             </div>
 
