@@ -796,6 +796,8 @@
             .footer-rodape { flex-direction: column; }
         }
     </style>
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <script th:src="@{/js/recursos-plataforma.js}"></script>
 </head>
 <body>
 
@@ -817,6 +819,7 @@
         </form>
     </div>
     <div class="nav-direito">
+        <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
         <span class="nav-localizacao">
             <i class="bi bi-geo-alt"></i> Brasil
         </span>
@@ -824,6 +827,17 @@
         <a th:if="${usuarioLogado != null}" th:href="@{/logout}" class="btn-entrar" th:text="|Sair (${usuarioLogado.nome})|">Sair</a>
     </div>
 </nav>
+
+<div class="toast-stack" th:if="${param.cadastro}">
+    <div class="app-toast" data-toast data-toast-clear-param="cadastro" role="status" aria-live="polite">
+        <div class="app-toast-icon">✓</div>
+        <div>
+            <strong>Cadastro realizado com sucesso!</strong>
+            <span>Você já está conectado à sua nova conta.</span>
+        </div>
+        <button type="button" class="toast-close" data-toast-close aria-label="Fechar notificação">✕</button>
+    </div>
+</div>
 
 <!-- ======================== HERO ======================== -->
 <section class="hero">

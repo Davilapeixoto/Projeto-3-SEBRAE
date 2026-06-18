@@ -47,9 +47,16 @@ public class ControleUsuario {
 	public String processarCadastro(
 			@Valid @ModelAttribute("usuario") Usuario usuario,
 			BindingResult bindingResult,
+			@RequestParam(defaultValue = "") String confirmarSenha,
+			HttpSession session,
 			Model model) {
 
 		if (bindingResult.hasErrors()) {
+			return "usuario/cadastro";
+		}
+
+		if (!confirmarSenha.equals(usuario.getSenha())) {
+			model.addAttribute("erroConfirmarSenha", "As senhas não coincidem.");
 			return "usuario/cadastro";
 		}
 
@@ -63,8 +70,9 @@ public class ControleUsuario {
 		}
 
 		usuario.setPerfil(PerfilUsuario.ALUNO);
-		repositorioUsuario.save(usuario);
-		return "redirect:/login?cadastro=sucesso";
+		Usuario usuarioSalvo = repositorioUsuario.save(usuario);
+		session.setAttribute("usuarioLogado", usuarioSalvo);
+		return "redirect:/?cadastro=sucesso";
 	}
 
 	@GetMapping("/login")

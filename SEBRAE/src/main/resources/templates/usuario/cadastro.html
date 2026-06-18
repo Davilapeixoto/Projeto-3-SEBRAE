@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEBRAE - Registo de Utilizador</title>
     <style>
         /* --- Reset e Alinhamento Global --- */
@@ -17,7 +18,7 @@
         .auth-container {
             background-color: #ffffff; padding: 40px 40px; width: 100%; max-width: 440px;
             text-align: center; position: relative; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); border-radius: 4px;
-            max-height: 95vh; /* Previne que o formulário seja cortado em ecrãs pequenos */
+            max-height: 95vh;
             overflow-y: auto;
         }
 
@@ -27,10 +28,16 @@
 
         .auth-container h2 { color: #0056b3; font-size: 24px; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.5px; }
 
-        /* --- Estilização do Bloco de Erro Dinâmico do Spring Boot --- */
+        /* --- Estilização dos Blocos de Erro --- */
         .alerta-erro {
             background-color: #FFF5F5; border-left: 4px solid #E53E3E;
             color: #C53030; padding: 12px; margin-bottom: 25px; font-size: 14px; text-align: left; border-radius: 4px;
+        }
+
+        .erro-campo {
+            color: #C53030;
+            font-size: 12px;
+            margin-top: 6px;
         }
 
         /* --- Inputs em Linha --- */
@@ -43,6 +50,7 @@
             font-size: 16px; color: #2d3748; outline: none; background: transparent; transition: border-color 0.3s ease;
         }
         .input-group input:focus { border-bottom-color: #00b4d8; }
+        .input-group input:invalid:not(:placeholder-shown) { border-bottom-color: #E53E3E; }
 
         /* --- Botões e Links --- */
         .btn-primario {
@@ -74,24 +82,30 @@
             <p th:text="${erro}"></p>
         </div>
 
-        <form th:action="@{/cadastro}" th:object="${usuario}" method="post">
+        <form th:action="@{/cadastro}" th:object="${usuario}" method="post" id="formCadastro">
 
             <div class="input-group">
                 <label for="nome">Nome Completo</label>
-                <input type="text" id="nome" th:field="*{nome}" maxlength="120" required placeholder="Insira o seu nome" />
+                <input type="text" id="nome" th:field="*{nome}" maxlength="120" autocomplete="name" required placeholder="Insira o seu nome" />
                 <p class="erro-campo" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></p>
             </div>
 
             <div class="input-group">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" th:field="*{email}" maxlength="160" required placeholder="exemplo@email.com" />
+                <input type="email" id="email" th:field="*{email}" maxlength="160" autocomplete="email" required placeholder="exemplo@email.com" />
                 <p class="erro-campo" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
             </div>
 
             <div class="input-group">
                 <label for="senha">Senha</label>
-                <input type="password" id="senha" th:field="*{senha}" minlength="6" maxlength="100" required placeholder="Crie uma senha forte" />
+                <input type="password" id="senha" th:field="*{senha}" minlength="6" maxlength="100" autocomplete="new-password" required placeholder="Crie uma senha forte" />
                 <p class="erro-campo" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></p>
+            </div>
+
+            <div class="input-group">
+                <label for="confirmarSenha">Confirmar Senha</label>
+                <input type="password" id="confirmarSenha" name="confirmarSenha" minlength="6" maxlength="100" autocomplete="new-password" required placeholder="Digite a senha novamente" />
+                <p class="erro-campo" th:if="${erroConfirmarSenha}" th:text="${erroConfirmarSenha}"></p>
             </div>
 
             <button type="submit" class="btn-primario">Cadastrar</button>
@@ -102,6 +116,26 @@
         </a>
     </div>
 </div>
+
+<script>
+    (function () {
+        const formulario = document.getElementById('formCadastro');
+        const senha = document.getElementById('senha');
+        const confirmarSenha = document.getElementById('confirmarSenha');
+
+        function validarSenhas() {
+            if (confirmarSenha.value && senha.value !== confirmarSenha.value) {
+                confirmarSenha.setCustomValidity('As senhas não coincidem.');
+            } else {
+                confirmarSenha.setCustomValidity('');
+            }
+        }
+
+        senha.addEventListener('input', validarSenhas);
+        confirmarSenha.addEventListener('input', validarSenhas);
+        formulario.addEventListener('submit', validarSenhas);
+    }());
+</script>
 
 </body>
 </html>

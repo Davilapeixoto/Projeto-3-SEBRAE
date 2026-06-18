@@ -8,27 +8,17 @@
     }
 
     function salvarTema(valor) {
-        try {
-            localStorage.setItem(CHAVE_TEMA, valor);
-        } catch (erro) {
-            // O modo escuro continua funcionando mesmo quando o armazenamento é bloqueado.
-        }
+        try { localStorage.setItem(CHAVE_TEMA, valor); } catch (erro) { /* armazenamento opcional */ }
     }
 
     function lerTemaSalvo() {
-        try {
-            return localStorage.getItem(CHAVE_TEMA);
-        } catch (erro) {
-            return null;
-        }
+        try { return localStorage.getItem(CHAVE_TEMA); } catch (erro) { return null; }
     }
 
     function aplicarTemaInicial() {
-        const temaSalvo = lerTemaSalvo();
-        const prefereEscuro = window.matchMedia
-            && window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-        if (temaSalvo === "escuro" || (!temaSalvo && prefereEscuro)) {
+        const salvo = lerTemaSalvo();
+        const prefereEscuro = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (salvo === "escuro" || (!salvo && prefereEscuro)) {
             document.documentElement.classList.add("tema-escuro");
         }
     }
@@ -50,42 +40,91 @@
 
     function configurarTema() {
         let botoes = document.querySelectorAll("[data-tema-toggle]");
-
-        // Segurança para alguma tela futura que seja criada sem o botão no HTML.
         if (botoes.length === 0) {
             const botao = document.createElement("button");
             botao.type = "button";
-            botao.className = "tema-toggle tema-toggle-flutuante";
+            botao.className = "tema-toggle";
             botao.setAttribute("data-tema-toggle", "");
+            botao.style.position = "fixed";
+            botao.style.right = "18px";
+            botao.style.bottom = "18px";
+            botao.style.zIndex = "1100";
             document.body.appendChild(botao);
             botoes = document.querySelectorAll("[data-tema-toggle]");
         }
-
-        botoes.forEach(function (botao) {
-            botao.addEventListener("click", alternarTema);
-        });
+        botoes.forEach(function (botao) { botao.addEventListener("click", alternarTema); });
         atualizarBotoesTema();
     }
 
+    function configurarToasts() {
+        document.querySelectorAll("[data-toast]").forEach(function (toast) {
+            const fechar = toast.querySelector("[data-toast-close]");
+            let temporizador;
+
+            function remover() {
+                window.clearTimeout(temporizador);
+                toast.classList.remove("toast-visible");
+                window.setTimeout(function () { toast.remove(); }, 260);
+            }
+
+            if (fechar) { fechar.addEventListener("click", remover); }
+            window.requestAnimationFrame(function () { toast.classList.add("toast-visible"); });
+
+            const parametro = toast.getAttribute("data-toast-clear-param");
+            if (parametro && window.history && typeof window.history.replaceState === "function") {
+                const url = new URL(window.location.href);
+                url.searchParams.delete(parametro);
+                window.history.replaceState({}, document.title, url.pathname + url.search + url.hash);
+            }
+
+            temporizador = window.setTimeout(remover, 5200);
+        });
+    }
+
+    function configurarConfirmacaoSenha() {
+        document.querySelectorAll("[data-password-confirm-form]").forEach(function (formulario) {
+            const senha = formulario.querySelector("[data-password]");
+            const confirmacao = formulario.querySelector("[data-password-confirm]");
+            if (!senha || !confirmacao) return;
+
+            function validar() {
+                if (confirmacao.value && senha.value !== confirmacao.value) {
+                    confirmacao.setCustomValidity("As senhas não coincidem.");
+                } else {
+                    confirmacao.setCustomValidity("");
+                }
+            }
+
+            senha.addEventListener("input", validar);
+            confirmacao.addEventListener("input", validar);
+            formulario.addEventListener("submit", validar);
+        });
+    }
+
+    function configurarExibicaoSenha() {
+        document.querySelectorAll("[data-password-toggle]").forEach(function (botao) {
+            const seletor = botao.getAttribute("data-password-toggle");
+            const campo = document.querySelector(seletor);
+            if (!campo) return;
+            botao.addEventListener("click", function () {
+                const mostrar = campo.type === "password";
+                campo.type = mostrar ? "text" : "password";
+                botao.textContent = mostrar ? "Ocultar" : "Ver";
+                botao.setAttribute("aria-label", mostrar ? "Ocultar senha" : "Mostrar senha");
+            });
+        });
+    }
+
     function criarIdVisita() {
-        if (window.crypto && typeof window.crypto.randomUUID === "function") {
-            return window.crypto.randomUUID();
-        }
+        if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
         return "visita_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 14);
     }
 
     function configurarTempoPagina() {
-        if (!window.fetch || !document.body) {
-            return;
-        }
-
+        if (!window.fetch || !document.body) return;
         const pagina = window.location.pathname;
         const cursoEncontrado = pagina.match(/^\/cursos\/(\d+)\/?$/);
-
-        // O tempo é registrado somente na página de detalhes de um curso cadastrado.
-        if (!cursoEncontrado) {
-            return;
-        }
+        if (!cursoEncontrado) return;
 
         const visitaId = criarIdVisita();
         const cursoId = Number(cursoEncontrado[1]);
@@ -93,54 +132,36 @@
         let ultimoEnviado = 0;
         let finalizado = false;
 
-        function payload(encerrou) {
-            return JSON.stringify({
-                visitaId: visitaId,
-                pagina: pagina,
-                cursoId: cursoId,
-                segundos: segundos,
-                finalizado: Boolean(encerrou)
-            });
+        function corpo(encerrou) {
+            return JSON.stringify({ visitaId: visitaId, pagina: pagina, cursoId: cursoId, segundos: segundos, finalizado: Boolean(encerrou) });
         }
 
         function enviar(encerrou) {
-            if (segundos < 1 || (!encerrou && segundos === ultimoEnviado)) {
-                return;
-            }
-
-            const corpo = payload(encerrou);
+            if (segundos < 1 || (!encerrou && segundos === ultimoEnviado)) return;
+            const payload = corpo(encerrou);
             ultimoEnviado = segundos;
-
             if (encerrou && navigator.sendBeacon) {
-                const blob = new Blob([corpo], { type: "application/json; charset=UTF-8" });
-                navigator.sendBeacon("/api/tempo-pagina", blob);
+                navigator.sendBeacon("/api/tempo-pagina", new Blob([payload], { type: "application/json; charset=UTF-8" }));
                 return;
             }
-
             fetch("/api/tempo-pagina", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: corpo,
+                body: payload,
                 credentials: "same-origin",
                 keepalive: true
-            }).catch(function () {
-                // Métrica não deve bloquear a navegação nem exibir erro ao usuário.
-            });
+            }).catch(function () { /* métrica não bloqueia a navegação */ });
         }
 
         const intervalo = window.setInterval(function () {
             if (document.visibilityState === "visible") {
                 segundos += 1;
-                if (segundos % 5 === 0) {
-                    enviar(false);
-                }
+                if (segundos % 5 === 0) enviar(false);
             }
         }, 1000);
 
         function encerrar() {
-            if (finalizado) {
-                return;
-            }
+            if (finalizado) return;
             finalizado = true;
             window.clearInterval(intervalo);
             enviar(true);
@@ -154,6 +175,9 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         configurarTema();
+        configurarToasts();
+        configurarConfirmacaoSenha();
+        configurarExibicaoSenha();
         configurarTempoPagina();
     });
 })();
