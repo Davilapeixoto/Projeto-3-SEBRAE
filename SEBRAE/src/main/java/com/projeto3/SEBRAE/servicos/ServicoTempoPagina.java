@@ -2,21 +2,24 @@ package com.projeto3.SEBRAE.servicos;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.projeto3.SEBRAE.modelo.Curso;
 import com.projeto3.SEBRAE.modelo.RegistroTempoPagina;
 import com.projeto3.SEBRAE.modelo.TempoPagina;
 import com.projeto3.SEBRAE.repositorios.RepositorioCurso;
 import com.projeto3.SEBRAE.repositorios.RepositorioTempoPagina;
-import com.projeto3.SEBRAE.repositorios.ResumoTempoPagina;
+import com.projeto3.SEBRAE.repositorios.ResumoTempoCurso;
 
 @Service
 public class ServicoTempoPagina {
 
 	private static final Pattern VISITA_ID_SEGURA = Pattern.compile("[a-zA-Z0-9_-]{8,64}");
+	private static final Pattern PAGINA_CURSO = Pattern.compile("^/cursos/(\\d+)/?$");
 	private static final long LIMITE_SEGUNDOS = 4 * 60 * 60;
 
 	private final RepositorioTempoPagina repositorioTempoPagina;
@@ -34,21 +37,31 @@ public class ServicoTempoPagina {
 			throw new IllegalArgumentException("Identificador de visita inválido");
 		}
 
-		String pagina = limparPagina(registro.pagina());
+		Long cursoId = extrairCursoDaPagina(registro.pagina());
+		if (registro.cursoId() == null || !cursoId.equals(registro.cursoId())) {
+			throw new IllegalArgumentException("Curso inválido");
+		}
+
+		Curso curso = repositorioCurso.findById(cursoId)
+				.orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
+
 		long segundos = Math.min(Math.max(registro.segundos(), 0), LIMITE_SEGUNDOS);
-		Long cursoId = validarCurso(registro.cursoId());
 		LocalDateTime agora = LocalDateTime.now();
 
 		TempoPagina tempo = repositorioTempoPagina.findByVisitaId(registro.visitaId())
 				.orElseGet(() -> {
 					TempoPagina novo = new TempoPagina();
 					novo.setVisitaId(registro.visitaId());
-					novo.setPagina(pagina);
-					novo.setCursoId(cursoId);
+					novo.setPagina("/cursos/" + cursoId);
+					novo.setCurso(curso);
 					novo.setUsuarioId(usuarioId);
 					novo.setCriadoEm(agora);
 					return novo;
 				});
+
+		if (tempo.getCurso() == null || !tempo.getCurso().getId().equals(cursoId)) {
+			throw new IllegalArgumentException("Visita associada a outro curso");
+		}
 
 		// O navegador envia o tempo acumulado. Manter o maior valor evita duplicação.
 		tempo.setSegundos(Math.max(tempo.getSegundos(), segundos));
@@ -58,25 +71,24 @@ public class ServicoTempoPagina {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ResumoTempoPagina> resumirPorPagina() {
-		return repositorioTempoPagina.resumirPorPagina();
+	public List<ResumoTempoCurso> resumirTempoMedioPorCurso() {
+		return repositorioTempoPagina.resumirTempoMedioPorCurso();
 	}
 
-	private String limparPagina(String pagina) {
+	private Long extrairCursoDaPagina(String pagina) {
 		if (pagina == null || pagina.isBlank()) {
-			throw new IllegalArgumentException("Página inválida");
+			throw new IllegalArgumentException("Página de curso inválida");
 		}
-		String limpa = pagina.trim();
-		if (!limpa.startsWith("/") || limpa.length() > 255) {
-			throw new IllegalArgumentException("Página inválida");
-		}
-		return limpa;
-	}
 
-	private Long validarCurso(Long cursoId) {
-		if (cursoId == null) {
-			return null;
+		Matcher matcher = PAGINA_CURSO.matcher(pagina.trim());
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException("O tempo só pode ser registrado em páginas de cursos");
 		}
-		return repositorioCurso.existsById(cursoId) ? cursoId : null;
+
+		try {
+			return Long.valueOf(matcher.group(1));
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Curso inválido", e);
+		}
 	}
 }

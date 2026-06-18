@@ -4,78 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
     <script defer th:src="@{/js/recursos-plataforma.js}"></script>
-    <title>Estatísticas | SEBRAE</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; min-height: 100vh; display: flex; font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; color: #172033; }
-        aside { width: 260px; background: #101828; color: white; padding: 28px 20px; }
-        .marca { display: block; margin-bottom: 34px; color: white; font-size: 1.35rem; font-weight: 800; text-decoration: none; }
-        aside a { display: block; margin-bottom: 8px; padding: 12px 14px; border-radius: 10px; color: #d0d5dd; text-decoration: none; font-weight: 700; }
-        aside a:hover, aside a.ativo { background: #1d2939; color: white; }
-        main { flex: 1; min-width: 0; padding: 34px; }
-        header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
-        h1 { margin: 0 0 6px; }
-        h2 { margin-top: 38px; }
-        .subtitulo { margin: 0; color: #667085; }
-        .sair { color: #0050c8; font-weight: 700; text-decoration: none; }
-        .tabela { overflow-x: auto; border: 1px solid #dfe4ea; border-radius: 14px; background: white; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 14px 16px; border-bottom: 1px solid #eaecf0; text-align: left; }
-        th { background: #f9fafb; font-size: .85rem; color: #475467; }
-        .grade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-        .card { padding: 20px; border: 1px solid #dfe4ea; border-radius: 14px; background: white; }
-        .card a { color: #172033; font-weight: 800; text-decoration: none; }
-        .card strong { display: block; margin-top: 12px; color: #0050c8; font-size: 1.6rem; }
-        .vazio { padding: 32px; background: white; border-radius: 14px; color: #667085; }
-        @media (max-width: 900px) { body { display: block; } aside { width: 100%; } .grade { grid-template-columns: 1fr; } }
-    </style>
+    <script defer th:src="@{/js/admin.js}"></script>
+    <title>Estatísticas | SEBRAE Admin</title>
 </head>
-<body>
-<aside>
-    <a class="marca" th:href="@{/admin/home}">SEBRAE Admin</a>
-    <a th:href="@{/admin/home}">Visão geral</a>
-    <a th:href="@{/admin/areas}">Áreas</a>
-    <a th:href="@{/admin/tags}">Tags</a>
-    <a class="ativo" th:href="@{/admin/estatisticas}">Estatísticas</a>
-    <a th:href="@{/}">Ver plataforma</a>
-</aside>
-<main>
-    <header>
+<body class="admin-body">
+<aside th:replace="~{admin/fragments :: sidebar('estatisticas')}"></aside>
+
+<main class="admin-main">
+    <header class="admin-header">
         <div>
-            <h1>Estatísticas de navegação</h1>
-            <p class="subtitulo">Visualizações dos cursos e tempo ativo por página.</p>
+            <h1 class="admin-title">Estatísticas</h1>
+            <p class="admin-subtitle">Acessos e tempo médio nas páginas dos cursos cadastrados.</p>
         </div>
-        <div class="cabecalho-acoes">
+        <div class="admin-header-actions">
             <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
-            <a class="sair" th:href="@{/logout}">Sair</a>
+            <a class="admin-logout" th:href="@{/logout}">Sair</a>
         </div>
     </header>
 
-    <h2>Cursos mais visitados</h2>
-    <section class="grade" th:if="${!#lists.isEmpty(cursosMaisVisitados)}">
-        <article class="card" th:each="curso : ${cursosMaisVisitados}">
-            <a th:href="@{/cursos/{id}(id=${curso.id})}" th:text="${curso.nome}">Curso</a>
-            <strong th:text="|${curso.visualizacoes} visualizações|">0 visualizações</strong>
-        </article>
-    </section>
-    <div class="vazio" th:if="${#lists.isEmpty(cursosMaisVisitados)}">Nenhuma visualização registrada.</div>
+    <section class="admin-section">
+        <div class="admin-section-header">
+            <div>
+                <h2 class="admin-section-title">Acessos por curso</h2>
+                <p class="admin-section-description">Comparação dos seis cursos mais acessados.</p>
+            </div>
+            <strong th:text="|${totalVisualizacoes} acessos no total|">0 acessos no total</strong>
+        </div>
 
-    <h2>Tempo por página</h2>
-    <div class="tabela" th:if="${!#lists.isEmpty(tempos)}">
-        <table>
-            <thead><tr><th>Página</th><th>Visitas</th><th>Tempo médio</th><th>Tempo total</th></tr></thead>
-            <tbody>
-                <tr th:each="tempo : ${tempos}">
-                    <td th:text="${tempo.pagina}">/pagina</td>
-                    <td th:text="${tempo.visitas}">0</td>
-                    <td th:text="|${#numbers.formatDecimal(tempo.tempoMedioSegundos, 1, 1)} s|">0 s</td>
-                    <td th:text="|${tempo.tempoTotalSegundos} s|">0 s</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="vazio" th:if="${#lists.isEmpty(tempos)}">Ainda não há dados de tempo por página.</div>
+        <div class="admin-panel" th:if="${totalVisualizacoes > 0}">
+            <div class="access-chart" data-grafico-acessos aria-label="Gráfico de barras com os acessos por curso">
+                <article class="access-chart-row"
+                         th:each="curso : ${cursosMaisVisitados}"
+                         th:if="${curso.visualizacoes > 0}"
+                         th:attr="data-acessos=${curso.visualizacoes}">
+                    <div class="access-chart-header">
+                        <a class="access-chart-name"
+                           th:href="@{/cursos/{id}(id=${curso.id})}"
+                           th:text="${curso.nome}">Curso</a>
+                        <span class="access-chart-value"
+                              th:text="${curso.visualizacoes == 1 ? curso.visualizacoes + ' acesso' : curso.visualizacoes + ' acessos'}">0 acessos</span>
+                    </div>
+                    <div class="access-chart-track">
+                        <div class="access-chart-bar" data-barra-acessos></div>
+                    </div>
+                </article>
+                <div class="access-chart-axis" aria-hidden="true">
+                    <span>0</span>
+                    <span data-grafico-limite>0</span>
+                </div>
+            </div>
+        </div>
+        <div class="admin-empty" th:if="${totalVisualizacoes == 0}">Nenhum acesso aos cursos foi registrado.</div>
+    </section>
+
+    <section class="admin-section">
+        <div class="admin-section-header">
+            <div>
+                <h2 class="admin-section-title">Tempo médio por curso</h2>
+                <p class="admin-section-description">Somente o tempo ativo nas páginas de detalhes dos cursos.</p>
+            </div>
+        </div>
+
+        <div class="admin-table-wrapper" th:if="${!#lists.isEmpty(tempos)}">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Tempo médio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tempo : ${tempos}">
+                        <td>
+                            <a class="admin-course-name"
+                               th:href="@{/cursos/{id}(id=${tempo.cursoId})}"
+                               th:text="${tempo.cursoNome}">Curso</a>
+                        </td>
+                        <td th:text="|${#numbers.formatDecimal(tempo.tempoMedioSegundos, 1, 1)} s|">0,0 s</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="admin-empty" th:if="${#lists.isEmpty(tempos)}">Ainda não há dados de tempo nas páginas dos cursos.</div>
+    </section>
 </main>
 </body>
 </html>

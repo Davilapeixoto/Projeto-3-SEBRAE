@@ -15,13 +15,13 @@ public interface RepositorioTempoPagina extends JpaRepository<TempoPagina, Long>
 	Optional<TempoPagina> findByVisitaId(String visitaId);
 
 	@Query("""
-		select t.pagina as pagina,
-		       count(t.id) as visitas,
-		       sum(t.segundos) as tempoTotalSegundos,
+		select t.curso.id as cursoId,
+		       t.curso.nome as cursoNome,
 		       avg(t.segundos) as tempoMedioSegundos
 		from TempoPagina t
-		group by t.pagina
-		order by sum(t.segundos) desc
+		where t.curso is not null
+		group by t.curso.id, t.curso.nome
+		order by avg(t.segundos) desc
 		""")
-	List<ResumoTempoPagina> resumirPorPagina();
+	List<ResumoTempoCurso> resumirTempoMedioPorCurso();
 }

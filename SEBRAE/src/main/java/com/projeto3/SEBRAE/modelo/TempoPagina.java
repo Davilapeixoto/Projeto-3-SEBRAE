@@ -7,7 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -32,8 +35,9 @@ public class TempoPagina {
 	@Column(nullable = false, length = 255)
 	private String pagina;
 
-	@Column(name = "curso_id")
-	private Long cursoId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "curso_id")
+	private Curso curso;
 
 	@Column(name = "usuario_id")
 	private Long usuarioId;
@@ -70,12 +74,12 @@ public class TempoPagina {
 		this.pagina = pagina;
 	}
 
-	public Long getCursoId() {
-		return cursoId;
+	public Curso getCurso() {
+		return curso;
 	}
 
-	public void setCursoId(Long cursoId) {
-		this.cursoId = cursoId;
+	public void setCurso(Curso curso) {
+		this.curso = curso;
 	}
 
 	public Long getUsuarioId() {

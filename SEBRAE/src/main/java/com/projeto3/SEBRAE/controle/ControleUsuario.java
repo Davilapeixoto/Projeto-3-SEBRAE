@@ -62,7 +62,7 @@ public class ControleUsuario {
 			return "usuario/cadastro";
 		}
 
-		usuario.setPerfil(repositorioUsuario.count() == 0 ? PerfilUsuario.ADMINISTRADOR : PerfilUsuario.ALUNO);
+		usuario.setPerfil(PerfilUsuario.ALUNO);
 		repositorioUsuario.save(usuario);
 		return "redirect:/login?cadastro=sucesso";
 	}

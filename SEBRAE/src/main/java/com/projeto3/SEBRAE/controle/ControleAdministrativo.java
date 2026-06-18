@@ -60,8 +60,9 @@ public class ControleAdministrativo {
 		}
 
 		model.addAttribute("usuarioLogado", usuario);
-		model.addAttribute("tempos", servicoTempoPagina.resumirPorPagina());
+		model.addAttribute("tempos", servicoTempoPagina.resumirTempoMedioPorCurso());
 		model.addAttribute("cursosMaisVisitados", servicoCurso.listarMaisVisitados());
+		model.addAttribute("totalVisualizacoes", servicoCurso.totalVisualizacoes());
 		return "admin/estatisticas";
 	}
 

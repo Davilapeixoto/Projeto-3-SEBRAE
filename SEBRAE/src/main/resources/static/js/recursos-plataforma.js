@@ -79,10 +79,16 @@
             return;
         }
 
-        const visitaId = criarIdVisita();
         const pagina = window.location.pathname;
         const cursoEncontrado = pagina.match(/^\/cursos\/(\d+)\/?$/);
-        const cursoId = cursoEncontrado ? Number(cursoEncontrado[1]) : null;
+
+        // O tempo é registrado somente na página de detalhes de um curso cadastrado.
+        if (!cursoEncontrado) {
+            return;
+        }
+
+        const visitaId = criarIdVisita();
+        const cursoId = Number(cursoEncontrado[1]);
         let segundos = 0;
         let ultimoEnviado = 0;
         let finalizado = false;
