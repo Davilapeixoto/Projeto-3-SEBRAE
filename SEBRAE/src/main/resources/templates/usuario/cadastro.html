@@ -1,34 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SEBRAE - Cadastro de Usuário</title>
-    <link rel="stylesheet" th:href="@{/css/estilo-sebrae.css}" />
+    <title>SEBRAE - Registo de Utilizador</title>
+    <style>
+        /* --- Reset e Alinhamento Global --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        .auth-wrapper {
+            background: linear-gradient(135deg, #002f6c 0%, #0056b3 50%, #00b4d8 100%);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; padding: 20px;
+        }
+
+        /* --- Card Branco Minimalista --- */
+        .auth-container {
+            background-color: #ffffff; padding: 40px 40px; width: 100%; max-width: 440px;
+            text-align: center; position: relative; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); border-radius: 4px;
+            max-height: 95vh; /* Previne que o formulário seja cortado em ecrãs pequenos */
+            overflow-y: auto;
+        }
+
+        .close-icon { position: absolute; top: 25px; right: 25px; color: #a0aec0; font-size: 18px; cursor: pointer; text-decoration: none; }
+
+        .logo-sebrae { display: block; max-width: 120px; height: auto; margin: 0 auto 15px auto; }
+
+        .auth-container h2 { color: #0056b3; font-size: 24px; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* --- Estilização do Bloco de Erro Dinâmico do Spring Boot --- */
+        .alerta-erro {
+            background-color: #FFF5F5; border-left: 4px solid #E53E3E;
+            color: #C53030; padding: 12px; margin-bottom: 25px; font-size: 14px; text-align: left; border-radius: 4px;
+        }
+
+        /* --- Inputs em Linha --- */
+        .input-group { text-align: left; margin-bottom: 25px; position: relative; }
+        .input-group label { display: block; font-size: 13px; color: #718096; margin-bottom: 4px; }
+        .input-group label::before { content: "• "; color: #00b4d8; font-weight: bold; }
+
+        .input-group input {
+            width: 100%; padding: 10px 0px; border: none; border-bottom: 2px solid #e2e8f0;
+            font-size: 16px; color: #2d3748; outline: none; background: transparent; transition: border-color 0.3s ease;
+        }
+        .input-group input:focus { border-bottom-color: #00b4d8; }
+
+        /* --- Botões e Links --- */
+        .btn-primario {
+            width: 100%; padding: 16px; background: linear-gradient(90deg, #0056b3 0%, #00b4d8 100%);
+            color: #ffffff; border: none; font-size: 15px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; cursor: pointer; margin-top: 10px; margin-bottom: 25px;
+            transition: opacity 0.2s ease, transform 0.1s ease; box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+            border-radius: 4px;
+        }
+        .btn-primario:hover { opacity: 0.95; }
+        .btn-primario:active { transform: scale(0.99); }
+
+        .link-rodape { display: inline-block; font-size: 14px; color: #718096; text-decoration: none; }
+        .link-rodape span { color: #0056b3; font-weight: 600; }
+        .link-rodape:hover span { text-decoration: underline; }
+    </style>
 </head>
 <body>
-<h2>Criar Nova Conta</h2>
 
-<div th:if="${erro}" style="color: red;">
-    <p th:text="${erro}"></p>
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <a th:href="@{/}" class="close-icon">✕</a>
+
+        <img th:src="@{/assets/logo-sebrae.png}" alt="Sebrae Logo" class="logo-sebrae" />
+
+        <h2>Criar Nova Conta</h2>
+
+        <div th:if="${erro}" class="alerta-erro">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <form th:action="@{/cadastro}" th:object="${usuario}" method="post">
+
+            <div class="input-group">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" th:field="*{nome}" required placeholder="Insira o seu nome" />
+            </div>
+
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" th:field="*{email}" required placeholder="exemplo@email.com" />
+            </div>
+
+            <div class="input-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" th:field="*{senha}" required placeholder="Crie uma senha forte" />
+            </div>
+
+            <button type="submit" class="btn-primario">Cadastrar</button>
+        </form>
+
+        <a th:href="@{/login}" class="link-rodape">
+            Já tem uma conta? <span>Faça login aqui</span>
+        </a>
+    </div>
 </div>
 
-<form th:action="@{/cadastro}" th:object="${usuario}" method="post">
-    <div>
-        <label>Nome:</label>
-        <input type="text" th:field="*{nome}" required />
-    </div>
-    <div>
-        <label>E-mail:</label>
-        <input type="email" th:field="*{email}" required />
-    </div>
-    <div>
-        <label>Senha:</label>
-        <input type="password" th:field="*{senha}" required />
-    </div>
-    <button type="submit">Cadastrar</button>
-</form>
-
-<br/>
-<a th:href="@{/login}">Já tem uma conta? Faça login aqui</a>
 </body>
 </html>
