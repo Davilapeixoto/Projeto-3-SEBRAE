@@ -67,6 +67,8 @@
 
         <h2>Acessar o Sistema</h2>
 
+        <div th:if="${param.cadastro}" class="alerta-sucesso">Cadastro realizado com sucesso. Faça login.</div>
+
         <div th:if="${erro}" class="alerta-erro">
             <p th:text="${erro}"></p>
         </div>

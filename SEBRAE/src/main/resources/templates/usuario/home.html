@@ -51,6 +51,7 @@
 
         .logo-box {
             background: var(--preto);
+            text-decoration: none;
             color: #fff;
             font-weight: 700;
             font-size: 1rem;
@@ -282,6 +283,8 @@
             transition: transform 0.25s, box-shadow 0.25s;
         }
         .card-explorar:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
+        a.card-explorar, a.card-destaque { color: inherit; text-decoration: none; }
+        .estado-vazio { color: var(--cinza-texto); padding: 22px 0; }
 
         .card-explorar-capa {
             height: 150px;
@@ -799,25 +802,26 @@
 <!-- ======================== NAVBAR ======================== -->
 <nav class="navbar-global">
     <div class="nav-esquerdo">
-        <div class="logo-box">S</div>
+        <a th:href="@{/}" class="logo-box" aria-label="Página inicial">S</a>
         <span class="logo-nome">Sebrae</span>
-        <a href="#" class="nav-link-item">Início</a>
-        <a href="#" class="nav-link-item">Explorar</a>
-        <a href="#" class="nav-link-item">Cursos</a>
-        <a href="#" class="nav-link-item">Mentorias</a>
-        <a href="#" class="nav-link-item">Atendimento</a>
+        <a th:href="@{/}" class="nav-link-item">Início</a>
+        <a th:href="@{/explorar}" class="nav-link-item">Explorar</a>
+        <a th:href="@{/cursos}" class="nav-link-item">Cursos</a>
+        <a th:if="${usuarioLogado != null}" th:href="@{/minhas-inscricoes}" class="nav-link-item">Meus cursos</a>
+        <a th:if="${usuarioLogado != null and usuarioLogado.administrador}" th:href="@{/admin/home}" class="nav-link-item">Admin</a>
     </div>
     <div class="nav-centro">
-        <div class="search-box">
+        <form class="search-box" th:action="@{/cursos}" method="get">
             <i class="bi bi-search ico-busca"></i>
-            <input type="text" placeholder="Buscar cursos, mentorias...">
-        </div>
+            <input type="search" name="q" placeholder="Buscar cursos..." aria-label="Buscar cursos">
+        </form>
     </div>
     <div class="nav-direito">
-        <a href="#" class="nav-localizacao">
-            <i class="bi bi-geo-alt"></i> São Paulo
-        </a>
-        <a th:href="@{/login}" class="btn-entrar">Entrar</a>
+        <span class="nav-localizacao">
+            <i class="bi bi-geo-alt"></i> Brasil
+        </span>
+        <a th:if="${usuarioLogado == null}" th:href="@{/login}" class="btn-entrar">Entrar</a>
+        <a th:if="${usuarioLogado != null}" th:href="@{/logout}" class="btn-entrar" th:text="|Sair (${usuarioLogado.nome})|">Sair</a>
     </div>
 </nav>
 
@@ -827,10 +831,10 @@
     <h1>Jornada do Empreendedor<br>Digital</h1>
     <p>Aprenda a transformar sua ideia em um negócio digital de sucesso. Do planejamento ao lançamento.</p>
     <div class="hero-botoes">
-        <a href="#" class="btn-hero-branco">
+        <a th:href="@{/cursos}" class="btn-hero-branco">
             <i class="bi bi-play-fill"></i> Começar agora
         </a>
-        <a href="#" class="btn-hero-outline">
+        <a th:href="@{/explorar}" class="btn-hero-outline">
             <i class="bi bi-search"></i> Explorar catálogo
         </a>
     </div>
@@ -848,144 +852,64 @@
     <div class="secao-header">
         <div>
             <h2 class="secao-titulo">Continue Explorando</h2>
-            <p class="secao-sub">Retome de onde você parou</p>
+            <p class="secao-sub">Cursos cadastrados na plataforma</p>
         </div>
         <div class="seta-grupo">
-            <button class="btn-seta" onclick="rolar('explorar', -1)"><i class="bi bi-chevron-left"></i></button>
-            <button class="btn-seta" onclick="rolar('explorar', 1)"><i class="bi bi-chevron-right"></i></button>
+            <button class="btn-seta" onclick="rolar('explorar', -1)" aria-label="Cursos anteriores"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('explorar', 1)" aria-label="Próximos cursos"><i class="bi bi-chevron-right"></i></button>
         </div>
     </div>
-    <div class="carrossel" id="explorar">
-        <div class="card-explorar">
-            <div class="card-explorar-capa" style="background:#F05D23;"><i class="bi bi-book"></i></div>
-            <div class="card-explorar-corpo">
-                <p class="card-cat">Formalização</p>
-                <h3 class="card-titulo">Como abrir um MEI</h3>
-                <div class="card-tempo"><i class="bi bi-clock"></i> 45 min</div>
+    <div class="carrossel" id="explorar" th:if="${cursos != null and !#lists.isEmpty(cursos)}">
+        <a class="card-explorar" th:each="curso : ${cursos}" th:href="@{/cursos/{id}(id=${curso.id})}">
+            <div class="card-explorar-capa"
+                 th:style="|background-image: linear-gradient(rgba(0,0,0,.10), rgba(0,0,0,.35)), url('${curso.imagemUrl}'); background-size: cover; background-position: center;|">
+                <i class="bi bi-book"></i>
             </div>
-        </div>
-        <div class="card-explorar">
-            <div class="card-explorar-capa" style="background:#0F978A;"><i class="bi bi-book"></i></div>
             <div class="card-explorar-corpo">
-                <p class="card-cat">Marketing</p>
-                <h3 class="card-titulo">Marketing Digital para Pequenos Negócios</h3>
-                <div class="card-tempo"><i class="bi bi-clock"></i> 2h 30min</div>
+                <p class="card-cat" th:text="${curso.area.nome}">Área</p>
+                <h3 class="card-titulo" th:text="${curso.nome}">Nome do curso</h3>
+                <div class="card-tempo"><i class="bi bi-bar-chart"></i> <span th:text="${curso.nivel.descricao}">Nível</span></div>
             </div>
-        </div>
-        <div class="card-explorar">
-            <div class="card-explorar-capa" style="background:#144F63;"><i class="bi bi-book"></i></div>
-            <div class="card-explorar-corpo">
-                <p class="card-cat">Finanças</p>
-                <h3 class="card-titulo">Gestão Financeira Essencial</h3>
-                <div class="card-tempo"><i class="bi bi-clock"></i> 1h 45min</div>
-            </div>
-        </div>
-        <div class="card-explorar">
-            <div class="card-explorar-capa" style="background:#E8AC00;"><i class="bi bi-book"></i></div>
-            <div class="card-explorar-corpo">
-                <p class="card-cat">E-commerce</p>
-                <h3 class="card-titulo">Vendas Online: Primeiros Passos</h3>
-                <div class="card-tempo"><i class="bi bi-clock"></i> 1h 15min</div>
-            </div>
-        </div>
-        <div class="card-explorar">
-            <div class="card-explorar-capa" style="background:#C05800;"><i class="bi bi-book"></i></div>
-            <div class="card-explorar-corpo">
-                <p class="card-cat">Tecnologia</p>
-                <h3 class="card-titulo">Inteligência Artificial nos Negócios</h3>
-                <div class="card-tempo"><i class="bi bi-clock"></i> 3h</div>
-            </div>
-        </div>
-        <div class="card-explorar">
-            <div class="card-explorar-capa" style="background:#215A6D;"><i class="bi bi-book"></i></div>
-            <div class="card-explorar-corpo">
-                <p class="card-cat">Gestão</p>
-                <h3 class="card-titulo">Planejamento Estratégico</h3>
-                <div class="card-tempo"><i class="bi bi-clock"></i> 2h</div>
-            </div>
-        </div>
+        </a>
     </div>
+    <p class="estado-vazio" th:if="${cursos == null or #lists.isEmpty(cursos)}">
+        Nenhum curso foi cadastrado ainda. Entre como administrador para adicionar o primeiro curso.
+    </p>
 </section>
 
 <!-- ======================== CURSOS EM DESTAQUE ======================== -->
 <section class="secao secao-cinza">
     <div class="secao-header">
         <div>
-            <h2 class="secao-titulo">Cursos em Destaque</h2>
-            <p class="secao-sub">Aprenda com os melhores</p>
+            <h2 class="secao-titulo">Mais visitados</h2>
+            <p class="secao-sub">Os cursos mais acessados da plataforma</p>
         </div>
         <div class="seta-grupo">
-            <button class="btn-seta" onclick="rolar('destaques', -1)"><i class="bi bi-chevron-left"></i></button>
-            <button class="btn-seta" onclick="rolar('destaques', 1)"><i class="bi bi-chevron-right"></i></button>
+            <button class="btn-seta" onclick="rolar('destaques', -1)" aria-label="Cursos anteriores"><i class="bi bi-chevron-left"></i></button>
+            <button class="btn-seta" onclick="rolar('destaques', 1)" aria-label="Próximos cursos"><i class="bi bi-chevron-right"></i></button>
         </div>
     </div>
-    <div class="carrossel" id="destaques">
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background:#0F978A;">
-                <span class="badge-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
+    <div class="carrossel" id="destaques" th:if="${maisVisitados != null and !#lists.isEmpty(maisVisitados)}">
+        <article class="card-destaque" th:each="curso : ${maisVisitados}">
+            <div class="card-destaque-capa"
+                 th:style="|background-image: linear-gradient(rgba(0,0,0,.06), rgba(0,0,0,.28)), url('${curso.imagemUrl}'); background-size: cover; background-position: center;|">
+                <span class="badge-modalidade" th:text="${curso.area.nome}">Área</span>
             </div>
             <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">Marketing Digital Completo</h3>
+                <h3 class="card-destaque-titulo" th:text="${curso.nome}">Nome do curso</h3>
                 <div class="card-destaque-meta">
-                    <i class="bi bi-display"></i> Online <span>•</span> Iniciante
+                    <i class="bi bi-bar-chart"></i>
+                    <span th:text="${curso.nivel.descricao}">Nível</span>
+                    <span>•</span>
+                    <span th:text="${curso.visualizacoes + ' acessos'}">0 acessos</span>
                 </div>
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
+                <a th:href="@{/cursos/{id}(id=${curso.id})}" class="btn-saiba-mais">Saiba mais</a>
             </div>
-        </div>
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background:#144F63;">
-                <span class="badge-modalidade">Presencial</span>
-                <i class="bi bi-award"></i>
-            </div>
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">Gestão de Pessoas para Pequenas Empresas</h3>
-                <div class="card-destaque-meta">
-                    <i class="bi bi-geo-alt"></i> Presencial <span>•</span> Intermediário
-                </div>
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background:#E8AC00;">
-                <span class="badge-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
-            </div>
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">E-commerce: Do Zero ao Lançamento</h3>
-                <div class="card-destaque-meta">
-                    <i class="bi bi-display"></i> Online <span>•</span> Iniciante
-                </div>
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background:#F05D23;">
-                <span class="badge-modalidade">EAD</span>
-                <i class="bi bi-award"></i>
-            </div>
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">Precificação Estratégica</h3>
-                <div class="card-destaque-meta">
-                    <i class="bi bi-display"></i> Online <span>•</span> Avançado
-                </div>
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
-        <div class="card-destaque">
-            <div class="card-destaque-capa" style="background:#215A6D;">
-                <span class="badge-modalidade">Presencial</span>
-                <i class="bi bi-award"></i>
-            </div>
-            <div class="card-destaque-corpo">
-                <h3 class="card-destaque-titulo">Atendimento ao Cliente de Excelência</h3>
-                <div class="card-destaque-meta">
-                    <i class="bi bi-geo-alt"></i> Presencial <span>•</span> Iniciante
-                </div>
-                <a href="#" class="btn-saiba-mais">Saiba mais</a>
-            </div>
-        </div>
+        </article>
     </div>
+    <p class="estado-vazio" th:if="${maisVisitados == null or #lists.isEmpty(maisVisitados)}">
+        Os cursos mais visitados aparecerão aqui após os primeiros acessos.
+    </p>
 </section>
 
 <!-- ======================== MENTORIAS ======================== -->

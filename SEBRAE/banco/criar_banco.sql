@@ -1,0 +1,1 @@
+CREATE DATABASE sebrae_db;

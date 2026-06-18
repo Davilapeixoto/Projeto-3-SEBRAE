@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <script defer th:src="@{/js/recursos-plataforma.js}"></script>
+    <title>Explorar cursos | SEBRAE</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; color: #172033; }
+        header { background: white; border-bottom: 1px solid #dfe4ea; }
+        nav { max-width: 1180px; margin: auto; min-height: 72px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .marca { color: #0050c8; font-size: 1.35rem; font-weight: 800; text-decoration: none; }
+        .links { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
+        .links a { color: #172033; text-decoration: none; font-weight: 700; }
+        .botao { background: #0050c8; color: white !important; padding: 11px 18px; border-radius: 10px; }
+        main { max-width: 1180px; margin: auto; padding: 48px 24px 80px; }
+        h1 { margin: 0 0 10px; font-size: 2.5rem; }
+        .subtitulo { margin: 0 0 26px; color: #667085; }
+        .filtro-form { display: grid; grid-template-columns: minmax(220px, 2fr) repeat(3, minmax(140px, 1fr)) auto; gap: 12px; margin-bottom: 32px; padding: 16px; border: 1px solid #dfe4ea; border-radius: 16px; background: white; }
+        .filtro-form input, .filtro-form select, .filtro-form button { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #cfd6df; border-radius: 9px; font: inherit; }
+        .filtro-form button { border: 0; background: #0050c8; color: white; font-weight: 800; cursor: pointer; }
+        .limpar { align-self: center; color: #0050c8; font-weight: 700; text-decoration: none; text-align: center; }
+        .resultado { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 20px; color: #667085; }
+        .mensagem { margin-bottom: 22px; padding: 13px 16px; border-radius: 10px; background: #fff1f1; color: #b42318; }
+        .grade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+        .card { position: relative; cursor: pointer; background: white; border: 1px solid #dfe4ea; border-radius: 18px; overflow: hidden; min-height: 410px; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(22, 34, 51, 0.06); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(22, 34, 51, 0.12); }
+        .card-link { position: absolute; inset: 0; z-index: 1; border-radius: 18px; }
+        .card-link:focus-visible { outline: 3px solid #0050c8; outline-offset: 3px; }
+        .card .detalhes { position: relative; z-index: 2; }
+        .imagem { width: 100%; height: 190px; object-fit: cover; background: #eaecf0; }
+        .conteudo { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+        .topo { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+        .area { color: #0050c8; font-weight: 800; }
+        .nivel { border-radius: 999px; padding: 6px 10px; background: #eaf2ff; color: #003b94; font-size: 0.82rem; font-weight: 700; }
+        h2 { margin: 0 0 12px; font-size: 1.25rem; }
+        p { color: #667085; line-height: 1.55; }
+        .visitas { margin: 0 0 4px; color: #667085; font-size: .84rem; }
+        .tags { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px; }
+        .tag { background: #f2f4f7; border-radius: 999px; padding: 7px 10px; color: #475467; font-size: 0.8rem; }
+        .detalhes { display: block; margin-top: 20px; padding: 11px 15px; border-radius: 10px; background: #0050c8; color: white; text-align: center; text-decoration: none; font-weight: 800; }
+        .vazio { background: white; border-radius: 16px; padding: 38px; text-align: center; color: #667085; }
+        @media (max-width: 980px) { .filtro-form { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 850px) { .grade { grid-template-columns: 1fr; } nav { align-items: flex-start; flex-direction: column; padding-top: 18px; padding-bottom: 18px; } }
+        @media (max-width: 560px) { .filtro-form { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a class="marca" th:href="@{/}">SEBRAE</a>
+        <div class="links">
+            <a th:href="@{/}">Início</a>
+            <a th:href="@{/explorar}">Explorar</a>
+            <a th:if="${usuarioLogado != null}" th:href="@{/minhas-inscricoes}">Minhas inscrições</a>
+            <a th:if="${usuarioLogado != null and usuarioLogado.administrador}" th:href="@{/cursos/gerenciar}">Gerenciar cursos</a>
+            <a th:if="${usuarioLogado != null and usuarioLogado.administrador}" class="botao" th:href="@{/cursos/novo}">Cadastrar curso</a>
+            <a th:if="${usuarioLogado == null}" class="botao" th:href="@{/login}">Entrar</a>
+            <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
+        </div>
+    </nav>
+</header>
+<main>
+    <h1>Explorar cursos</h1>
+    <p class="subtitulo">Pesquise por nome, descrição, área ou tag e filtre o catálogo.</p>
+
+    <form class="filtro-form" method="get" th:action="@{/cursos}">
+        <input type="search" name="q" th:value="${q}" placeholder="Pesquisar cursos..." aria-label="Pesquisar cursos">
+        <select name="area" aria-label="Filtrar por área">
+            <option value="">Todas as áreas</option>
+            <option th:each="areaItem : ${areas}" th:value="${areaItem.id}" th:text="${areaItem.nome}" th:selected="${areaSelecionada != null and areaSelecionada == areaItem.id}"></option>
+        </select>
+        <select name="nivel" aria-label="Filtrar por nível">
+            <option value="">Todos os níveis</option>
+            <option th:each="nivelItem : ${niveis}" th:value="${nivelItem.name()}" th:text="${nivelItem.descricao}" th:selected="${nivelSelecionado == nivelItem}"></option>
+        </select>
+        <select name="ordem" aria-label="Ordenar cursos">
+            <option value="recentes" th:selected="${ordem == 'recentes'}">Mais recentes</option>
+            <option value="visitados" th:selected="${ordem == 'visitados'}">Mais visitados</option>
+            <option value="nome" th:selected="${ordem == 'nome'}">Nome A–Z</option>
+        </select>
+        <button type="submit">Pesquisar</button>
+        <a class="limpar" th:href="@{/cursos}">Limpar</a>
+    </form>
+
+    <div class="mensagem" th:if="${param.naoEncontrado}">O curso informado não foi encontrado.</div>
+    <div class="resultado"><span><strong th:text="${#lists.size(cursos)}">0</strong> curso(s) encontrado(s)</span></div>
+
+    <section class="grade" th:if="${!#lists.isEmpty(cursos)}">
+        <article class="card" th:each="curso : ${cursos}">
+            <a class="card-link" th:href="@{/cursos/{id}(id=${curso.id})}" th:attr="aria-label=|Abrir curso ${curso.nome}|"></a>
+            <img class="imagem" th:src="${curso.imagemUrl}" th:alt="${curso.nome}">
+            <div class="conteudo">
+                <div class="topo">
+                    <span class="area" th:text="${curso.area.nome}">Área</span>
+                    <span class="nivel" th:text="${curso.nivel.descricao}">Nível</span>
+                </div>
+                <h2 th:text="${curso.nome}">Nome do curso</h2>
+                <div class="visitas" th:text="|${curso.visualizacoes} visualizações|">0 visualizações</div>
+                <p th:text="${curso.descricao}">Descrição</p>
+                <div class="tags"><span class="tag" th:each="tag : ${curso.tags}" th:text="${tag.nome}">Tag</span></div>
+                <a class="detalhes" th:href="@{/cursos/{id}(id=${curso.id})}">Ver curso</a>
+            </div>
+        </article>
+    </section>
+
+    <div class="vazio" th:if="${#lists.isEmpty(cursos)}">Nenhum curso corresponde aos filtros informados.</div>
+</main>
+</body>
+</html>

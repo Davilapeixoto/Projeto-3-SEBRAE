@@ -1,0 +1,212 @@
+@startuml
+
+' =========================================================
+' Configuração visual
+' =========================================================
+left to right direction
+
+skinparam nodesep 90
+skinparam ranksep 110
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+title Diagrama de Classes — SEBRAE
+
+' =========================================================
+' Classes e enums
+' =========================================================
+
+class CursoFormulario [[java:com.projeto3.SEBRAE.modelo.CursoFormulario]] {
+    - id: Long
+    - nome: String
+    - descricao: String
+    - areaId: Long
+    - tagIds: List<Long>
+    - imagem: MultipartFile
+    - imagemAtual: String
+
+    + getId(): Long
+    + setId(id: Long): void
+    + getNome(): String
+    + setNome(nome: String): void
+    + getDescricao(): String
+    + setDescricao(descricao: String): void
+    + getAreaId(): Long
+    + setAreaId(areaId: Long): void
+    + getNivel(): Nivel
+    + setNivel(nivel: Nivel): void
+    + getTagIds(): List<Long>
+    + setTagIds(tagIds: List<Long>): void
+    + getImagem(): MultipartFile
+    + setImagem(imagem: MultipartFile): void
+    + getImagemAtual(): String
+    + setImagemAtual(imagemAtual: String): void
+}
+
+enum Nivel [[java:com.projeto3.SEBRAE.modelo.Nivel]] {
+    INICIANTE
+    INTERMEDIARIO
+    AVANCADO
+    --
+    - descricao: String
+    ~ Nivel(descricao: String)
+    + getDescricao(): String
+}
+
+enum PerfilUsuario [[java:com.projeto3.SEBRAE.modelo.PerfilUsuario]] {
+    ADMINISTRADOR
+    ALUNO
+}
+
+class Usuario [[java:com.projeto3.SEBRAE.modelo.Usuario]] {
+    - id: Long
+    - nome: String
+    - email: String
+    - senha: String
+
+    + Usuario()
+    + Usuario(id: Long, nome: String, email: String, senha: String)
+    + getId(): Long
+    + setId(id: Long): void
+    + getNome(): String
+    + setNome(nome: String): void
+    + getEmail(): String
+    + setEmail(email: String): void
+    + getSenha(): String
+    + setSenha(senha: String): void
+    + getPerfil(): PerfilUsuario
+    + setPerfil(perfil: PerfilUsuario): void
+    + isAdministrador(): boolean
+}
+
+class Area [[java:com.projeto3.SEBRAE.modelo.Area]] {
+    - id: Long
+    - nome: String
+
+    + Area()
+    + Area(id: Long, nome: String)
+    + getId(): Long
+    + setId(id: Long): void
+    + getNome(): String
+    + setNome(nome: String): void
+}
+
+class Tag [[java:com.projeto3.SEBRAE.modelo.Tag]] {
+    - id: Long
+    - nome: String
+
+    + Tag()
+    + Tag(id: Long, nome: String)
+    + getId(): Long
+    + setId(id: Long): void
+    + getNome(): String
+    + setNome(nome: String): void
+}
+
+class Curso [[java:com.projeto3.SEBRAE.modelo.Curso]] {
+    - id: Long
+    - nome: String
+    - descricao: String
+    - imagem: String
+    - visualizacoes: long
+
+    + Curso()
+    + getId(): Long
+    + setId(id: Long): void
+    + getNome(): String
+    + setNome(nome: String): void
+    + getDescricao(): String
+    + setDescricao(descricao: String): void
+    + getImagem(): String
+    + setImagem(imagem: String): void
+    + getArea(): Area
+    + setArea(area: Area): void
+    + getNivel(): Nivel
+    + setNivel(nivel: Nivel): void
+    + getVisualizacoes(): long
+    + setVisualizacoes(visualizacoes: long): void
+    + getTags(): Set<Tag>
+    + setTags(tags: Set<Tag>): void
+    + getImagemUrl(): String
+}
+
+class Inscricao [[java:com.projeto3.SEBRAE.modelo.Inscricao]] {
+    - id: Long
+    - dataInscricao: LocalDateTime
+
+    + Inscricao()
+    + preencherDataInscricao(): void
+    + getId(): Long
+    + setId(id: Long): void
+    + getUsuario(): Usuario
+    + setUsuario(usuario: Usuario): void
+    + getCurso(): Curso
+    + setCurso(curso: Curso): void
+    + getDataInscricao(): LocalDateTime
+    + setDataInscricao(dataInscricao: LocalDateTime): void
+    + getDataInscricaoFormatada(): String
+}
+
+class RegistroTempoPagina [[java:com.projeto3.SEBRAE.modelo.RegistroTempoPagina]]
+
+class TempoPagina [[java:com.projeto3.SEBRAE.modelo.TempoPagina]] {
+    - id: Long
+    - visitaId: String
+    - pagina: String
+    - cursoId: Long
+    - usuarioId: Long
+    - segundos: long
+    - finalizado: boolean
+    - criadoEm: LocalDateTime
+    - atualizadoEm: LocalDateTime
+
+    + getId(): Long
+    + getVisitaId(): String
+    + setVisitaId(visitaId: String): void
+    + getPagina(): String
+    + setPagina(pagina: String): void
+    + getCursoId(): Long
+    + setCursoId(cursoId: Long): void
+    + getUsuarioId(): Long
+    + setUsuarioId(usuarioId: Long): void
+    + getSegundos(): long
+    + setSegundos(segundos: long): void
+    + isFinalizado(): boolean
+    + setFinalizado(finalizado: boolean): void
+    + getCriadoEm(): LocalDateTime
+    + setCriadoEm(criadoEm: LocalDateTime): void
+    + getAtualizadoEm(): LocalDateTime
+    + setAtualizadoEm(atualizadoEm: LocalDateTime): void
+}
+
+' =========================================================
+' Relacionamentos
+' =========================================================
+
+Usuario --> "1" PerfilUsuario : perfil
+CursoFormulario --> "1" Nivel : nivel
+
+Inscricao --> "1" Usuario : usuario
+Inscricao --> "1" Curso : curso
+
+Curso --> "1" Area : area
+Curso --> "1" Nivel : nivel
+Curso --> "0..*" Tag : tags
+
+' =========================================================
+' Orientação do layout
+' Relacionamentos invisíveis apenas organizam as classes
+' =========================================================
+
+Usuario -[hidden]right-> CursoFormulario
+CursoFormulario -[hidden]right-> Curso
+Curso -[hidden]right-> TempoPagina
+
+Inscricao -[hidden]down-> Curso
+
+Area -[hidden]right-> Nivel
+Nivel -[hidden]right-> Tag
+
+@enduml

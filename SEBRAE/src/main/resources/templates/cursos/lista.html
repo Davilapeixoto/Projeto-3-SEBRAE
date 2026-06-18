@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/recursos-plataforma.js}"></script>
+    <title>Gerenciar cursos | SEBRAE Admin</title>
+</head>
+<body class="admin-body">
+<aside th:replace="~{admin/fragments :: sidebar('cursos')}"></aside>
+
+<main class="admin-main">
+    <header class="admin-header">
+        <div>
+            <h1 class="admin-title">Gerenciar cursos</h1>
+            <p class="admin-subtitle">Cadastre, edite e acompanhe os acessos dos cursos da plataforma.</p>
+        </div>
+        <div class="admin-header-actions">
+            <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
+            <a class="admin-logout" th:href="@{/logout}">Sair</a>
+        </div>
+    </header>
+
+    <div class="admin-section-header">
+        <div>
+            <h2 class="admin-section-title">Cursos cadastrados</h2>
+            <p class="admin-section-description">A visualização pública de cada curso continua disponível pelo nome ou pelo botão Abrir.</p>
+        </div>
+        <a class="admin-button" th:href="@{/cursos/novo}">Cadastrar curso</a>
+    </div>
+
+    <div class="admin-alert admin-alert-success" th:if="${param.excluido}">Curso excluído com sucesso.</div>
+    <div class="admin-alert admin-alert-error" th:if="${param.naoEncontrado}">Curso não encontrado.</div>
+    <div class="admin-alert admin-alert-error" th:if="${erro}" th:text="${erro}"></div>
+
+    <div class="admin-table-wrapper" th:if="${!#lists.isEmpty(cursos)}">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Curso</th>
+                    <th>Área</th>
+                    <th>Nível</th>
+                    <th>Tags</th>
+                    <th>Acessos</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="curso : ${cursos}">
+                    <td>
+                        <a th:href="@{/cursos/{id}(id=${curso.id})}">
+                            <img class="admin-course-image" th:src="${curso.imagemUrl}" th:alt="${curso.nome}">
+                        </a>
+                    </td>
+                    <td>
+                        <a class="admin-course-name" th:href="@{/cursos/{id}(id=${curso.id})}" th:text="${curso.nome}">Curso</a>
+                        <span class="admin-course-description" th:text="${curso.descricao}">Descrição</span>
+                    </td>
+                    <td th:text="${curso.area.nome}">Área</td>
+                    <td><span class="admin-level" th:text="${curso.nivel.descricao}">Nível</span></td>
+                    <td>
+                        <div class="admin-tags">
+                            <span class="admin-tag" th:each="tag : ${curso.tags}" th:text="${tag.nome}">Tag</span>
+                        </div>
+                    </td>
+                    <td th:text="${curso.visualizacoes}">0</td>
+                    <td>
+                        <div class="admin-row-actions">
+                            <a class="admin-button-success" th:href="@{/cursos/{id}(id=${curso.id})}">Abrir</a>
+                            <a class="admin-button-small" th:href="@{/cursos/editar/{id}(id=${curso.id})}">Editar</a>
+                            <form th:action="@{/cursos/excluir/{id}(id=${curso.id})}" method="post">
+                                <button class="admin-button-danger" type="submit">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-empty" th:if="${#lists.isEmpty(cursos)}">Nenhum curso cadastrado.</div>
+</main>
+</body>
+</html>

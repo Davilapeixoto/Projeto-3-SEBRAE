@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/recursos-plataforma.js}"></script>
+    <title>Tags | SEBRAE Admin</title>
+</head>
+<body class="admin-body">
+<aside th:replace="~{admin/fragments :: sidebar('tags')}"></aside>
+
+<main class="admin-main">
+    <header class="admin-header">
+        <div>
+            <h1 class="admin-title">Tags</h1>
+            <p class="admin-subtitle">Somente tags cadastradas aqui poderão ser vinculadas aos cursos.</p>
+        </div>
+        <div class="admin-header-actions">
+            <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
+            <a class="admin-logout" th:href="@{/logout}">Sair</a>
+        </div>
+    </header>
+
+    <div class="admin-alert admin-alert-success" th:if="${param.salvo}">Tag salva com sucesso.</div>
+    <div class="admin-alert admin-alert-success" th:if="${param.excluido}">Tag excluída com sucesso.</div>
+    <div class="admin-alert admin-alert-error" th:if="${erro}" th:text="${erro}"></div>
+
+    <div class="admin-grid admin-grid-form-list">
+        <section class="admin-form-card">
+            <h2 class="admin-form-title" th:text="${tag.id == null ? 'Nova tag' : 'Editar tag'}">Nova tag</h2>
+            <form th:action="@{/admin/tags/salvar}" th:object="${tag}" method="post">
+                <input type="hidden" th:field="*{id}">
+                <div class="admin-field">
+                    <label for="nome">Nome</label>
+                    <input class="admin-input" id="nome" type="text" th:field="*{nome}" maxlength="60" required>
+                    <p class="admin-field-error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></p>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-button" type="submit">Salvar</button>
+                    <a class="admin-button-secondary" th:if="${tag.id != null}" th:href="@{/admin/tags}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+
+        <section>
+            <div class="admin-table-wrapper" th:if="${!#lists.isEmpty(tags)}">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${tags}">
+                            <td><span class="admin-tag" th:text="${item.nome}">Tag</span></td>
+                            <td>
+                                <div class="admin-row-actions">
+                                    <a class="admin-button-small" th:href="@{/admin/tags/editar/{id}(id=${item.id})}">Editar</a>
+                                    <form th:action="@{/admin/tags/excluir/{id}(id=${item.id})}" method="post">
+                                        <button class="admin-button-danger" type="submit">Excluir</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="admin-empty" th:if="${#lists.isEmpty(tags)}">Nenhuma tag cadastrada.</div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

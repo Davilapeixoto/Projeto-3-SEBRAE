@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/recursos-plataforma.js}"></script>
+    <script defer th:src="@{/js/admin.js}"></script>
+    <title>Estatísticas | SEBRAE Admin</title>
+</head>
+<body class="admin-body">
+<aside th:replace="~{admin/fragments :: sidebar('estatisticas')}"></aside>
+
+<main class="admin-main">
+    <header class="admin-header">
+        <div>
+            <h1 class="admin-title">Estatísticas</h1>
+            <p class="admin-subtitle">Acessos e tempo médio nas páginas dos cursos cadastrados.</p>
+        </div>
+        <div class="admin-header-actions">
+            <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
+            <a class="admin-logout" th:href="@{/logout}">Sair</a>
+        </div>
+    </header>
+
+    <section class="admin-section">
+        <div class="admin-section-header">
+            <div>
+                <h2 class="admin-section-title">Acessos por curso</h2>
+                <p class="admin-section-description">Comparação dos seis cursos mais acessados.</p>
+            </div>
+            <strong th:text="|${totalVisualizacoes} acessos no total|">0 acessos no total</strong>
+        </div>
+
+        <div class="admin-panel" th:if="${totalVisualizacoes > 0}">
+            <div class="access-chart" data-grafico-acessos aria-label="Gráfico de barras com os acessos por curso">
+                <article class="access-chart-row"
+                         th:each="curso : ${cursosMaisVisitados}"
+                         th:if="${curso.visualizacoes > 0}"
+                         th:attr="data-acessos=${curso.visualizacoes}">
+                    <div class="access-chart-header">
+                        <a class="access-chart-name"
+                           th:href="@{/cursos/{id}(id=${curso.id})}"
+                           th:text="${curso.nome}">Curso</a>
+                        <span class="access-chart-value"
+                              th:text="${curso.visualizacoes == 1 ? curso.visualizacoes + ' acesso' : curso.visualizacoes + ' acessos'}">0 acessos</span>
+                    </div>
+                    <div class="access-chart-track">
+                        <div class="access-chart-bar" data-barra-acessos></div>
+                    </div>
+                </article>
+                <div class="access-chart-axis" aria-hidden="true">
+                    <span>0</span>
+                    <span data-grafico-limite>0</span>
+                </div>
+            </div>
+        </div>
+        <div class="admin-empty" th:if="${totalVisualizacoes == 0}">Nenhum acesso aos cursos foi registrado.</div>
+    </section>
+
+    <section class="admin-section">
+        <div class="admin-section-header">
+            <div>
+                <h2 class="admin-section-title">Tempo médio por curso</h2>
+                <p class="admin-section-description">Somente o tempo ativo nas páginas de detalhes dos cursos.</p>
+            </div>
+        </div>
+
+        <div class="admin-table-wrapper" th:if="${!#lists.isEmpty(tempos)}">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Tempo médio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tempo : ${tempos}">
+                        <td>
+                            <a class="admin-course-name"
+                               th:href="@{/cursos/{id}(id=${tempo.cursoId})}"
+                               th:text="${tempo.cursoNome}">Curso</a>
+                        </td>
+                        <td th:text="|${#numbers.formatDecimal(tempo.tempoMedioSegundos, 1, 1)} s|">0,0 s</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="admin-empty" th:if="${#lists.isEmpty(tempos)}">Ainda não há dados de tempo nas páginas dos cursos.</div>
+    </section>
+</main>
+</body>
+</html>

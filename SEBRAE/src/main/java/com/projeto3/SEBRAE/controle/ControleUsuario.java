@@ -1,24 +1,39 @@
 package com.projeto3.SEBRAE.controle;
 
-import com.projeto3.SEBRAE.modelo.Usuario;
-import com.projeto3.SEBRAE.repositorios.RepositorioUsuario;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.projeto3.SEBRAE.modelo.PerfilUsuario;
+import com.projeto3.SEBRAE.modelo.Usuario;
+import com.projeto3.SEBRAE.repositorios.RepositorioUsuario;
+import com.projeto3.SEBRAE.servicos.ServicoCurso;
+
 import jakarta.servlet.http.HttpSession;
-import java.util.Optional;
+import jakarta.validation.Valid;
 
 @Controller
 public class ControleUsuario {
 
-	@Autowired
-	private RepositorioUsuario repositorioUsuario;
+	private final RepositorioUsuario repositorioUsuario;
+	private final ServicoCurso servicoCurso;
+
+	public ControleUsuario(RepositorioUsuario repositorioUsuario, ServicoCurso servicoCurso) {
+		this.repositorioUsuario = repositorioUsuario;
+		this.servicoCurso = servicoCurso;
+	}
 
 	@GetMapping("/")
-	public String paginaInicial() {
+	public String paginaInicial(Model model, HttpSession session) {
+		model.addAttribute("cursos", servicoCurso.listar().stream().limit(6).toList());
+		model.addAttribute("maisVisitados", servicoCurso.listarMaisVisitados());
+		model.addAttribute("usuarioLogado", session.getAttribute("usuarioLogado"));
 		return "usuario/home";
 	}
 
@@ -29,13 +44,27 @@ public class ControleUsuario {
 	}
 
 	@PostMapping("/cadastro")
-	public String processarCadastro(Usuario usuario, Model model) {
-		if (repositorioUsuario.findByEmail(usuario.getEmail()).isPresent()) {
-			model.addAttribute("erro", "Este e-mail já se encontra registado na plataforma.");
+	public String processarCadastro(
+			@Valid @ModelAttribute("usuario") Usuario usuario,
+			BindingResult bindingResult,
+			Model model) {
+
+		if (bindingResult.hasErrors()) {
 			return "usuario/cadastro";
 		}
+
+		usuario.setId(null);
+		usuario.setNome(usuario.getNome().trim());
+		usuario.setEmail(usuario.getEmail().trim().toLowerCase());
+
+		if (repositorioUsuario.findByEmail(usuario.getEmail()).isPresent()) {
+			model.addAttribute("erro", "Este e-mail já está cadastrado na plataforma.");
+			return "usuario/cadastro";
+		}
+
+		usuario.setPerfil(PerfilUsuario.ALUNO);
 		repositorioUsuario.save(usuario);
-		return "redirect:/login";
+		return "redirect:/login?cadastro=sucesso";
 	}
 
 	@GetMapping("/login")
@@ -44,12 +73,17 @@ public class ControleUsuario {
 	}
 
 	@PostMapping("/login")
-	public String processarLogin(@RequestParam String email, @RequestParam String senha, HttpSession session, Model model) {
-		Optional<Usuario> usuarioOpt = repositorioUsuario.findByEmail(email);
+	public String processarLogin(
+			@RequestParam String email,
+			@RequestParam String senha,
+			HttpSession session,
+			Model model) {
+
+		Optional<Usuario> usuarioOpt = repositorioUsuario.findByEmail(email.trim().toLowerCase());
 
 		if (usuarioOpt.isPresent() && usuarioOpt.get().getSenha().equals(senha)) {
 			session.setAttribute("usuarioLogado", usuarioOpt.get());
-			return "redirect:/admin/home";
+			return "redirect:/";
 		}
 
 		model.addAttribute("erro", "Credenciais inválidas. Por favor, tente novamente.");

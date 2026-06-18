@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/recursos-plataforma.js}"></script>
+    <title th:text="${cursoFormulario.id == null ? 'Cadastrar curso | SEBRAE Admin' : 'Editar curso | SEBRAE Admin'}">Curso | SEBRAE Admin</title>
+</head>
+<body class="admin-body">
+<aside th:replace="~{admin/fragments :: sidebar('cursos')}"></aside>
+
+<main class="admin-main">
+    <header class="admin-header">
+        <div>
+            <h1 class="admin-title" th:text="${cursoFormulario.id == null ? 'Cadastrar curso' : 'Editar curso'}">Cadastrar curso</h1>
+            <p class="admin-subtitle">A área e as tags devem existir previamente no painel administrativo.</p>
+        </div>
+        <div class="admin-header-actions">
+            <button type="button" class="tema-toggle" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
+            <a class="admin-logout" th:href="@{/logout}">Sair</a>
+        </div>
+    </header>
+
+    <div class="admin-alert admin-alert-error" th:if="${erro}" th:text="${erro}"></div>
+    <div class="admin-alert admin-alert-warning" th:if="${#lists.isEmpty(areas)}">
+        Nenhuma área está disponível. <a th:href="@{/admin/areas}">Cadastre uma área.</a>
+    </div>
+    <div class="admin-alert admin-alert-warning" th:if="${#lists.isEmpty(tags)}">
+        Nenhuma tag está disponível. <a th:href="@{/admin/tags}">Cadastre uma tag.</a>
+    </div>
+
+    <form class="admin-form-card"
+          th:action="@{/cursos/salvar}"
+          th:object="${cursoFormulario}"
+          method="post"
+          enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{imagemAtual}">
+
+        <div class="admin-form-grid">
+            <div class="admin-field">
+                <label for="nome">Nome</label>
+                <input class="admin-input" id="nome" type="text" th:field="*{nome}" maxlength="150" required>
+                <p class="admin-field-error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></p>
+            </div>
+
+            <div class="admin-field">
+                <label for="nivel">Nível</label>
+                <select class="admin-select" id="nivel" th:field="*{nivel}" required>
+                    <option value="">Selecione um nível</option>
+                    <option th:each="nivel : ${niveis}" th:value="${nivel}" th:text="${nivel.descricao}"></option>
+                </select>
+                <p class="admin-field-error" th:if="${#fields.hasErrors('nivel')}" th:errors="*{nivel}"></p>
+            </div>
+
+            <div class="admin-field admin-field-wide">
+                <label for="descricao">Descrição</label>
+                <textarea class="admin-textarea" id="descricao" th:field="*{descricao}" maxlength="2000" required></textarea>
+                <p class="admin-field-error" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></p>
+            </div>
+
+            <div class="admin-field">
+                <label for="areaId">Área</label>
+                <select class="admin-select" id="areaId" th:field="*{areaId}" required>
+                    <option value="">Selecione uma área</option>
+                    <option th:each="area : ${areas}" th:value="${area.id}" th:text="${area.nome}"></option>
+                </select>
+                <p class="admin-field-error" th:if="${#fields.hasErrors('areaId')}" th:errors="*{areaId}"></p>
+            </div>
+
+            <div class="admin-field">
+                <label for="imagem">Imagem</label>
+                <img class="admin-current-image"
+                     th:if="${cursoFormulario.imagemAtual != null and !cursoFormulario.imagemAtual.isBlank()}"
+                     th:src="@{/uploads/cursos/{imagem}(imagem=${cursoFormulario.imagemAtual})}"
+                     alt="Imagem atual do curso">
+                <input class="admin-input" id="imagem" type="file" th:field="*{imagem}"
+                       accept="image/jpeg,image/png,image/webp" th:required="${cursoFormulario.id == null}">
+                <p class="admin-help">Formatos permitidos: JPG, PNG e WEBP. Tamanho máximo: 5 MB.</p>
+                <p class="admin-field-error" th:if="${#fields.hasErrors('imagem')}" th:errors="*{imagem}"></p>
+            </div>
+
+            <div class="admin-field admin-field-wide">
+                <span class="admin-field-title">Tags</span>
+                <div class="admin-tag-options">
+                    <label class="admin-tag-option" th:each="tag : ${tags}">
+                        <input type="checkbox" th:field="*{tagIds}" th:value="${tag.id}">
+                        <span th:text="${tag.nome}">Tag</span>
+                    </label>
+                </div>
+                <p class="admin-field-error" th:if="${#fields.hasErrors('tagIds')}" th:errors="*{tagIds}"></p>
+            </div>
+        </div>
+
+        <div class="admin-actions">
+            <button class="admin-button" type="submit" th:disabled="${#lists.isEmpty(areas) or #lists.isEmpty(tags)}">Salvar curso</button>
+            <a class="admin-button-secondary" th:href="@{/cursos/gerenciar}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
