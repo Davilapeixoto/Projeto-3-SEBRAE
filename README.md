@@ -31,10 +31,6 @@ Com esses dados, a solução permite identificar padrões de uso e possíveis po
 
 O projeto foi desenvolvido por uma equipe composta por **4 designers** e **6 estudantes de Ciência da Computação**, integrando visão de experiência do usuário, modelagem, frontend e backend.
 
-## Status do Projeto
-
-O projeto encontra-se em desenvolvimento, com foco na construção dos protótipos, implementação das funcionalidades principais e integração entre frontend e backend.
-
 ## Considerações Finais
 
 A **Ferramenta KI** propõe uma forma menos invasiva e mais orientada a dados para compreender a satisfação dos usuários, auxiliando o SEBRAE na melhoria contínua da experiência digital.
