@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEBRAE - Registo de Utilizador</title>
+    <script>
+        (function () {
+            try {
+                const temaSalvo = localStorage.getItem("sebrae-tema");
+                const prefereEscuro = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (temaSalvo === "escuro" || (!temaSalvo && prefereEscuro)) {
+                    document.documentElement.classList.add("tema-escuro");
+                }
+            } catch (erro) { /* preferência visual opcional */ }
+        }());
+    </script>
     <style>
         /* --- Reset e Alinhamento Global --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -67,6 +78,63 @@
         .link-rodape span { color: #0F0F77; font-weight: 600; }
         .link-rodape:hover span { text-decoration: underline; }
 
+        /* --- Alternância de tema --- */
+        .tema-toggle-auth {
+            position: absolute; top: 20px; left: 20px; z-index: 3;
+            width: 42px; height: 42px; border: 1px solid rgba(15, 15, 119, .18);
+            border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+            background: #EAE8E1; color: #0F0F77; font-size: 20px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 8px 20px rgba(15, 15, 119, .14);
+            transition: transform .18s ease, background-color .18s ease, color .18s ease;
+        }
+        .tema-toggle-auth:hover { transform: translateY(-2px); background: #E7F118; }
+        .logo-sebrae { width: auto; max-width: 82px; max-height: 94px; object-fit: contain; }
+
+        html.tema-escuro .auth-wrapper {
+            background: linear-gradient(135deg, #05051e 0%, #0F0F77 62%, #7b1907 100%);
+        }
+        html.tema-escuro .auth-container {
+            background: #15154A; border-top: 7px solid #E7F118;
+            box-shadow: 0 24px 65px rgba(0, 0, 0, .48);
+        }
+        html.tema-escuro .auth-container h2 { color: #E7F118; }
+        html.tema-escuro .close-icon { color: #EAE8E1; }
+        html.tema-escuro .close-icon:hover { color: #E7F118; }
+        html.tema-escuro .input-group label,
+        html.tema-escuro .link-rodape { color: #D7D7E8; }
+        html.tema-escuro .input-group input {
+            color: #FFFFFF; border-bottom-color: #4B4B82; caret-color: #E7F118;
+        }
+        html.tema-escuro .input-group input::placeholder { color: #AFAFC8; opacity: 1; }
+        html.tema-escuro .input-group input:focus { border-bottom-color: #E7F118; }
+        html.tema-escuro .input-group input:invalid:not(:placeholder-shown) { border-bottom-color: #F32C06; }
+        html.tema-escuro .input-group input:-webkit-autofill,
+        html.tema-escuro .input-group input:-webkit-autofill:hover,
+        html.tema-escuro .input-group input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #FFFFFF;
+            -webkit-box-shadow: 0 0 0 1000px #15154A inset;
+            transition: background-color 9999s ease-out 0s;
+        }
+        html.tema-escuro .btn-primario {
+            background: #E7F118; color: #0F0F77;
+            box-shadow: 0 5px 18px rgba(231, 241, 24, .2);
+        }
+        html.tema-escuro .btn-primario:hover { background: #F32C06; color: #FFFFFF; opacity: 1; }
+        html.tema-escuro .link-rodape span { color: #E7F118; }
+        html.tema-escuro .alerta-erro {
+            background: #3A171B; border-left-color: #F32C06; border-top-color: #E7F118; color: #FFD3CB;
+        }
+        html.tema-escuro .erro-campo { color: #FFB4A6; }
+        html.tema-escuro .tema-toggle-auth {
+            background: #20205B; border-color: #4B4B82; color: #E7F118;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, .34);
+        }
+        html.tema-escuro .tema-toggle-auth:hover { background: #E7F118; color: #0F0F77; }
+        html.tema-escuro .logo-sebrae {
+            filter: drop-shadow(0 0 1px rgba(231, 241, 24, .75));
+        }
+
+
     </style>
 </head>
 <body>
@@ -74,6 +142,7 @@
 
 <div class="auth-wrapper">
     <div class="auth-container">
+        <button type="button" class="tema-toggle-auth" data-tema-toggle aria-label="Ativar modo escuro" title="Modo escuro">☾</button>
         <a th:href="@{/}" class="close-icon">✕</a>
 
         <img th:src="@{/assets/logo-sebrae.png}" alt="Sebrae Logo" class="logo-sebrae" />
@@ -139,5 +208,6 @@
     }());
 </script>
 
+<script th:src="@{/js/recursos-plataforma.js}"></script>
 </body>
 </html>

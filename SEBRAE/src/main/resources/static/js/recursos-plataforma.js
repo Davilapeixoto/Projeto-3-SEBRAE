@@ -25,7 +25,7 @@
 
     function atualizarLogosTema() {
         const escuro = temaEscuroAtivo();
-        document.querySelectorAll(".site-logo-image, .footer-logo-image, .admin-brand-logo").forEach(function (logo) {
+        document.querySelectorAll(".site-logo-image, .footer-logo-image, .admin-brand-logo, .logo-sebrae").forEach(function (logo) {
             if (!logo.dataset.logoClaro) {
                 logo.dataset.logoClaro = logo.getAttribute("src") || "/assets/logo-sebrae.png";
             }

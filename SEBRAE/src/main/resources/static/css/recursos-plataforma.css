@@ -1231,3 +1231,31 @@ html.tema-escuro .navbar-global .nav-link-item:hover {
         width: 92px;
     }
 }
+
+
+/* Logo personalizada fornecida para a plataforma. */
+.site-logo-image,
+.navbar-global .site-logo-image {
+    width: auto !important;
+    height: 42px;
+    max-width: 72px;
+    max-height: 42px;
+    object-fit: contain;
+    background: transparent !important;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .16));
+}
+.footer-logo-image {
+    width: auto !important;
+    height: 112px !important;
+    max-width: 82px;
+    object-fit: contain;
+    background: transparent !important;
+}
+html.tema-escuro .site-logo-image,
+html.tema-escuro .navbar-global .site-logo-image,
+html.tema-escuro .footer-logo-image,
+html.tema-escuro .admin-brand-logo,
+html.tema-escuro .logo-sebrae {
+    filter: drop-shadow(0 0 1px rgba(231, 241, 24, .75)) !important;
+    background: transparent !important;
+}

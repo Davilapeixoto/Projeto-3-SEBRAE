@@ -320,3 +320,20 @@ html.tema-escuro .admin-button-success {
     background: #123c32;
     color: #86efca;
 }
+
+
+/* Logo vertical personalizada sem caixa branca. */
+.admin-brand-logo,
+html.tema-escuro .admin-brand-logo {
+    width: auto !important;
+    height: 46px !important;
+    max-width: 48px !important;
+    max-height: 46px !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    object-fit: contain;
+}
+html.tema-escuro .admin-brand-logo {
+    filter: drop-shadow(0 0 1px rgba(231, 241, 24, .75)) !important;
+}
