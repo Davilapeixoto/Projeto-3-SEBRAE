@@ -76,3 +76,15 @@ export SPRING_DATASOURCE_PASSWORD='postgres'
 As quarenta imagens iniciais estão dentro do JAR e são restauradas na inicialização. Novas imagens enviadas pelo painel ficam em `/tmp/ki/uploads/cursos` no perfil de produção.
 
 Em hospedagem gratuita esse diretório normalmente é temporário. Assim, imagens novas podem desaparecer após um redeploy, embora o restante dos dados continue no PostgreSQL. Para uma demonstração isso funciona; para armazenamento permanente, migre as imagens para Supabase Storage, Cloudinary ou S3.
+
+## Correção de conexão em localhost
+
+Se um deploy anterior registrar `DriverManagerDataSource` e tentar acessar
+`localhost:5432`, o repositório ainda contém a versão antiga de
+`ConfiguracaoBancoDeDados.java`. Esta versão do pacote inclui o mesmo arquivo
+sem um bean `DataSource`, para sobrescrever o arquivo antigo quando os arquivos
+forem copiados para o repositório.
+
+Depois de substituir os arquivos, confirme no GitHub que este arquivo não contém
+`DriverManagerDataSource`, faça commit/push e no Render execute **Clear build
+cache & deploy**.
