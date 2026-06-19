@@ -33,3 +33,9 @@ build/
 .vscode/
 
 /uploads/
+
+# Deploy/local
+.env
+target/
+uploads/
+*.log

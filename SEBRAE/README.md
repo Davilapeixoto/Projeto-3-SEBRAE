@@ -96,8 +96,9 @@ aplicacao.admin.email=${ADMIN_EMAIL:admin@gmail.com}
 aplicacao.admin.password=${ADMIN_PASSWORD:admin123}
 ```
 
-Com a configuração padrão, o acesso é `admin@gmail.com` / `admin123`.
+Com a configuração padrão de demonstração, o acesso é `admin@gmail.com` / `admin123`.
 Em produção, defina `ADMIN_EMAIL` e `ADMIN_PASSWORD` no ambiente. Se o e-mail já existir, a conta será promovida para administradora e a senha será sincronizada com `ADMIN_PASSWORD`.
+A senha `hjgiuiBOUVfdslf132@BRU32$NSDGF` é do banco PostgreSQL e deve ser informada em `SPRING_DATASOURCE_PASSWORD`; ela não é a senha de login do administrador.
 
 
 ## Integração front + backend
@@ -115,3 +116,8 @@ Este pacote foi montado usando o projeto de front como base. A página inicial, 
 ## Avaliações
 
 Usuários autenticados podem atribuir notas de 1 a 5 estrelas e publicar um comentário opcional. Cada usuário possui uma única avaliação por curso e pode atualizá-la. A página do curso exibe média, quantidade e comentários. A tabela é criada automaticamente pelo Hibernate.
+
+
+## Deploy
+
+Consulte `DEPLOY.md` para publicar com Docker e PostgreSQL externo.

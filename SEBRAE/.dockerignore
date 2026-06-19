@@ -1,0 +1,13 @@
+.git
+.github
+.idea
+.settings
+.classpath
+.project
+target
+frontend/node_modules
+*.log
+.env
+uploads
+banco
+*.zip
