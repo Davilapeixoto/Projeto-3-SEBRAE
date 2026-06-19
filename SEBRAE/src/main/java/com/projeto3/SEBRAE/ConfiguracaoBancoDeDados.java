@@ -9,7 +9,8 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-@Configuration
+
+@Configuration(proxyBeanMethods = false)
 public class ConfiguracaoBancoDeDados {
 
 	@Bean
@@ -32,4 +33,5 @@ public class ConfiguracaoBancoDeDados {
 		adapter.setPrepareConnection(true);
 		return adapter;
 	}
+	
 }
