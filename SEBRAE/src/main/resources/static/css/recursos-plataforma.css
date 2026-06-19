@@ -890,8 +890,8 @@ html.tema-escuro .navbar-global { background-color: #0b0b32 !important; }
 .card-selec-link-total { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
 .card-selec-capa { background-color: var(--azul-escuro); }
 .card-selec-corpo { display: flex; flex: 1; flex-direction: column; }
-.card-selec-meta { justify-content: space-between; }
-.card-selec-meta > span { display: inline-flex; align-items: center; gap: 6px; }
+.card-selec-meta { justify-content: flex-start; gap: 4px; }
+.card-selec-meta > span { display: inline-flex; align-items: center; gap: 5px; }
 .badge-recomendado {
     position: absolute;
     right: 14px;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRAE - Plataforma Educacional</title>
+    <title>Ki - Plataforma Educacional</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
@@ -647,7 +647,7 @@
             align-items: center;
             justify-content: center;
         }
-        .card-selec-capa i { font-size: 1.8rem; color: rgba(255,255,255,0.7); }
+        .card-selec-capa > i { font-size: 1.8rem; color: rgba(255,255,255,0.7); }
 
         .card-selec-corpo { padding: 18px 20px 20px; }
 
@@ -799,6 +799,29 @@
 
     <style>
         .footer-logo-image { width: auto; height: 112px; max-width: 82px; display: block; object-fit: contain; }
+
+        /* Ajustes finais do bloco Escolhido para você. */
+        #selec .card-selec-meta {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start !important;
+            flex-wrap: wrap;
+            column-gap: 0 !important;
+            row-gap: 3px;
+        }
+        #selec .card-selec-meta .meta-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        #selec .card-selec-meta .meta-separador {
+            display: inline-block;
+            margin-left: 9px;
+            margin-right: 5px;
+            line-height: 1;
+            color: currentColor;
+        }
     </style>
 </head>
 <body>
@@ -806,7 +829,7 @@
 <!-- ======================== NAVBAR ======================== -->
 <nav class="navbar-global">
     <div class="nav-esquerdo">
-        <a th:href="@{/}" class="logo-box" aria-label="Página inicial"><img th:src="@{/assets/logo-sebrae.png}" class="site-logo-image" alt="Sebrae"></a>
+        <a th:href="@{/}" class="logo-box" aria-label="Página inicial"><img th:src="@{/assets/logo-sebrae.png}" class="site-logo-image" alt="Ki"></a>
         <a th:href="@{/}" class="nav-link-item">Home</a>
         <a th:href="@{/feed}" class="nav-link-item">Feed</a>
         <a th:href="@{/categorias}" class="nav-link-item">Categorias</a>
@@ -1138,7 +1161,7 @@
     <div class="secao-header">
         <div>
             <h2 class="secao-titulo">Programas Estratégicos</h2>
-            <p class="secao-sub">Iniciativas oficiais do Sebrae para impulsionar seu negócio</p>
+            <p class="secao-sub">Iniciativas estratégicas para impulsionar seu negócio</p>
         </div>
         <div class="seta-grupo">
             <button class="btn-seta" onclick="rolar('programas', -1)" aria-label="Programas anteriores"><i class="bi bi-chevron-left"></i></button>
@@ -1214,7 +1237,7 @@
             <div class="ferramenta-icone"><i class="bi bi-bullseye"></i></div>
             <div class="ferramenta-info">
                 <div class="ferramenta-header">
-                    <span class="ferramenta-nome">Radar Sebrae</span>
+                    <span class="ferramenta-nome">Radar Ki</span>
                     <i class="bi bi-box-arrow-up-right" style="color:#9CA3AF; font-size:0.8rem;"></i>
                 </div>
                 <p class="ferramenta-desc">Análise de mercado e dados sobre seu segmento de atuação.</p>
@@ -1237,7 +1260,7 @@
                     <span class="ferramenta-nome">Aplicativo Mobile</span>
                     <i class="bi bi-box-arrow-up-right" style="color:#9CA3AF; font-size:0.8rem;"></i>
                 </div>
-                <p class="ferramenta-desc">Tenha o Sebrae no seu bolso. Acesse conteúdos, cursos e ferramentas.</p>
+                <p class="ferramenta-desc">Tenha a Ki no seu bolso. Acesse conteúdos, cursos e ferramentas.</p>
             </div>
         </a>
     </div>
@@ -1247,7 +1270,7 @@
 <section class="secao">
     <div class="secao-header">
         <div>
-            <h2 class="secao-titulo">Selecionado para você</h2>
+            <h2 class="secao-titulo">Escolhido para você</h2>
             <p class="secao-sub">Conteúdos escolhidos para apoiar os próximos passos do seu negócio</p>
         </div>
         <div class="seta-grupo">
@@ -1265,7 +1288,7 @@
             <div class="card-selec-corpo">
                 <p class="card-selec-cat">Marketing digital</p>
                 <h3 class="card-selec-titulo">Instagram para Negócios</h3>
-                <div class="card-selec-meta"><i class="bi bi-display"></i> Online <span>•</span> Iniciante</div>
+                <div class="card-selec-meta"><span class="meta-item"><i class="bi bi-display"></i>Online</span><span class="meta-separador" aria-hidden="true">•</span><span class="meta-item">Iniciante</span></div>
                 <a th:href="@{/cursos(q='Marketing Digital')}" class="btn-selec-antigo">
                     Ver conteúdos <i class="bi bi-arrow-right"></i>
                 </a>
@@ -1280,7 +1303,7 @@
             <div class="card-selec-corpo">
                 <p class="card-selec-cat">Planejamento</p>
                 <h3 class="card-selec-titulo">Como criar um plano de negócios</h3>
-                <div class="card-selec-meta"><i class="bi bi-clock"></i> Leitura rápida</div>
+                <div class="card-selec-meta"><span class="meta-item"><i class="bi bi-clock"></i>Leitura rápida</span></div>
                 <a th:href="@{/cursos(q='Plano de Negócios')}" class="btn-selec-antigo">
                     Explorar tema <i class="bi bi-arrow-right"></i>
                 </a>
@@ -1289,16 +1312,15 @@
 
         <article class="card-selec card-selec-antigo">
             <div class="card-selec-capa" style="background:#F32C06;">
-                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
-                <span class="badge-duracao" style="top:14px;right:14px;"><i class="bi bi-clock"></i> 25min</span>
-                <span class="badge-categoria-aula" style="bottom:14px;left:14px;">Marketing Digital</span>
+                <span class="badge-modalidade">Aula</span>
+                <i class="bi bi-play-btn"></i>
             </div>
             <div class="card-selec-corpo">
-                <p class="card-selec-cat">Conteúdo em destaque</p>
+                <p class="card-selec-cat">Marketing digital</p>
                 <h3 class="card-selec-titulo">Stories que vendem: dicas práticas</h3>
-                <div class="card-selec-meta"><i class="bi bi-person"></i> Especialistas Sebrae</div>
+                <div class="card-selec-meta"><span class="meta-item"><i class="bi bi-display"></i>Online</span><span class="meta-separador" aria-hidden="true">•</span><span class="meta-item">Iniciante</span></div>
                 <a th:href="@{/cursos(q='Marketing')}" class="btn-selec-antigo">
-                    Acessar seleção <i class="bi bi-arrow-right"></i>
+                    Ver conteúdo <i class="bi bi-arrow-right"></i>
                 </a>
             </div>
         </article>
@@ -1311,7 +1333,7 @@
             <div class="card-selec-corpo">
                 <p class="card-selec-cat">Finanças</p>
                 <h3 class="card-selec-titulo">Finanças para Empreendedores</h3>
-                <div class="card-selec-meta"><i class="bi bi-display"></i> Online <span>•</span> Iniciante</div>
+                <div class="card-selec-meta"><span class="meta-item"><i class="bi bi-display"></i>Online</span><span class="meta-separador" aria-hidden="true">•</span><span class="meta-item">Iniciante</span></div>
                 <a th:href="@{/cursos(q='Finanças')}" class="btn-selec-antigo">
                     Ver conteúdos <i class="bi bi-arrow-right"></i>
                 </a>
@@ -1326,7 +1348,7 @@
         <div class="footer-grid">
             <div>
                 <div class="footer-marca-logo">
-                    <img th:src="@{/assets/logo-sebrae.png}" class="footer-logo-image" alt="Sebrae">
+                    <img th:src="@{/assets/logo-sebrae.png}" class="footer-logo-image" alt="Ki">
                 </div>
                 <p class="footer-desc">Capacitando empreendedores e impulsionando pequenos negócios em todo o Brasil.</p>
                 <div class="footer-redes">
@@ -1340,7 +1362,7 @@
             <div>
                 <p class="footer-col-titulo">Institucional</p>
                 <ul class="footer-lista">
-                    <li><a href="#">Sobre o Sebrae</a></li>
+                    <li><a href="#">Sobre a Ki</a></li>
                     <li><a href="#">Transparência</a></li>
                     <li><a href="#">Trabalhe Conosco</a></li>
                     <li><a href="#">Imprensa</a></li>
@@ -1367,7 +1389,7 @@
         </div>
         <hr class="footer-divider">
         <div class="footer-rodape">
-            <span>© 2026 Sebrae. Todos os direitos reservados.</span>
+            <span>© 2026 Grupo Ki, em parceria com o SEBRAE. Todos os direitos reservados.</span>
             <div class="footer-links-rodape">
                 <a href="#">Termos de Uso</a>
                 <a href="#">Política de Privacidade</a>

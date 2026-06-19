@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${modoLoja ? 'Loja de cursos | SEBRAE' : 'Explorar cursos | SEBRAE'}">Cursos | SEBRAE</title>
+    <title th:text="${modoLoja ? 'Loja de cursos | Ki' : 'Explorar cursos | Ki'}">Cursos | Ki</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/css/recursos-plataforma.css}">
     <script th:src="@{/js/recursos-plataforma.js}"></script>
@@ -11,7 +11,7 @@
 <body>
 <nav class="site-navbar">
     <div class="site-nav-left">
-        <a th:href="@{/}" class="site-logo-box" aria-label="Página inicial"><img th:src="@{/assets/logo-sebrae.png}" class="site-logo-image" alt="Sebrae"></a>
+        <a th:href="@{/}" class="site-logo-box" aria-label="Página inicial"><img th:src="@{/assets/logo-sebrae.png}" class="site-logo-image" alt="Ki"></a>
         <a th:href="@{/}" class="site-nav-link">Home</a>
         <a th:href="@{/feed}" class="site-nav-link">Feed</a>
         <a th:href="@{/categorias}" class="site-nav-link">Categorias</a>
@@ -35,7 +35,7 @@
 
 <main class="page-shell">
     <section class="page-hero-strip">
-        <p class="page-eyebrow" th:text="${modoLoja ? 'Modo loja' : 'Catálogo Sebrae'}">Catálogo Sebrae</p>
+        <p class="page-eyebrow" th:text="${modoLoja ? 'Modo loja' : 'Catálogo Ki'}">Catálogo Ki</p>
         <h1 th:text="${modoLoja ? 'Escolha seu próximo curso.' : 'Aprenda no seu ritmo.'}">Aprenda no seu ritmo.</h1>
         <p th:text="${modoLoja ? 'Cursos gratuitos apresentados em formato de vitrine para facilitar sua escolha.' : 'Pesquise por nome, descrição, área ou tag e encontre conteúdos para cada etapa do seu negócio.'}">Encontre conteúdos.</p>
     </section>
@@ -96,6 +96,6 @@
         <p>Altere os filtros ou limpe a pesquisa para ver todo o catálogo.</p>
     </div>
 </main>
-<footer class="site-footer">© 2026 Sebrae. Conhecimento para transformar negócios.</footer>
+<footer class="site-footer">© 2026 Grupo Ki, em parceria com o SEBRAE. Todos os direitos reservados.</footer>
 </body>
 </html>
